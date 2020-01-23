@@ -1,0 +1,134 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L tcrt5000:TCRT5000 U?
+U 1 1 5E29CC7F
+P 3925 2425
+F 0 "U?" H 4153 2491 50  0000 L CNN
+F 1 "TCRT5000" H 4153 2400 50  0000 L CNN
+F 2 "tcrt5000:TCRT500" H 4153 2309 50  0000 L CNN
+F 3 "" H 3925 2375 50  0001 C CNN
+	1    3925 2425
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3825 2125 3825 1825
+Wire Wire Line
+	3825 1825 4025 1825
+Wire Wire Line
+	4025 2125 4025 1825
+Connection ~ 4025 1825
+$Comp
+L Device:R R?
+U 1 1 5E29DACB
+P 4025 3325
+F 0 "R?" H 4095 3371 50  0000 L CNN
+F 1 "330R" H 4095 3280 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 3955 3325 50  0001 C CNN
+F 3 "~" H 4025 3325 50  0001 C CNN
+	1    4025 3325
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5E29DF88
+P 3825 3325
+F 0 "R?" H 3895 3371 50  0000 L CNN
+F 1 "10K" H 3895 3280 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 3755 3325 50  0001 C CNN
+F 3 "~" H 3825 3325 50  0001 C CNN
+	1    3825 3325
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3825 3475 3825 3600
+Wire Wire Line
+	3825 3600 4025 3600
+Wire Wire Line
+	4025 3475 4025 3600
+Connection ~ 4025 3600
+Wire Wire Line
+	3825 3175 3825 2975
+Wire Wire Line
+	4025 2775 4025 3175
+Wire Wire Line
+	3825 2975 4300 2975
+Connection ~ 3825 2975
+Wire Wire Line
+	3825 2975 3825 2775
+$Comp
+L Device:R R?
+U 1 1 5E29E5DC
+P 4450 2975
+F 0 "R?" V 4243 2975 50  0000 C CNN
+F 1 "10K" V 4334 2975 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 4380 2975 50  0001 C CNN
+F 3 "~" H 4450 2975 50  0001 C CNN
+	1    4450 2975
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4600 2975 4900 2975
+$Comp
+L Transistor_BJT:BC817 Q?
+U 1 1 5E29F24F
+P 5100 2975
+F 0 "Q?" H 5291 3021 50  0000 L CNN
+F 1 "BC817" H 5291 2930 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 5300 2900 50  0001 L CIN
+F 3 "http://www.fairchildsemi.com/ds/BC/BC817.pdf" H 5100 2975 50  0001 L CNN
+	1    5100 2975
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5200 3175 5200 3600
+Wire Wire Line
+	4025 3600 5200 3600
+$Comp
+L Device:R R?
+U 1 1 5E29FB00
+P 5200 2350
+F 0 "R?" H 5270 2396 50  0000 L CNN
+F 1 "10K" H 5270 2305 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 5130 2350 50  0001 C CNN
+F 3 "~" H 5200 2350 50  0001 C CNN
+	1    5200 2350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5200 2500 5200 2600
+Wire Wire Line
+	5200 2200 5200 1825
+Wire Wire Line
+	4025 1825 5200 1825
+Wire Wire Line
+	5200 1825 5925 1825
+Connection ~ 5200 1825
+Wire Wire Line
+	5200 2600 5950 2600
+Connection ~ 5200 2600
+Wire Wire Line
+	5200 2600 5200 2775
+Wire Wire Line
+	5200 3600 6000 3600
+Connection ~ 5200 3600
+Text GLabel 5925 1825 2    50   Input ~ 0
+VCC
+Text GLabel 5925 2600 2    50   Output ~ 0
+OUT
+Text GLabel 6000 3600 2    50   Output ~ 0
+GND
+$EndSCHEMATC
