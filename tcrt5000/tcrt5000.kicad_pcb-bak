@@ -150,7 +150,7 @@
       (net 5 /OUT))
     (pad 1 thru_hole rect (at 0 0) (size 1.7 1.7) (drill 1) (layers *.Cu *.Mask)
       (net 6 /VCC))
-    (model ${KISYS3DMOD}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.wrl
+    (model ${KISYS3DMOD}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Horizontal.step
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -368,7 +368,7 @@
     (pad 2 thru_hole circle (at 2.75 -1.27) (size 1.5 1.5) (drill 1) (layers *.Cu *.Mask)
       (net 6 /VCC))
     (pad "" np_thru_hole circle (at -4.65 2.54) (size 1 1) (drill 1) (layers *.Cu *.Mask))
-    (model "C:/Users/tnt23/Downloads/User Library-corpo TCRT 5000.step"
+    (model ${KIPRJMOD}/3d/TCRT5000.step
       (offset (xyz -5.08 2.8 3.6))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 180 180))
