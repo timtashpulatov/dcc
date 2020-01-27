@@ -150,4 +150,8 @@ Wire Wire Line
 	6625 3825 6900 3825
 Wire Wire Line
 	5675 4725 6625 4725
+Text Notes 2425 3625 0    50   ~ 0
+Vf = 1.25V nom, 1.5V max @60mA\nVf = 60mA max\n
+Text Notes 3250 4875 0    50   ~ 0
+At VCC=5V, R2=330R gives 10mA and R2=330R gives 17mA
 $EndSCHEMATC
