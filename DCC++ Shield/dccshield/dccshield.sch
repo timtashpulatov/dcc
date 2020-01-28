@@ -14,17 +14,6 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L MCU_Module:Arduino_UNO_R3 A1
-U 1 1 5E38E585
-P 3850 4500
-F 0 "A1" H 3850 5950 50  0000 C CNN
-F 1 "Arduino_UNO_R3" H 3850 5875 50  0000 C CNN
-F 2 "Modules:Arduino_UNO_R3_WithMountingHoles" H 3850 5800 50  0000 C CIN
-F 3 "https://www.arduino.cc/en/Main/arduinoBoardUno" H 3850 4500 50  0001 C CNN
-	1    3850 4500
-	1    0    0    -1  
-$EndComp
-$Comp
 L Power_Management:BTN8982TA Q1
 U 1 1 5E38FF50
 P 7500 2500
@@ -212,11 +201,7 @@ F 3 "" H 8750 5850 50  0001 C CNN
 	1    8750 5850
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4050 3500 4050 3350
-Wire Wire Line
-	4050 3350 4500 3350
-Text GLabel 5000 3350 2    50   Output ~ 0
+Text GLabel 3000 3250 2    50   Output ~ 0
 +5V
 $Comp
 L 74xx:74HC04 U1
@@ -251,11 +236,7 @@ Wire Wire Line
 	6750 3250 6750 2300
 Wire Wire Line
 	6750 2300 7200 2300
-Wire Wire Line
-	6750 3250 6500 3250
 Connection ~ 6750 3250
-Wire Wire Line
-	6675 3750 6500 3750
 Connection ~ 6675 3750
 Wire Wire Line
 	6850 5700 7500 5700
@@ -271,7 +252,7 @@ Wire Wire Line
 	6125 5700 6125 5300
 Connection ~ 6125 5300
 Wire Wire Line
-	6125 5300 5500 5300
+	6125 5300 4500 5300
 Text GLabel 7850 5600 0    50   Input ~ 0
 +5V
 $Comp
@@ -296,17 +277,6 @@ F 3 "http://www.ti.com/lit/ds/symlink/lm2904-n.pdf" H 5450 6875 50  0001 C CNN
 	2    5450 6875
 	1    0    0    -1  
 $EndComp
-$Comp
-L Amplifier_Operational:LM358 U?
-U 3 1 5E3C2076
-P 2350 6625
-F 0 "U?" H 2308 6671 50  0000 L CNN
-F 1 "LM358" H 2308 6580 50  0000 L CNN
-F 2 "" H 2350 6625 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/lm2904-n.pdf" H 2350 6625 50  0001 C CNN
-	3    2350 6625
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	8750 5500 9750 5500
 Wire Wire Line
@@ -315,56 +285,9 @@ Wire Wire Line
 	9750 6250 6000 6250
 Connection ~ 8750 5500
 Wire Wire Line
-	4350 4300 4500 4300
+	2500 4200 2500 3250
 Wire Wire Line
-	4500 4300 4500 3350
-Connection ~ 4500 3350
-Wire Wire Line
-	4500 3350 5000 3350
-$Comp
-L power:GND #PWR?
-U 1 1 5E3CB802
-P 3750 5600
-F 0 "#PWR?" H 3750 5350 50  0001 C CNN
-F 1 "GND" H 3755 5427 50  0001 C CNN
-F 2 "" H 3750 5600 50  0001 C CNN
-F 3 "" H 3750 5600 50  0001 C CNN
-	1    3750 5600
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 5E3CBCC4
-P 3850 5600
-F 0 "#PWR?" H 3850 5350 50  0001 C CNN
-F 1 "GND" H 3855 5427 50  0001 C CNN
-F 2 "" H 3850 5600 50  0001 C CNN
-F 3 "" H 3850 5600 50  0001 C CNN
-	1    3850 5600
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 5E3CBEAB
-P 3950 5600
-F 0 "#PWR?" H 3950 5350 50  0001 C CNN
-F 1 "GND" H 3955 5427 50  0001 C CNN
-F 2 "" H 3950 5600 50  0001 C CNN
-F 3 "" H 3950 5600 50  0001 C CNN
-	1    3950 5600
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 5E3CCF82
-P 2250 6925
-F 0 "#PWR?" H 2250 6675 50  0001 C CNN
-F 1 "GND" H 2255 6752 50  0001 C CNN
-F 2 "" H 2250 6925 50  0001 C CNN
-F 3 "" H 2250 6925 50  0001 C CNN
-	1    2250 6925
-	1    0    0    -1  
-$EndComp
+	2500 3250 3000 3250
 $Comp
 L power:GND #PWR?
 U 1 1 5E3CD4ED
@@ -386,32 +309,10 @@ Text Notes 9775 5725 0    50   ~ 0
 0R25 for Vref=5V and Imax=2A
 $Comp
 L Bridges:R R?
-U 1 1 5E3D389B
-P 6350 3750
-F 0 "R?" V 6143 3750 50  0000 C CNN
-F 1 "10K" V 6234 3750 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V 6280 3750 50  0001 C CNN
-F 3 "" H 6350 3750 50  0001 C CNN
-	1    6350 3750
-	0    1    1    0   
-$EndComp
-$Comp
-L Bridges:R R?
-U 1 1 5E3D427F
-P 6350 3250
-F 0 "R?" V 6143 3250 50  0000 C CNN
-F 1 "10K" V 6234 3250 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V 6280 3250 50  0001 C CNN
-F 3 "" H 6350 3250 50  0001 C CNN
-	1    6350 3250
-	0    1    1    0   
-$EndComp
-$Comp
-L Bridges:R R?
 U 1 1 5E3D5889
 P 7200 2850
 F 0 "R?" H 7400 2825 50  0000 R CNN
-F 1 "510R" H 7450 2900 50  0000 R CNN
+F 1 "1K" H 7450 2900 50  0000 R CNN
 F 2 "Resistors_SMD:R_0805" V 7130 2850 50  0001 C CNN
 F 3 "" H 7200 2850 50  0001 C CNN
 	1    7200 2850
@@ -433,7 +334,7 @@ L Bridges:R R?
 U 1 1 5E3D732F
 P 9275 2850
 F 0 "R?" H 9205 2804 50  0000 R CNN
-F 1 "510R" H 9205 2895 50  0000 R CNN
+F 1 "1K" H 9205 2895 50  0000 R CNN
 F 2 "Resistors_SMD:R_0805" V 9205 2850 50  0001 C CNN
 F 3 "" H 9275 2850 50  0001 C CNN
 	1    9275 2850
@@ -485,8 +386,126 @@ Wire Wire Line
 Connection ~ 6950 4075
 Wire Wire Line
 	6950 4075 6950 4150
+$Comp
+L 74xx:74HC04 U?
+U 3 1 5E3E9EA5
+P 5300 3250
+F 0 "U?" H 5300 3600 50  0000 C CNN
+F 1 "74HC04" H 5300 3525 50  0000 C CNN
+F 2 "Housings_SOIC:SOIC-14_3.9x8.7mm_Pitch1.27mm" H 5300 3000 50  0000 C CNN
+F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 5300 3250 50  0001 C CNN
+	3    5300 3250
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	6200 3250 5750 3250
+	5000 3250 4500 3250
+Text Label 4500 3250 0    50   ~ 0
+ENABLE_MAIN
+Connection ~ 2500 3250
+$Comp
+L power:GND #PWR?
+U 1 1 5E3CCF82
+P 2250 6925
+F 0 "#PWR?" H 2250 6675 50  0001 C CNN
+F 1 "GND" H 2255 6752 50  0001 C CNN
+F 2 "" H 2250 6925 50  0001 C CNN
+F 3 "" H 2250 6925 50  0001 C CNN
+	1    2250 6925
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E3CBEAB
+P 1950 5500
+F 0 "#PWR?" H 1950 5250 50  0001 C CNN
+F 1 "GND" H 1955 5327 50  0001 C CNN
+F 2 "" H 1950 5500 50  0001 C CNN
+F 3 "" H 1950 5500 50  0001 C CNN
+	1    1950 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E3CBCC4
+P 1850 5500
+F 0 "#PWR?" H 1850 5250 50  0001 C CNN
+F 1 "GND" H 1855 5327 50  0001 C CNN
+F 2 "" H 1850 5500 50  0001 C CNN
+F 3 "" H 1850 5500 50  0001 C CNN
+	1    1850 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E3CB802
+P 1750 5500
+F 0 "#PWR?" H 1750 5250 50  0001 C CNN
+F 1 "GND" H 1755 5327 50  0001 C CNN
+F 2 "" H 1750 5500 50  0001 C CNN
+F 3 "" H 1750 5500 50  0001 C CNN
+	1    1750 5500
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	6200 3750 5750 3750
+	2350 4200 2500 4200
+$Comp
+L Amplifier_Operational:LM358 U?
+U 3 1 5E3C2076
+P 2350 6625
+F 0 "U?" H 2308 6671 50  0000 L CNN
+F 1 "LM358" H 2308 6580 50  0000 L CNN
+F 2 "" H 2350 6625 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/lm2904-n.pdf" H 2350 6625 50  0001 C CNN
+	3    2350 6625
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2050 3250 2500 3250
+Wire Wire Line
+	2050 3400 2050 3250
+$Comp
+L MCU_Module:Arduino_UNO_R3 A1
+U 1 1 5E38E585
+P 1850 4400
+F 0 "A1" H 1850 5850 50  0000 C CNN
+F 1 "Arduino_UNO_R3" H 1850 5775 50  0000 C CNN
+F 2 "Modules:Arduino_UNO_R3_WithMountingHoles" H 1850 5700 50  0000 C CIN
+F 3 "https://www.arduino.cc/en/Main/arduinoBoardUno" H 1850 4400 50  0001 C CNN
+	1    1850 4400
+	1    0    0    -1  
+$EndComp
+Text Label 4500 3750 0    50   ~ 0
+DCC_SIGNAL_MAIN
+Text Label 4500 5300 0    50   ~ 0
+DCC_SIGNAL_PROG
+Wire Wire Line
+	6675 3750 6500 3750
+Wire Wire Line
+	6200 3750 4500 3750
+Wire Wire Line
+	6750 3250 6500 3250
+Wire Wire Line
+	5600 3250 6200 3250
+$Comp
+L Bridges:R R?
+U 1 1 5E3D389B
+P 6350 3750
+F 0 "R?" V 6143 3750 50  0000 C CNN
+F 1 "10K" V 6234 3750 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 6280 3750 50  0001 C CNN
+F 3 "" H 6350 3750 50  0001 C CNN
+	1    6350 3750
+	0    1    1    0   
+$EndComp
+$Comp
+L Bridges:R R?
+U 1 1 5E3D427F
+P 6350 3250
+F 0 "R?" V 6143 3250 50  0000 C CNN
+F 1 "10K" V 6234 3250 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 6280 3250 50  0001 C CNN
+F 3 "" H 6350 3250 50  0001 C CNN
+	1    6350 3250
+	0    1    1    0   
+$EndComp
 $EndSCHEMATC
