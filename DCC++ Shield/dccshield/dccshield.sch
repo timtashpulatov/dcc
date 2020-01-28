@@ -1,0 +1,492 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L MCU_Module:Arduino_UNO_R3 A1
+U 1 1 5E38E585
+P 3850 4500
+F 0 "A1" H 3850 5950 50  0000 C CNN
+F 1 "Arduino_UNO_R3" H 3850 5875 50  0000 C CNN
+F 2 "Modules:Arduino_UNO_R3_WithMountingHoles" H 3850 5800 50  0000 C CIN
+F 3 "https://www.arduino.cc/en/Main/arduinoBoardUno" H 3850 4500 50  0001 C CNN
+	1    3850 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Power_Management:BTN8982TA Q1
+U 1 1 5E38FF50
+P 7500 2500
+F 0 "Q1" H 7375 3000 50  0000 L CNN
+F 1 "BTN8982TA" H 7075 2900 50  0000 L CNN
+F 2 "TO_SOT_Packages_SMD:TO-263-7_TabPin8" H 7300 2950 50  0001 C CNN
+F 3 "https://www.infineon.com/dgdl/Infineon-BTN8982TA-DS-v01_00-EN.pdf?fileId=db3a30433fa9412f013fbe32289b7c17" H 7450 2510 50  0001 C CNN
+	1    7500 2500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Power_Management:BTN8982TA Q2
+U 1 1 5E391511
+P 8975 2500
+F 0 "Q2" H 8950 2975 50  0000 C CNN
+F 1 "BTN8982TA" H 8800 2875 50  0000 C CNN
+F 2 "TO_SOT_Packages_SMD:TO-263-7_TabPin8" H 8775 2950 50  0001 C CNN
+F 3 "https://www.infineon.com/dgdl/Infineon-BTN8982TA-DS-v01_00-EN.pdf?fileId=db3a30433fa9412f013fbe32289b7c17" H 8925 2510 50  0001 C CNN
+	1    8975 2500
+	-1   0    0    -1  
+$EndComp
+$Comp
+L 74xx:74HC04 U1
+U 1 1 5E3935E7
+P 8275 3750
+F 0 "U1" H 8275 4100 50  0000 C CNN
+F 1 "74HC04" H 8275 4025 50  0000 C CNN
+F 2 "Housings_SOIC:SOIC-14_3.9x8.7mm_Pitch1.27mm" H 8275 3500 50  0000 C CNN
+F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 8275 3750 50  0001 C CNN
+	1    8275 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L 74xx:74HC04 U1
+U 7 1 5E3955A9
+P 3300 1500
+F 0 "U1" H 3530 1546 50  0000 L CNN
+F 1 "74HC04" H 3530 1455 50  0000 L CNN
+F 2 "" H 3300 1500 50  0001 C CNN
+F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 3300 1500 50  0001 C CNN
+	7    3300 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x06 J1
+U 1 1 5E396A7C
+P 8225 925
+F 0 "J1" H 8305 962 50  0000 L CNN
+F 1 "Conn_01x06" H 8305 871 50  0000 L CNN
+F 2 "Connectors_Terminal_Blocks:TerminalBlock_bornier-6_P5.08mm" H 8305 780 50  0000 L CNN
+F 3 "~" H 8225 925 50  0001 C CNN
+	1    8225 925 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8025 925  7550 925 
+Wire Wire Line
+	8025 1025 7550 1025
+Text GLabel 7550 925  0    50   Output ~ 0
+VCC
+$Comp
+L power:GND #PWR0101
+U 1 1 5E397AB3
+P 7550 1025
+F 0 "#PWR0101" H 7550 775 50  0001 C CNN
+F 1 "GND" H 7555 852 50  0001 C CNN
+F 2 "" H 7550 1025 50  0001 C CNN
+F 3 "" H 7550 1025 50  0001 C CNN
+	1    7550 1025
+	1    0    0    -1  
+$EndComp
+Text GLabel 8025 725  0    50   Input ~ 0
+MAIN1
+Text GLabel 8025 825  0    50   Input ~ 0
+MAIN2
+Text GLabel 7800 2500 2    50   Output ~ 0
+MAIN1
+Text GLabel 8675 2500 0    50   Output ~ 0
+MAIN2
+Wire Wire Line
+	7600 2900 7600 2975
+Wire Wire Line
+	7600 2975 8250 2975
+Wire Wire Line
+	8875 2975 8875 2900
+$Comp
+L power:GND #PWR0102
+U 1 1 5E39949D
+P 8250 2975
+F 0 "#PWR0102" H 8250 2725 50  0001 C CNN
+F 1 "GND" H 8255 2802 50  0001 C CNN
+F 2 "" H 8250 2975 50  0001 C CNN
+F 3 "" H 8250 2975 50  0001 C CNN
+	1    8250 2975
+	1    0    0    -1  
+$EndComp
+Connection ~ 8250 2975
+Wire Wire Line
+	8250 2975 8875 2975
+Wire Wire Line
+	7600 2100 7600 2000
+Wire Wire Line
+	7600 2000 8250 2000
+Wire Wire Line
+	8875 2000 8875 2100
+Wire Wire Line
+	8250 2000 8250 1750
+Wire Wire Line
+	8250 1750 8500 1750
+Connection ~ 8250 2000
+Wire Wire Line
+	8250 2000 8875 2000
+Text GLabel 8500 1750 2    50   Input ~ 0
+VCC
+$Comp
+L Driver_Motor:A4953_LJ U2
+U 1 1 5E39CF39
+P 8250 5500
+F 0 "U2" H 8025 6175 50  0000 C CNN
+F 1 "A4953_LJ" H 8000 6100 50  0000 C CNN
+F 2 "Housings_SOIC:SOIC-8-1EP_3.9x4.9mm_Pitch1.27mm" H 8250 4925 50  0000 C CNN
+F 3 "www.allegromicro.com/~/media/Files/Datasheets/A4952-3-Datasheet.ashx?la=en" H 7950 5850 50  0001 C CNN
+	1    8250 5500
+	1    0    0    -1  
+$EndComp
+Text GLabel 8025 1125 0    50   Input ~ 0
+PROG1
+Text GLabel 8025 1225 0    50   Input ~ 0
+PROG2
+Text GLabel 8650 5300 2    50   Input ~ 0
+PROG1
+Text GLabel 8650 5400 2    50   Input ~ 0
+PROG2
+Wire Wire Line
+	8250 5100 8250 4750
+Wire Wire Line
+	8250 4750 8500 4750
+Text GLabel 8500 4750 2    50   Input ~ 0
+VCC
+$Comp
+L power:GND #PWR0103
+U 1 1 5E39F2B0
+P 8250 5900
+F 0 "#PWR0103" H 8250 5650 50  0001 C CNN
+F 1 "GND" H 8255 5727 50  0001 C CNN
+F 2 "" H 8250 5900 50  0001 C CNN
+F 3 "" H 8250 5900 50  0001 C CNN
+	1    8250 5900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0104
+U 1 1 5E39F7AA
+P 8350 5900
+F 0 "#PWR0104" H 8350 5650 50  0001 C CNN
+F 1 "GND" H 8355 5727 50  0001 C CNN
+F 2 "" H 8350 5900 50  0001 C CNN
+F 3 "" H 8350 5900 50  0001 C CNN
+	1    8350 5900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Bridges:R Rs
+U 1 1 5E3A4F5B
+P 8750 5700
+F 0 "Rs" H 8820 5791 50  0000 L CNN
+F 1 "0R25 1% 1W" H 8820 5700 50  0000 L CNN
+F 2 "Resistors_SMD:R_2512" H 8820 5609 50  0000 L CNN
+F 3 "" H 8750 5700 50  0001 C CNN
+	1    8750 5700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8650 5500 8750 5500
+Wire Wire Line
+	8750 5500 8750 5550
+$Comp
+L power:GND #PWR?
+U 1 1 5E3A5749
+P 8750 5850
+F 0 "#PWR?" H 8750 5600 50  0001 C CNN
+F 1 "GND" H 8755 5677 50  0001 C CNN
+F 2 "" H 8750 5850 50  0001 C CNN
+F 3 "" H 8750 5850 50  0001 C CNN
+	1    8750 5850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4050 3500 4050 3350
+Wire Wire Line
+	4050 3350 4500 3350
+Text GLabel 5000 3350 2    50   Output ~ 0
++5V
+$Comp
+L 74xx:74HC04 U1
+U 2 1 5E3A88F7
+P 6550 5700
+F 0 "U1" H 6550 6107 50  0000 C CNN
+F 1 "74HC04" H 6550 6016 50  0000 C CNN
+F 2 "Housings_SOIC:SOIC-14_3.9x8.7mm_Pitch1.27mm" H 6550 5925 50  0000 C CNN
+F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 6550 5700 50  0001 C CNN
+	2    6550 5700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8575 3750 9725 3750
+Wire Wire Line
+	9725 3750 9725 2400
+Wire Wire Line
+	9725 2400 9275 2400
+Wire Wire Line
+	7975 3750 6675 3750
+Wire Wire Line
+	6675 3750 6675 2400
+Wire Wire Line
+	6675 2400 7200 2400
+Wire Wire Line
+	9275 2300 9500 2300
+Wire Wire Line
+	9500 2300 9500 3250
+Wire Wire Line
+	9500 3250 6750 3250
+Wire Wire Line
+	6750 3250 6750 2300
+Wire Wire Line
+	6750 2300 7200 2300
+Wire Wire Line
+	6750 3250 6500 3250
+Connection ~ 6750 3250
+Wire Wire Line
+	6675 3750 6500 3750
+Connection ~ 6675 3750
+Wire Wire Line
+	6850 5700 7500 5700
+Wire Wire Line
+	7500 5700 7500 5400
+Wire Wire Line
+	7500 5400 7850 5400
+Wire Wire Line
+	7850 5300 6125 5300
+Wire Wire Line
+	6250 5700 6125 5700
+Wire Wire Line
+	6125 5700 6125 5300
+Connection ~ 6125 5300
+Wire Wire Line
+	6125 5300 5500 5300
+Text GLabel 7850 5600 0    50   Input ~ 0
++5V
+$Comp
+L Amplifier_Operational:LM358 U?
+U 1 1 5E3BC457
+P 6075 4350
+F 0 "U?" H 6075 4717 50  0000 C CNN
+F 1 "LM358" H 6075 4626 50  0000 C CNN
+F 2 "" H 6075 4350 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/lm2904-n.pdf" H 6075 4350 50  0001 C CNN
+	1    6075 4350
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Amplifier_Operational:LM358 U?
+U 2 1 5E3BF2DF
+P 5450 6875
+F 0 "U?" H 5450 7242 50  0000 C CNN
+F 1 "LM358" H 5450 7151 50  0000 C CNN
+F 2 "" H 5450 6875 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/lm2904-n.pdf" H 5450 6875 50  0001 C CNN
+	2    5450 6875
+	1    0    0    -1  
+$EndComp
+$Comp
+L Amplifier_Operational:LM358 U?
+U 3 1 5E3C2076
+P 2350 6625
+F 0 "U?" H 2308 6671 50  0000 L CNN
+F 1 "LM358" H 2308 6580 50  0000 L CNN
+F 2 "" H 2350 6625 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/lm2904-n.pdf" H 2350 6625 50  0001 C CNN
+	3    2350 6625
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8750 5500 9750 5500
+Wire Wire Line
+	9750 5500 9750 6250
+Wire Wire Line
+	9750 6250 6000 6250
+Connection ~ 8750 5500
+Wire Wire Line
+	4350 4300 4500 4300
+Wire Wire Line
+	4500 4300 4500 3350
+Connection ~ 4500 3350
+Wire Wire Line
+	4500 3350 5000 3350
+$Comp
+L power:GND #PWR?
+U 1 1 5E3CB802
+P 3750 5600
+F 0 "#PWR?" H 3750 5350 50  0001 C CNN
+F 1 "GND" H 3755 5427 50  0001 C CNN
+F 2 "" H 3750 5600 50  0001 C CNN
+F 3 "" H 3750 5600 50  0001 C CNN
+	1    3750 5600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E3CBCC4
+P 3850 5600
+F 0 "#PWR?" H 3850 5350 50  0001 C CNN
+F 1 "GND" H 3855 5427 50  0001 C CNN
+F 2 "" H 3850 5600 50  0001 C CNN
+F 3 "" H 3850 5600 50  0001 C CNN
+	1    3850 5600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E3CBEAB
+P 3950 5600
+F 0 "#PWR?" H 3950 5350 50  0001 C CNN
+F 1 "GND" H 3955 5427 50  0001 C CNN
+F 2 "" H 3950 5600 50  0001 C CNN
+F 3 "" H 3950 5600 50  0001 C CNN
+	1    3950 5600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E3CCF82
+P 2250 6925
+F 0 "#PWR?" H 2250 6675 50  0001 C CNN
+F 1 "GND" H 2255 6752 50  0001 C CNN
+F 2 "" H 2250 6925 50  0001 C CNN
+F 3 "" H 2250 6925 50  0001 C CNN
+	1    2250 6925
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E3CD4ED
+P 3300 2000
+F 0 "#PWR?" H 3300 1750 50  0001 C CNN
+F 1 "GND" H 3305 1827 50  0001 C CNN
+F 2 "" H 3300 2000 50  0001 C CNN
+F 3 "" H 3300 2000 50  0001 C CNN
+	1    3300 2000
+	1    0    0    -1  
+$EndComp
+Text GLabel 3500 1000 2    50   Output ~ 0
++5V
+Wire Wire Line
+	3500 1000 3300 1000
+Text Notes 9250 5450 0    50   ~ 0
++/- 500mV ?
+Text Notes 9775 5725 0    50   ~ 0
+0R25 for Vref=5V and Imax=2A
+$Comp
+L Bridges:R R?
+U 1 1 5E3D389B
+P 6350 3750
+F 0 "R?" V 6143 3750 50  0000 C CNN
+F 1 "10K" V 6234 3750 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 6280 3750 50  0001 C CNN
+F 3 "" H 6350 3750 50  0001 C CNN
+	1    6350 3750
+	0    1    1    0   
+$EndComp
+$Comp
+L Bridges:R R?
+U 1 1 5E3D427F
+P 6350 3250
+F 0 "R?" V 6143 3250 50  0000 C CNN
+F 1 "10K" V 6234 3250 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 6280 3250 50  0001 C CNN
+F 3 "" H 6350 3250 50  0001 C CNN
+	1    6350 3250
+	0    1    1    0   
+$EndComp
+$Comp
+L Bridges:R R?
+U 1 1 5E3D5889
+P 7200 2850
+F 0 "R?" H 7400 2825 50  0000 R CNN
+F 1 "510R" H 7450 2900 50  0000 R CNN
+F 2 "Resistors_SMD:R_0805" V 7130 2850 50  0001 C CNN
+F 3 "" H 7200 2850 50  0001 C CNN
+	1    7200 2850
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E3D6EA9
+P 7200 3000
+F 0 "#PWR?" H 7200 2750 50  0001 C CNN
+F 1 "GND" H 7205 2827 50  0001 C CNN
+F 2 "" H 7200 3000 50  0001 C CNN
+F 3 "" H 7200 3000 50  0001 C CNN
+	1    7200 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Bridges:R R?
+U 1 1 5E3D732F
+P 9275 2850
+F 0 "R?" H 9205 2804 50  0000 R CNN
+F 1 "510R" H 9205 2895 50  0000 R CNN
+F 2 "Resistors_SMD:R_0805" V 9205 2850 50  0001 C CNN
+F 3 "" H 9275 2850 50  0001 C CNN
+	1    9275 2850
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E3D7339
+P 9275 3000
+F 0 "#PWR?" H 9275 2750 50  0001 C CNN
+F 1 "GND" H 9280 2827 50  0001 C CNN
+F 2 "" H 9275 3000 50  0001 C CNN
+F 3 "" H 9275 3000 50  0001 C CNN
+	1    9275 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Bridges:R R?
+U 1 1 5E3D8B55
+P 6950 4300
+F 0 "R?" H 6880 4254 50  0000 R CNN
+F 1 "TBD" H 6880 4345 50  0000 R CNN
+F 2 "Resistors_SMD:R_0805" V 6880 4300 50  0001 C CNN
+F 3 "" H 6950 4300 50  0001 C CNN
+	1    6950 4300
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E3D8B5F
+P 6950 4450
+F 0 "#PWR?" H 6950 4200 50  0001 C CNN
+F 1 "GND" H 6955 4277 50  0001 C CNN
+F 2 "" H 6950 4450 50  0001 C CNN
+F 3 "" H 6950 4450 50  0001 C CNN
+	1    6950 4450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7200 2600 6950 2600
+Wire Wire Line
+	6950 2600 6950 4075
+Wire Wire Line
+	6950 4075 9925 4075
+Wire Wire Line
+	9925 4075 9925 2600
+Wire Wire Line
+	9925 2600 9275 2600
+Connection ~ 6950 4075
+Wire Wire Line
+	6950 4075 6950 4150
+Wire Wire Line
+	6200 3250 5750 3250
+Wire Wire Line
+	6200 3750 5750 3750
+$EndSCHEMATC
