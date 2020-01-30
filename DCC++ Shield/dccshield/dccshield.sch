@@ -4,10 +4,10 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title ""
-Date ""
-Rev ""
-Comp ""
+Title "DCC++ Shield"
+Date "2020-01-30"
+Rev "0.1"
+Comp "Tim Tashpulatov"
 Comment1 ""
 Comment2 ""
 Comment3 ""
@@ -207,9 +207,9 @@ $Comp
 L 74xx:74HC04 U1
 U 2 1 5E3A88F7
 P 4800 5450
-F 0 "U1" H 4800 5857 50  0000 C CNN
-F 1 "74HC04" H 4800 5766 50  0000 C CNN
-F 2 "Housings_SOIC:SOIC-14_3.9x8.7mm_Pitch1.27mm" H 4800 5675 50  0000 C CNN
+F 0 "U1" H 4800 5750 50  0000 C CNN
+F 1 "74HC04" H 4850 5650 50  0000 C CNN
+F 2 "Housings_SOIC:SOIC-14_3.9x8.7mm_Pitch1.27mm" H 4350 5200 50  0000 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 4800 5450 50  0001 C CNN
 	2    4800 5450
 	1    0    0    -1  
@@ -272,7 +272,7 @@ U 2 1 5E3BF2DF
 P 8550 5350
 F 0 "U3" H 8550 5717 50  0000 C CNN
 F 1 "LM358" H 8550 5626 50  0000 C CNN
-F 2 "Housings_SOIC:SOIC-8_3.9x4.9mm_Pitch1.27mm" H 9525 5575 50  0000 C CNN
+F 2 "Housings_SOIC:SOIC-8_3.9x4.9mm_Pitch1.27mm" H 9525 5525 50  0000 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/lm2904-n.pdf" H 8550 5350 50  0001 C CNN
 	2    8550 5350
 	1    0    0    -1  
@@ -299,7 +299,7 @@ Text GLabel 4525 6325 2    50   Output ~ 0
 +5V
 Text Notes 7500 5200 0    50   ~ 0
 +/- 500mV ?
-Text Notes 7300 4925 0    50   ~ 0
+Text Notes 6850 6025 0    50   ~ 0
 0R25 for Vref=5V and Imax=2A
 $Comp
 L Bridges:R R4
@@ -553,7 +553,7 @@ F 3 "" H 3700 5050 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	3550 5050 2750 5050
-Text Notes 4250 4675 0    50   ~ 0
+Text Notes 1500 4625 0    50   ~ 0
 ENABLE PROG ???
 Text Label 3225 2050 0    50   ~ 0
 A0
@@ -567,8 +567,8 @@ $Comp
 L Bridges:R R10
 U 1 1 5E35866A
 P 9600 4325
-F 0 "R10" V 9393 4325 50  0000 C CNN
-F 1 "10K" V 9484 4325 50  0000 C CNN
+F 0 "R10" V 9500 4325 50  0000 C CNN
+F 1 "10K" V 9700 4325 50  0000 C CNN
 F 2 "Resistors_SMD:R_0805" V 9530 4325 50  0001 C CNN
 F 3 "" H 9600 4325 50  0001 C CNN
 	1    9600 4325
@@ -579,7 +579,7 @@ L Bridges:R R9
 U 1 1 5E358674
 P 9250 4550
 F 0 "R9" H 9125 4525 50  0000 C CNN
-F 1 "1K" H 9100 4625 50  0000 C CNN
+F 1 "1K" H 9125 4625 50  0000 C CNN
 F 2 "Resistors_SMD:R_0805" V 9180 4550 50  0001 C CNN
 F 3 "" H 9250 4550 50  0001 C CNN
 	1    9250 4550
@@ -607,7 +607,7 @@ Wire Wire Line
 	9750 4325 9850 4325
 Wire Wire Line
 	9850 4325 9850 3900
-Text Notes 9550 4575 0    50   ~ 0
+Text Notes 9800 4750 0    50   ~ 0
 TBD
 Wire Wire Line
 	8425 3800 9250 3800
@@ -753,7 +753,7 @@ U 1 1 5E3FE578
 P 5725 5500
 F 0 "C3" H 5840 5591 50  0000 L CNN
 F 1 "100nF" H 5840 5500 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0805" H 4825 5400 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805" H 5300 5400 50  0000 L CNN
 F 3 "" H 5725 5500 50  0001 C CNN
 	1    5725 5500
 	1    0    0    -1  
@@ -899,4 +899,12 @@ F 3 "" H 3500 4025 50  0001 C CNN
 $EndComp
 Text Notes 2775 4225 0    50   ~ 0
 Resistanse is futile. Inductance is not.
+Text Notes 1450 2050 0    50   ~ 0
+For UNO
+Text Notes 1425 1525 0    50   ~ 0
+For MEGA
+Text Notes 1425 2850 0    50   ~ 0
+For MEGA
+Text Notes 1525 2300 0    50   ~ 0
+For UNO
 $EndSCHEMATC

@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 9)
+    (drawings 11)
     (tracks 269)
     (zones 0)
     (modules 29)
@@ -837,7 +837,7 @@
     (tags "SOIC 1.27")
     (path /5E3BC457)
     (attr smd)
-    (fp_text reference U3 (at 0 -3.5) (layer F.SilkS)
+    (fp_text reference U3 (at 0 3.81) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LM358 (at 0 3.5) (layer F.Fab)
@@ -1561,6 +1561,12 @@
     )
   )
 
+  (gr_text "tnt23 2020" (at 144.145 101.6 90) (layer F.SilkS) (tstamp 5E32FF9A)
+    (effects (font (size 1.5 1.5) (thickness 0.25)))
+  )
+  (gr_text "DCC++ SHIELD v0.1" (at 139.7 101.6 90) (layer F.SilkS)
+    (effects (font (size 2 2) (thickness 0.5)))
+  )
   (gr_line (start 190.5 78.74) (end 190.5 76.2) (layer Edge.Cuts) (width 0.05) (tstamp 5E3170E6))
   (gr_line (start 193.04 81.28) (end 190.5 78.74) (layer Edge.Cuts) (width 0.05))
   (gr_line (start 193.04 114.3) (end 193.04 81.28) (layer Edge.Cuts) (width 0.05))
