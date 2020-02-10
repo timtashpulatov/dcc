@@ -252,7 +252,7 @@ Wire Wire Line
 	4375 5450 4375 5050
 Connection ~ 4375 5050
 Wire Wire Line
-	4375 5050 3850 5050
+	4375 5050 4350 5050
 Text GLabel 5650 5350 0    50   Input ~ 0
 +5V
 $Comp
@@ -459,20 +459,20 @@ F 3 "https://www.arduino.cc/en/Main/arduinoBoardUno" H 2725 2050 50  0001 C CNN
 	1    2725 2050
 	1    0    0    -1  
 $EndComp
-Text Label 3375 3475 0    50   ~ 0
+Text Label 3400 3475 0    50   ~ 0
 DCC_SIGNAL_MAIN
-Text Label 2750 5050 0    50   ~ 0
+Text Label 3250 5050 0    50   ~ 0
 DCC_SIGNAL_PROG
 $Comp
 L Bridges:R R2
 U 1 1 5E3D389B
-P 1950 2450
-F 0 "R2" V 1743 2450 50  0000 C CNN
-F 1 "10K" V 1834 2450 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V 1880 2450 50  0001 C CNN
-F 3 "" H 1950 2450 50  0001 C CNN
-	1    1950 2450
-	0    1    1    0   
+P 4225 3475
+F 0 "R2" V 4018 3475 50  0000 C CNN
+F 1 "10K" V 4109 3475 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 4155 3475 50  0001 C CNN
+F 3 "" H 4225 3475 50  0001 C CNN
+	1    4225 3475
+	0    -1   -1   0   
 $EndComp
 $Comp
 L Bridges:R R1
@@ -543,16 +543,16 @@ Wire Wire Line
 $Comp
 L Bridges:R R3
 U 1 1 5E34FD15
-P 3700 5050
-F 0 "R3" V 3493 5050 50  0000 C CNN
-F 1 "10K" V 3584 5050 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V 3630 5050 50  0001 C CNN
-F 3 "" H 3700 5050 50  0001 C CNN
-	1    3700 5050
+P 4200 5050
+F 0 "R3" V 3993 5050 50  0000 C CNN
+F 1 "10K" V 4084 5050 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 4130 5050 50  0001 C CNN
+F 3 "" H 4200 5050 50  0001 C CNN
+	1    4200 5050
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	3550 5050 2750 5050
+	4050 5050 3250 5050
 Text Notes 1500 4625 0    50   ~ 0
 ENABLE PROG ???
 Text Label 3225 2050 0    50   ~ 0
@@ -616,51 +616,10 @@ Wire Wire Line
 Connection ~ 9850 3900
 Text Label 2225 1750 2    50   ~ 0
 ENABLE_MAIN
-Text Label 1625 2450 2    50   ~ 0
+Text Label 625  2575 2    50   ~ 0
 DCC_SIGNAL_MAIN
-Text Label 1275 1950 2    50   ~ 0
+Text Label 550  1800 2    50   ~ 0
 DCC_SIGNAL_PROG
-Wire Wire Line
-	2225 2650 2075 2650
-$Comp
-L Bridges:R R12
-U 1 1 5E36F49C
-P 1925 2650
-F 0 "R12" V 2025 2650 50  0000 C CNN
-F 1 "DNF" V 2100 2650 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V 1855 2650 50  0001 C CNN
-F 3 "" H 1925 2650 50  0001 C CNN
-	1    1925 2650
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	1625 2450 1725 2450
-Wire Wire Line
-	1775 2650 1725 2650
-Wire Wire Line
-	1725 2650 1725 2450
-Wire Wire Line
-	2225 1650 1700 1650
-$Comp
-L Bridges:R R11
-U 1 1 5E3736A4
-P 1550 1650
-F 0 "R11" V 1343 1650 50  0000 C CNN
-F 1 "DNF" V 1434 1650 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V 1480 1650 50  0001 C CNN
-F 3 "" H 1550 1650 50  0001 C CNN
-	1    1550 1650
-	0    1    -1   0   
-$EndComp
-Wire Wire Line
-	1400 1650 1350 1650
-Wire Wire Line
-	1350 1650 1350 1950
-Wire Wire Line
-	2225 1950 1350 1950
-Connection ~ 1350 1950
-Wire Wire Line
-	1350 1950 1275 1950
 $Comp
 L Bridges:C C1
 U 1 1 5E3D2AED
@@ -858,12 +817,7 @@ Wire Wire Line
 Wire Wire Line
 	6750 2700 6750 1900
 Wire Wire Line
-	3375 3475 5175 3475
-Wire Wire Line
-	1800 2450 1725 2450
-Connection ~ 1725 2450
-Wire Wire Line
-	2100 2450 2225 2450
+	4375 3475 5175 3475
 $Comp
 L Device:Ferrite_Bead_Small FB1
 U 1 1 5E3E685D
@@ -899,12 +853,64 @@ F 3 "" H 3500 4025 50  0001 C CNN
 $EndComp
 Text Notes 2775 4225 0    50   ~ 0
 Resistanse is futile. Inductance is not.
-Text Notes 1450 2050 0    50   ~ 0
+Text Notes 950  2150 0    50   ~ 0
 For UNO
-Text Notes 1425 1525 0    50   ~ 0
+Text Notes 900  1500 0    50   ~ 0
 For MEGA
-Text Notes 1425 2850 0    50   ~ 0
+Text Notes 1000 2950 0    50   ~ 0
 For MEGA
-Text Notes 1525 2300 0    50   ~ 0
+Text Notes 975  2300 0    50   ~ 0
 For UNO
+Wire Wire Line
+	775  2575 625  2575
+$Comp
+L Jumper:Jumper_3_Open JP2
+U 1 1 5E5C8CD0
+P 925 2575
+F 0 "JP2" V 834 2662 50  0000 L CNN
+F 1 "MAIN UNO/MEGA" V 925 2662 50  0000 L CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x03_Pitch2.54mm" V 1016 2662 50  0000 L CNN
+F 3 "~" H 925 2575 50  0001 C CNN
+	1    925  2575
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	925  2325 1400 2325
+Wire Wire Line
+	1400 2325 1400 2450
+Wire Wire Line
+	1400 2450 2225 2450
+Wire Wire Line
+	925  2825 1400 2825
+Wire Wire Line
+	1400 2825 1400 2650
+Wire Wire Line
+	1400 2650 2225 2650
+Wire Wire Line
+	4075 3475 3400 3475
+Wire Wire Line
+	1275 1950 2225 1950
+$Comp
+L Jumper:Jumper_3_Open JP1
+U 1 1 5E5E66B9
+P 925 1800
+F 0 "JP1" V 834 1887 50  0000 L CNN
+F 1 "MAIN UNO/MEGA" V 925 1887 50  0000 L CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x03_Pitch2.54mm" V 1016 1887 50  0000 L CNN
+F 3 "~" H 925 1800 50  0001 C CNN
+	1    925  1800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	925  2050 1275 2050
+Wire Wire Line
+	1275 2050 1275 1950
+Wire Wire Line
+	925  1550 1275 1550
+Wire Wire Line
+	1275 1550 1275 1650
+Wire Wire Line
+	1275 1650 2225 1650
+Wire Wire Line
+	775  1800 550  1800
 $EndSCHEMATC
