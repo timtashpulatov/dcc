@@ -156,7 +156,7 @@ Wire Wire Line
 Wire Wire Line
 	3575 2600 3975 2600
 Wire Wire Line
-	3075 3625 3075 2600
+	3075 3625 3075 2875
 Connection ~ 3075 2600
 Wire Wire Line
 	3075 2600 3375 2600
@@ -238,10 +238,6 @@ Text Label 6150 3000 0    50   ~ 0
 ADC_IN0
 Text Label 6150 3100 0    50   ~ 0
 ADC_IN1
-Text Label 6150 3200 0    50   ~ 0
-ADC_IN3
-Text Label 6150 3300 0    50   ~ 0
-ADC_IN4
 Text Notes 4975 4100 2    39   ~ 0
 TIM3_CH4, TIM14_CH1, TIM1_CH3
 Text Notes 6225 3800 0    39   ~ 0
@@ -646,4 +642,41 @@ Text Label 6150 3500 0    50   ~ 0
 _RL
 Text Label 5150 4100 2    50   ~ 0
 _FL
+Text Label 8400 2800 0    50   ~ 0
+_F1
+Text Label 8400 3000 0    50   ~ 0
+_F2
+Text Label 6150 3200 0    50   ~ 0
+_F1
+Text Label 6150 3300 0    50   ~ 0
+_F2
+$Comp
+L Device:C C5
+U 1 1 5E6B1D41
+P 2900 3150
+F 0 "C5" H 3015 3196 50  0000 L CNN
+F 1 "C" H 3015 3105 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 2938 3000 50  0001 C CNN
+F 3 "~" H 2900 3150 50  0001 C CNN
+	1    2900 3150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 3000 2900 2875
+$Comp
+L power:GND #PWR0115
+U 1 1 5E6B1D4C
+P 2900 3300
+F 0 "#PWR0115" H 2900 3050 50  0001 C CNN
+F 1 "GND" H 2905 3127 50  0001 C CNN
+F 2 "" H 2900 3300 50  0001 C CNN
+F 3 "" H 2900 3300 50  0001 C CNN
+	1    2900 3300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 2875 3075 2875
+Connection ~ 3075 2875
+Wire Wire Line
+	3075 2875 3075 2600
 $EndSCHEMATC
