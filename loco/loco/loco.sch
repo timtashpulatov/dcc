@@ -83,13 +83,62 @@ $Comp
 L Driver_Motor:A4953_LJ U2
 U 1 1 5E653C2B
 P 3200 4325
-F 0 "U2" H 3200 4906 50  0000 C CNN
-F 1 "A4953_LJ" H 3200 4815 50  0000 C CNN
+F 0 "U2" H 3400 4800 50  0000 C CNN
+F 1 "A4953_LJ" H 3425 4700 50  0000 C CNN
 F 2 "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm" H 3200 3775 50  0001 C CNN
 F 3 "www.allegromicro.com/~/media/Files/Datasheets/A4952-3-Datasheet.ashx?la=en" H 2900 4675 50  0001 C CNN
 	1    3200 4325
 	1    0    0    -1  
 $EndComp
 Text Label 2850 2700 0    50   ~ 0
+27V
+Text Label 5150 3000 2    50   ~ 0
+NRST
+Text Label 5150 3200 2    50   ~ 0
+BOOT0
+Wire Wire Line
+	5650 2800 5650 2700
+Wire Wire Line
+	5750 2800 5750 2700
+Wire Wire Line
+	5750 2700 5650 2700
+Connection ~ 5650 2700
+Wire Wire Line
+	5650 2700 5650 2600
+Text Label 5650 2600 0    50   ~ 0
++3V3
+$Comp
+L power:GND #PWR?
+U 1 1 5E657AD9
+P 3200 4825
+F 0 "#PWR?" H 3200 4575 50  0001 C CNN
+F 1 "GND" H 3205 4652 50  0001 C CNN
+F 2 "" H 3200 4825 50  0001 C CNN
+F 3 "" H 3200 4825 50  0001 C CNN
+	1    3200 4825
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 4725 3200 4775
+Wire Wire Line
+	3300 4725 3300 4775
+Wire Wire Line
+	3300 4775 3200 4775
+Connection ~ 3200 4775
+Wire Wire Line
+	3200 4775 3200 4825
+Wire Wire Line
+	3600 4125 3825 4125
+Wire Wire Line
+	3600 4225 3825 4225
+Text Label 3825 4125 0    50   ~ 0
+M1
+Text Label 3825 4225 0    50   ~ 0
+M2
+Text Label 2800 4125 2    50   ~ 0
+IN1
+Text Label 2800 4225 2    50   ~ 0
+IN2
+Text Label 3200 3925 2    50   ~ 0
 27V
 $EndSCHEMATC
