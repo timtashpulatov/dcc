@@ -127,16 +127,6 @@ Wire Wire Line
 	3075 4475 3075 4525
 Wire Wire Line
 	2675 3825 2450 3825
-Wire Wire Line
-	2675 3925 2450 3925
-Text Label 2450 3825 2    50   ~ 0
-M1
-Text Label 2450 3925 2    50   ~ 0
-M2
-Text Label 3475 3825 0    50   ~ 0
-IN1
-Text Label 3475 3925 0    50   ~ 0
-IN2
 $Comp
 L loco:TLV760 U3
 U 1 1 5E653E6E
@@ -244,4 +234,74 @@ Wire Wire Line
 	6325 4100 6750 4100
 Text Label 6325 4425 0    50   ~ 0
 SWCLK
+Text Label 6150 3000 0    50   ~ 0
+ADC_IN0
+Text Label 6150 3100 0    50   ~ 0
+ADC_IN1
+Text Label 6150 3200 0    50   ~ 0
+ADC_IN3
+Text Label 6150 3300 0    50   ~ 0
+ADC_IN4
+Text Notes 5050 4100 2    39   ~ 0
+TIM3_CH4, TIM14_CH1, TIM1_CH3
+Text Notes 6225 3800 0    39   ~ 0
+TIM1_CH2
+Text Notes 6225 3900 0    39   ~ 0
+TIM1_CH3
+Text Label 6500 3400 0    39   ~ 0
+TIM14_CH1
+Wire Wire Line
+	6150 3400 6900 3400
+Wire Wire Line
+	6900 3400 6900 2750
+$Comp
+L Device:R R1
+U 1 1 5E66806A
+P 6900 2600
+F 0 "R1" H 6970 2646 50  0000 L CNN
+F 1 "TBD" H 6970 2555 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 6830 2600 50  0001 C CNN
+F 3 "~" H 6900 2600 50  0001 C CNN
+	1    6900 2600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6900 2450 6900 2300
+Wire Wire Line
+	6900 2300 2900 2300
+Connection ~ 2900 2300
+Text GLabel 2450 3825 0    50   Output ~ 0
+M1
+Wire Wire Line
+	2675 3925 2450 3925
+Text GLabel 2450 3925 0    50   Output ~ 0
+M2
+Text Label 6225 3600 0    39   ~ 0
+TIM3_CH1
+Wire Wire Line
+	6150 3700 6900 3700
+Text Label 6225 3700 0    39   ~ 0
+TIM3_CH2
+Wire Wire Line
+	3675 3825 3675 4675
+Wire Wire Line
+	3675 4675 6900 4675
+Wire Wire Line
+	6900 4675 6900 3700
+Wire Wire Line
+	7000 3600 7000 4775
+Wire Wire Line
+	7000 4775 3750 4775
+Wire Wire Line
+	3750 4775 3750 3925
+Wire Wire Line
+	6150 3600 7000 3600
+Wire Wire Line
+	3750 3925 3475 3925
+Wire Wire Line
+	3675 3825 3475 3825
+Text Label 3475 4125 0    50   ~ 0
+VREF
+Text Label 2675 4025 2    50   ~ 0
+LSS
 $EndSCHEMATC
