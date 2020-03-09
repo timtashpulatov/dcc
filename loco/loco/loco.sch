@@ -221,8 +221,6 @@ Wire Wire Line
 Wire Wire Line
 	6550 4000 6550 4325
 Connection ~ 6550 4000
-Wire Wire Line
-	6550 4000 6750 4000
 Text Label 6550 4325 0    50   ~ 0
 SWDIO
 Wire Wire Line
@@ -230,8 +228,6 @@ Wire Wire Line
 Wire Wire Line
 	6325 4100 6325 4425
 Connection ~ 6325 4100
-Wire Wire Line
-	6325 4100 6750 4100
 Text Label 6325 4425 0    50   ~ 0
 SWCLK
 Text Label 6150 3000 0    50   ~ 0
@@ -508,10 +504,6 @@ F 3 "" H 9275 3575 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	9275 3475 9725 3475
-Wire Wire Line
-	8675 3475 8400 3475
-Wire Wire Line
-	8675 3675 8400 3675
 $Comp
 L Device:R R6
 U 1 1 5E66D592
@@ -703,4 +695,16 @@ F 3 "" H 4625 2275 50  0001 C CNN
 $EndComp
 Text Label 4625 1975 0    50   ~ 0
 +3V3
+Wire Wire Line
+	8200 4000 8200 3675
+Wire Wire Line
+	6550 4000 8200 4000
+Wire Wire Line
+	8200 3675 8675 3675
+Wire Wire Line
+	8000 4100 8000 3475
+Wire Wire Line
+	6325 4100 8000 4100
+Wire Wire Line
+	8000 3475 8675 3475
 $EndSCHEMATC
