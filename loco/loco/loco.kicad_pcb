@@ -34,7 +34,7 @@
   )
 
   (setup
-    (last_trace_width 0.5)
+    (last_trace_width 0.25)
     (user_trace_width 0.3)
     (user_trace_width 0.5)
     (trace_clearance 0.2)
@@ -1207,6 +1207,11 @@
       (net 8 RAIL2))
     (pad 4 smd rect (at -0.7775 -1.585 180) (size 0.56 0.63) (layers F.Cu F.Paste F.Mask)
       (net 5 GND))
+    (model ${KIPRJMOD}/3d/NSR2030.step
+      (offset (xyz -1.75 -1.75 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (module Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm (layer F.Cu) (tedit 5C570069) (tstamp 5E651206)
@@ -1354,7 +1359,6 @@
   (segment (start 129.215 89.31) (end 129.215 87.559) (width 0.25) (layer F.Cu) (net 5))
   (segment (start 127.7875 80.2385) (end 127.762 80.264) (width 0.3) (layer F.Cu) (net 5))
   (segment (start 128.778 80.2385) (end 127.7875 80.2385) (width 0.3) (layer F.Cu) (net 5))
-  (via (at 129.286 86.106) (size 0.7) (drill 0.3) (layers F.Cu B.Cu) (net 9) (tstamp 5E6617ED))
   (segment (start 119.7675 80.645) (end 123.0375 80.645) (width 0.25) (layer F.Cu) (net 6))
   (segment (start 119.5225 81.6025) (end 119.67 81.75) (width 0.25) (layer F.Cu) (net 6))
   (segment (start 119.5225 80.965) (end 119.5225 81.6025) (width 0.25) (layer F.Cu) (net 6))
@@ -1389,6 +1393,7 @@
   (segment (start 117.033 84.135) (end 117.97 84.135) (width 0.5) (layer F.Cu) (net 8))
   (segment (start 115.57 85.725) (end 115.57 85.598) (width 0.5) (layer F.Cu) (net 8))
   (segment (start 115.57 85.598) (end 117.033 84.135) (width 0.5) (layer F.Cu) (net 8))
+  (via (at 129.286 86.106) (size 0.7) (drill 0.3) (layers F.Cu B.Cu) (net 9) (tstamp 5E6617ED))
   (segment (start 124.841 85.725) (end 124.395 85.725) (width 0.25) (layer F.Cu) (net 9))
   (segment (start 129.865 89.31) (end 129.865 83.41) (width 0.3) (layer F.Cu) (net 9))
   (segment (start 129.286 88.1125) (end 129.032 88.3665) (width 0.5) (layer B.Cu) (net 9))
