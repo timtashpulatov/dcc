@@ -11,85 +11,131 @@ void HAL_TIM_IC_CaptureCallback (TIM_HandleTypeDef *htim) {
 uint8_t DccBitVal;
 uint32_t bitMicros;
 
+volatile uint8_t gap;
+volatile uint16_t count0, count1;
+
 // We only have one input capture timer, so no checks for proper htim here
 
-	bitMicros = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
+//	bitMicros = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
-	if (bitMicros > MIN_ONEBITFULL) {
-		DccBitVal = (bitMicros < MAX_ONEBITFULL);
 
-		switch (DccRx.State) {
 
-		case WAIT_PREAMBLE:
-			if (DccBitVal) {
-				DccRx.BitCount++;
-				if (DccRx.BitCount > 10) {
-					DccRx.State = WAIT_START_BIT;
+//	if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1) {
+
+	if (1) {
+//	if (htim->Instance->SR & TIM_SR_CC1OF) {
+
+//		gap = 0;
+//		htim->Instance->SR = ~(TIM_SR_CC1OF | TIM_SR_CC1IF);
+//	} else {
+
+
+//
+//		if (0 == gap) {
+//			count0 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
+//			gap = 1;
+//		} else {
+//			count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
+//			if (count1 > count0) {
+//				bitMicros = count1 - count0;
+//			} else {
+//				bitMicros = count1 + 0xffffffffU - count0 + 1;
+//			}
+//			gap = 0;	// ??
+//		}
+
+
+		count0 = count1;
+		count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
+
+		TIM14->EGR = 1;
+
+		htim->Instance->EGR = 1;
+
+
+		if (count1 > count0) {
+			bitMicros = count1 - count0;
+		} else {
+			bitMicros = 50000 - count0 + count1;
+		}
+
+
+		if (bitMicros > MIN_ONEBITFULL) {
+			DccBitVal = (bitMicros < MAX_ONEBITFULL);
+
+			switch (DccRx.State) {
+
+			case WAIT_PREAMBLE:
+				if (DccBitVal) {
+					DccRx.BitCount++;
+					if (DccRx.BitCount > 10) {
+						DccRx.State = WAIT_START_BIT;
+					}
+				} else {
+					DccRx.BitCount = 0 ;
 				}
-			} else {
-				DccRx.BitCount = 0 ;
-			}
-			break;
+				break;
 
-		case WAIT_START_BIT:
+			case WAIT_START_BIT:
 
-			if (DccBitVal) {
+				if (DccBitVal) {
+					DccRx.BitCount ++;
+				} else {
+					// we got the startbit
+					DccRx.State = WAIT_DATA ;
+					DccRx.PacketBuf.Size = 0;
+					DccRx.PacketBuf.PreambleBits = 0;
+					for(uint8_t i = 0; i< MAX_DCC_MESSAGE_LEN; i++ )
+						DccRx.PacketBuf.Data [i] = 0;
+
+					DccRx.PacketBuf.PreambleBits = DccRx.BitCount;
+					DccRx.BitCount = 0 ;
+					DccRx.TempByte = 0 ;
+				}
+
+				break;
+
+			case WAIT_DATA:
+				DccRx.BitCount++;
+				DccRx.TempByte = (DccRx.TempByte << 1);
+				if (DccBitVal) {
+					DccRx.TempByte |= 1;
+					if (DccRx.BitCount == 8) {
+					  if (DccRx.PacketBuf.Size == MAX_DCC_MESSAGE_LEN ) { // Packet is too long - abort
+						DccRx.State = WAIT_PREAMBLE ;
+						DccRx.BitCount = 0 ;
+					  } else {
+						DccRx.State = WAIT_END_BIT;
+						DccRx.PacketBuf.Data [DccRx.PacketBuf.Size ++] = DccRx.TempByte;
+					  }
+					}
+				}
+				break;
+
+			case WAIT_END_BIT:
 				DccRx.BitCount ++;
-			} else {
-				// we got the startbit
-				DccRx.State = WAIT_DATA ;
-				DccRx.PacketBuf.Size = 0;
-				DccRx.PacketBuf.PreambleBits = 0;
-				for(uint8_t i = 0; i< MAX_DCC_MESSAGE_LEN; i++ )
-					DccRx.PacketBuf.Data [i] = 0;
+				if (DccBitVal) { // End of packet?
+				  DccRx.State = WAIT_PREAMBLE;
+				  DccRx.BitCount = 0 ;
+				  DccRx.PacketCopy = DccRx.PacketBuf;
 
-				DccRx.PacketBuf.PreambleBits = DccRx.BitCount;
-				DccRx.BitCount = 0 ;
-				DccRx.TempByte = 0 ;
+				  DccRx.DataReady = 1;
+
+				}
+				else  // Get next Byte
+				  // KGW - Abort immediately if packet is too long.
+				  if (DccRx.PacketBuf.Size == MAX_DCC_MESSAGE_LEN) { // Packet is too long - abort
+					DccRx.State = WAIT_PREAMBLE ;
+					DccRx.BitCount = 0;
+				  } else {
+					DccRx.State = WAIT_DATA;
+					DccRx.BitCount = 0;
+					DccRx.TempByte = 0;
+				  }
+				break;
 			}
-
-			break;
-
-		case WAIT_DATA:
-			DccRx.BitCount++;
-			DccRx.TempByte = (DccRx.TempByte << 1);
-			if (DccBitVal)
-				DccRx.TempByte |= 1;
-			    if (DccRx.BitCount == 8) {
-			      if (DccRx.PacketBuf.Size == MAX_DCC_MESSAGE_LEN ) { // Packet is too long - abort
-			        DccRx.State = WAIT_PREAMBLE ;
-			        DccRx.BitCount = 0 ;
-			      } else {
-			        DccRx.State = WAIT_END_BIT;
-			        DccRx.PacketBuf.Data [DccRx.PacketBuf.Size ++] = DccRx.TempByte;
-			      }
-			    }
-			break;
-
-		case WAIT_END_BIT:
-		    DccRx.BitCount ++;
-		    if (DccBitVal) { // End of packet?
-		      DccRx.State = WAIT_PREAMBLE;
-		      DccRx.BitCount = 0 ;
-		      DccRx.PacketCopy = DccRx.PacketBuf;
-
-		      DccRx.DataReady = 1;
-
-		    }
-		    else  // Get next Byte
-		      // KGW - Abort immediately if packet is too long.
-		      if (DccRx.PacketBuf.Size == MAX_DCC_MESSAGE_LEN) { // Packet is too long - abort
-		        DccRx.State = WAIT_PREAMBLE ;
-		        DccRx.BitCount = 0;
-		      } else {
- 		        DccRx.State = WAIT_DATA;
-		        DccRx.BitCount = 0;
-		        DccRx.TempByte = 0;
-		      }
-			break;
 		}
 	}
-
 }
 
 
@@ -175,7 +221,7 @@ void MX_TIM14_Init(void)
 
   /* USER CODE END TIM14_Init 1 */
   htim14.Instance = TIM14;
-  htim14.Init.Prescaler = 31;		// TODO good for 64MHz in F103, recalculate for 48MHz of F030
+  htim14.Init.Prescaler = 48-1;		// TODO 31 good for 64MHz in F103, recalculate for 48MHz of F030
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim14.Init.Period = 50000-1;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -188,7 +234,7 @@ void MX_TIM14_Init(void)
   {
     Error_Handler();
   }
-  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_BOTHEDGE;
+  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; // TIM_INPUTCHANNELPOLARITY_BOTHEDGE;
   sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
   sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
   sConfigIC.ICFilter = 0;
