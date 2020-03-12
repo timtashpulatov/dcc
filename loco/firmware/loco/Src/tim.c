@@ -48,9 +48,9 @@ volatile uint16_t count0, count1;
 		count0 = count1;
 		count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
-		TIM14->EGR = 1;
+//		TIM14->EGR = 1;
 
-		htim->Instance->EGR = 1;
+//		htim->Instance->EGR = 1;
 
 
 		if (count1 > count0) {
@@ -221,7 +221,7 @@ void MX_TIM14_Init(void)
 
   /* USER CODE END TIM14_Init 1 */
   htim14.Instance = TIM14;
-  htim14.Init.Prescaler = 48-1;		// TODO 31 good for 64MHz in F103, recalculate for 48MHz of F030
+  htim14.Init.Prescaler = 31;		// TODO 31 good for 64MHz in F103, recalculate for 48MHz of F030
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim14.Init.Period = 50000-1;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -234,7 +234,7 @@ void MX_TIM14_Init(void)
   {
     Error_Handler();
   }
-  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; // TIM_INPUTCHANNELPOLARITY_BOTHEDGE;
+  sConfigIC.ICPolarity = /* TIM_INPUTCHANNELPOLARITY_RISING */ TIM_INPUTCHANNELPOLARITY_BOTHEDGE;
   sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
   sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
   sConfigIC.ICFilter = 0;
