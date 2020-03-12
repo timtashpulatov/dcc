@@ -1,5 +1,97 @@
 #include "main.h"
+#include "loco.h"
 #include "tim.h"
+
+DccRx_t DccRx;
+volatile uint32_t bitMax, bitMin, bitVal;
+
+
+
+void HAL_TIM_IC_CaptureCallback (TIM_HandleTypeDef *htim) {
+uint8_t DccBitVal;
+uint32_t bitMicros;
+
+// We only have one input capture timer, so no checks for proper htim here
+
+	bitMicros = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
+
+	if (bitMicros > MIN_ONEBITFULL) {
+		DccBitVal = (bitMicros < MAX_ONEBITFULL);
+
+		switch (DccRx.State) {
+
+		case WAIT_PREAMBLE:
+			if (DccBitVal) {
+				DccRx.BitCount++;
+				if (DccRx.BitCount > 10) {
+					DccRx.State = WAIT_START_BIT;
+				}
+			} else {
+				DccRx.BitCount = 0 ;
+			}
+			break;
+
+		case WAIT_START_BIT:
+
+			if (DccBitVal) {
+				DccRx.BitCount ++;
+			} else {
+				// we got the startbit
+				DccRx.State = WAIT_DATA ;
+				DccRx.PacketBuf.Size = 0;
+				DccRx.PacketBuf.PreambleBits = 0;
+				for(uint8_t i = 0; i< MAX_DCC_MESSAGE_LEN; i++ )
+					DccRx.PacketBuf.Data [i] = 0;
+
+				DccRx.PacketBuf.PreambleBits = DccRx.BitCount;
+				DccRx.BitCount = 0 ;
+				DccRx.TempByte = 0 ;
+			}
+
+			break;
+
+		case WAIT_DATA:
+			DccRx.BitCount++;
+			DccRx.TempByte = (DccRx.TempByte << 1);
+			if (DccBitVal)
+				DccRx.TempByte |= 1;
+			    if (DccRx.BitCount == 8) {
+			      if (DccRx.PacketBuf.Size == MAX_DCC_MESSAGE_LEN ) { // Packet is too long - abort
+			        DccRx.State = WAIT_PREAMBLE ;
+			        DccRx.BitCount = 0 ;
+			      } else {
+			        DccRx.State = WAIT_END_BIT;
+			        DccRx.PacketBuf.Data [DccRx.PacketBuf.Size ++] = DccRx.TempByte;
+			      }
+			    }
+			break;
+
+		case WAIT_END_BIT:
+		    DccRx.BitCount ++;
+		    if (DccBitVal) { // End of packet?
+		      DccRx.State = WAIT_PREAMBLE;
+		      DccRx.BitCount = 0 ;
+		      DccRx.PacketCopy = DccRx.PacketBuf;
+
+		      DccRx.DataReady = 1;
+
+		    }
+		    else  // Get next Byte
+		      // KGW - Abort immediately if packet is too long.
+		      if (DccRx.PacketBuf.Size == MAX_DCC_MESSAGE_LEN) { // Packet is too long - abort
+		        DccRx.State = WAIT_PREAMBLE ;
+		        DccRx.BitCount = 0;
+		      } else {
+ 		        DccRx.State = WAIT_DATA;
+		        DccRx.BitCount = 0;
+		        DccRx.TempByte = 0;
+		      }
+			break;
+		}
+	}
+
+}
+
 
 
 /**

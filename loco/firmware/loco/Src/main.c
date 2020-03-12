@@ -52,6 +52,9 @@ IWDG_HandleTypeDef hiwdg;
 
 /* USER CODE BEGIN PV */
 
+//  extern DCC_MSG Msg;
+extern DccRx_t DccRx;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -98,10 +101,15 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC_Init();
-  MX_IWDG_Init();
+//  MX_IWDG_Init();
   MX_TIM3_Init();
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
+
+
+
+  HAL_TIM_IC_Start_IT (&htim14, TIM_CHANNEL_1);
+
 
   /* USER CODE END 2 */
  
@@ -115,6 +123,10 @@ int main(void)
 	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
+
+	  if (DccRx.DataReady) {
+
+	  }
 
 
     /* USER CODE END WHILE */
