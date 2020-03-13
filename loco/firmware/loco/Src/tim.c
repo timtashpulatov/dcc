@@ -19,6 +19,8 @@ __HAL_DBGMCU_FREEZE_TIM3 ();
 __HAL_DBGMCU_FREEZE_TIM14 ();
 
 
+HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+
 
 // We only have one input capture timer, so no checks for proper htim here
 
@@ -63,7 +65,7 @@ __HAL_DBGMCU_FREEZE_TIM14 ();
 		if (count1 > count0) {
 			bitMicros = count1 - count0;
 		} else {
-			bitMicros = 50000 - count0 + count1;
+			bitMicros = TIM4_INIT_PERIOD - count0 + count1;
 		}
 
 
@@ -141,9 +143,13 @@ __HAL_DBGMCU_FREEZE_TIM14 ();
 				  }
 				break;
 			}
+		} else {
+			HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 		}
 	}
 
+
+	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
 	__HAL_DBGMCU_UNFREEZE_TIM14 ();
 	__HAL_DBGMCU_UNFREEZE_TIM3 ();
@@ -172,7 +178,7 @@ void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 48-1;
+  htim3.Init.Prescaler = 48-1;										// 48MHz/48 = 1MHz (one tick equals 1us)
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 158-1;	// 500-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -235,7 +241,7 @@ void MX_TIM14_Init(void)
   htim14.Instance = TIM14;
   htim14.Init.Prescaler = 48-1;		// TODO 31 good for 64MHz in F103, recalculate for 48MHz of F030
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim14.Init.Period = 50000-1;
+  htim14.Init.Period = TIM4_INIT_PERIOD - 1;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim14) != HAL_OK)

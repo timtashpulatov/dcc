@@ -4,12 +4,12 @@
 
 #define MAX_DCC_MESSAGE_LEN     8    	// including XOR-Byte
 
-#define MAX_ONEBITFULL  200-42          // 146
-#define MAX_PREAMBLE    200             // 146
+#define MAX_ONEBITFULL  116+10	//200-42          // 146
+//#define MAX_PREAMBLE    200             // 146
 #define MAX_ONEBITHALF  100     		// 82
-#define MIN_ONEBITFULL  115-15          // 82
-#define MIN_ONEBITHALF  25              // 35
-#define MAX_BITDIFF     25              // 24
+#define MIN_ONEBITFULL  50-10	//115-15          // 82
+//#define MIN_ONEBITHALF  25              // 35
+//#define MAX_BITDIFF     25              // 24
 
 typedef struct
 {

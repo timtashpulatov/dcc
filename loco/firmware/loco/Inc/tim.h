@@ -1,6 +1,9 @@
 #ifndef __TIM_H__
 #define __TIM_H__
 
+
+#define TIM4_INIT_PERIOD		10000
+
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim14;
 
