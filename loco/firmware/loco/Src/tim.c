@@ -22,6 +22,11 @@ __HAL_DBGMCU_FREEZE_TIM14 ();
 HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 
 
+count0 = count1;
+count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
+
+
+
 // We only have one input capture timer, so no checks for proper htim here
 
 //	bitMicros = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
@@ -53,8 +58,8 @@ HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 //		}
 
 
-		count0 = count1;
-		count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
+//		count0 = count1;
+//		count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
 
 //		TIM14->EGR = 1;
