@@ -3,7 +3,7 @@
 #include "tim.h"
 
 volatile DccRx_t DccRx;
-volatile uint32_t bitMax, bitMin, bitVal;
+//volatile uint32_t bitMax, bitMin, bitVal;
 
 uint8_t DccBitVal;
 uint16_t bitMicros;
@@ -87,6 +87,9 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 					DccRx.BitCount++;
 					if (DccRx.BitCount > 10) {
 						DccRx.State = WAIT_START_BIT;
+						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+
 					}
 				} else {
 					DccRx.BitCount = 0 ;
@@ -261,7 +264,7 @@ void MX_TIM14_Init(void)
   {
     Error_Handler();
   }
-  sConfigIC.ICPolarity = /* TIM_INPUTCHANNELPOLARITY_RISING */ TIM_INPUTCHANNELPOLARITY_BOTHEDGE;
+  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING /* TIM_INPUTCHANNELPOLARITY_BOTHEDGE */;
   sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
   sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
   sConfigIC.ICFilter = 0;
