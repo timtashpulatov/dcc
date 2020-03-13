@@ -14,6 +14,12 @@ uint32_t bitMicros;
 volatile uint8_t gap;
 volatile uint16_t count0, count1;
 
+
+__HAL_DBGMCU_FREEZE_TIM3 ();
+__HAL_DBGMCU_FREEZE_TIM14 ();
+
+
+
 // We only have one input capture timer, so no checks for proper htim here
 
 //	bitMicros = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
@@ -22,12 +28,12 @@ volatile uint16_t count0, count1;
 
 //	if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1) {
 
-	if (1) {
-//	if (htim->Instance->SR & TIM_SR_CC1OF) {
+//	if (1) {
+	if (htim->Instance->SR & TIM_SR_CC1OF) {
 
-//		gap = 0;
-//		htim->Instance->SR = ~(TIM_SR_CC1OF | TIM_SR_CC1IF);
-//	} else {
+		gap = 0;
+		htim->Instance->SR = ~(TIM_SR_CC1OF | TIM_SR_CC1IF);
+	} else {
 
 
 //
@@ -47,6 +53,7 @@ volatile uint16_t count0, count1;
 
 		count0 = count1;
 		count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
+
 
 //		TIM14->EGR = 1;
 
@@ -136,6 +143,11 @@ volatile uint16_t count0, count1;
 			}
 		}
 	}
+
+
+	__HAL_DBGMCU_UNFREEZE_TIM14 ();
+	__HAL_DBGMCU_UNFREEZE_TIM3 ();
+
 }
 
 
@@ -160,9 +172,9 @@ void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
+  htim3.Init.Prescaler = 48-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 0;
+  htim3.Init.Period = 158-1;	// 500-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -185,7 +197,7 @@ void MX_TIM3_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
+  sConfigOC.Pulse = 58-1;	// 250-1;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
@@ -221,7 +233,7 @@ void MX_TIM14_Init(void)
 
   /* USER CODE END TIM14_Init 1 */
   htim14.Instance = TIM14;
-  htim14.Init.Prescaler = 31;		// TODO 31 good for 64MHz in F103, recalculate for 48MHz of F030
+  htim14.Init.Prescaler = 48-1;		// TODO 31 good for 64MHz in F103, recalculate for 48MHz of F030
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim14.Init.Period = 50000-1;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;

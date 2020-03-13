@@ -107,8 +107,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
+  HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
 
   HAL_TIM_IC_Start_IT (&htim14, TIM_CHANNEL_1);
+
+  __HAL_RCC_DBGMCU_CLK_ENABLE();
 
 
   /* USER CODE END 2 */
