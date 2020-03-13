@@ -53,7 +53,7 @@ IWDG_HandleTypeDef hiwdg;
 /* USER CODE BEGIN PV */
 
 //  extern DCC_MSG Msg;
-extern DccRx_t DccRx;
+extern volatile DccRx_t DccRx;
 
 /* USER CODE END PV */
 
@@ -128,7 +128,10 @@ int main(void)
 
 
 	  if (DccRx.DataReady) {
+		  	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+		  	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
+		  DccRx.DataReady = 0;
 	  }
 
 

@@ -2,24 +2,27 @@
 #include "loco.h"
 #include "tim.h"
 
-DccRx_t DccRx;
+volatile DccRx_t DccRx;
 volatile uint32_t bitMax, bitMin, bitVal;
 
-
+uint8_t DccBitVal;
+uint16_t bitMicros;
+volatile uint16_t count0, count1;
 
 void HAL_TIM_IC_CaptureCallback (TIM_HandleTypeDef *htim) {
-uint8_t DccBitVal;
-uint32_t bitMicros;
 
-volatile uint8_t gap;
-volatile uint16_t count0, count1;
+
+//volatile uint8_t gap;
+
+
+//HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 
 
 __HAL_DBGMCU_FREEZE_TIM3 ();
 __HAL_DBGMCU_FREEZE_TIM14 ();
 
 
-HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+
 
 
 count0 = count1;
@@ -38,7 +41,7 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 //	if (1) {
 	if (htim->Instance->SR & TIM_SR_CC1OF) {
 
-		gap = 0;
+//		gap = 0;
 		htim->Instance->SR = ~(TIM_SR_CC1OF | TIM_SR_CC1IF);
 	} else {
 
@@ -148,15 +151,16 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 				  }
 				break;
 			}
-		} else {
-			HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 		}
 	}
 
 
-	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
-
 	__HAL_DBGMCU_UNFREEZE_TIM14 ();
+
+	__HAL_TIM_CLEAR_IT(htim, TIM_IT_CC1);
+
+//	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+
 	__HAL_DBGMCU_UNFREEZE_TIM3 ();
 
 }
