@@ -87,9 +87,6 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 					DccRx.BitCount++;
 					if (DccRx.BitCount > 10) {
 						DccRx.State = WAIT_START_BIT;
-						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
-						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
-
 					}
 				} else {
 					DccRx.BitCount = 0 ;

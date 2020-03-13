@@ -55,6 +55,8 @@ IWDG_HandleTypeDef hiwdg;
 //  extern DCC_MSG Msg;
 extern volatile DccRx_t DccRx;
 
+DCC_MSG Msg;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -130,6 +132,23 @@ int main(void)
 	  if (DccRx.DataReady) {
 //		  	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 //		  	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+
+		   Msg = DccRx.PacketCopy;
+
+		   uint8_t xorValue = 0 ;
+
+		   for (uint8_t i = 0; i < DccRx.PacketCopy.Size; i++)
+		         xorValue ^= DccRx.PacketCopy.Data [i];
+		   if (xorValue) {
+
+//		         Checksum error
+
+		       } else {
+						if (Msg.Data [0] != 0xff) {
+							HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+						  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+						}
+		       }
 
 		  DccRx.DataReady = 0;
 	  }
