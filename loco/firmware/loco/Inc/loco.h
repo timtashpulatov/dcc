@@ -4,7 +4,7 @@
 
 #define MAX_DCC_MESSAGE_LEN     8    	// including XOR-Byte
 
-#define MAX_ONEBITFULL  116+20	//50+25	//116+10	//200-42          // 146
+#define MAX_ONEBITFULL  116+25	//50+25	//116+10	//200-42          // 146
 //#define MAX_PREAMBLE    200             // 146
 #define MAX_ONEBITHALF  100     		// 82
 #define MIN_ONEBITFULL  116-20	//50-10	//115-15          // 82

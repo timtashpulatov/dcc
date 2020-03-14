@@ -52,7 +52,7 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
 			case WAIT_PREAMBLE:
 
-	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 
 				if (DccBitVal) {
 					DccRx.BitCount++;
@@ -60,11 +60,14 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 						DccRx.State = WAIT_START_BIT;
 					}
 				} else {
-					DccRx.BitCount = 0 ;
+					DccRx.BitCount = 0;
 				}
 				break;
 
 			case WAIT_START_BIT:
+
+	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+
 				if (DccBitVal) {
 					DccRx.BitCount ++;
 				} else {
@@ -82,9 +85,6 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 						DccRx.BitCount = 0;
 
 					} else {
-
-	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
-
 						DccRx.State = WAIT_DATA ;
 						DccRx.PacketBuf.Size = 0;
 						DccRx.PacketBuf.PreambleBits = 0;
@@ -100,25 +100,15 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 				break;
 
 			case WAIT_DATA:
-
-//		HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
-
 				DccRx.BitCount++;
 				DccRx.TempByte = (DccRx.TempByte << 1);
 				if (DccBitVal) {
 					DccRx.TempByte |= 1;
 					if (DccRx.BitCount == 8) {
-
-						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
-						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
-
 					  if (DccRx.PacketBuf.Size == MAX_DCC_MESSAGE_LEN ) { // Packet is too long - abort
 						DccRx.State = WAIT_PREAMBLE ;
 						DccRx.BitCount = 0 ;
 					  } else {
-
-		  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
-
 						DccRx.State = WAIT_END_BIT;
 						DccRx.PacketBuf.Data [DccRx.PacketBuf.Size ++] = DccRx.TempByte;
 					  }
@@ -134,9 +124,6 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 				  DccRx.PacketCopy = DccRx.PacketBuf;
 
 				  DccRx.DataReady = 1;
-
-//	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
 				}
 				else  // Get next Byte
@@ -273,7 +260,7 @@ void MX_TIM14_Init(void)
   sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
   sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
   sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-  sConfigIC.ICFilter = 0;
+  sConfigIC.ICFilter = 5;	// 5 microseconds it should be 	// was 0;
   if (HAL_TIM_IC_ConfigChannel(&htim14, &sConfigIC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
