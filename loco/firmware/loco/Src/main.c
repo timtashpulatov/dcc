@@ -144,13 +144,15 @@ int main(void)
 //		         Checksum error
 
 		       } else {
-						if (Msg.Data [0] != 0xff) {
-							HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
-							HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+//						if ((Msg.Data [0] != 0xff) && (Msg.Size != 2)) {
+		    	   	   if (1) {
+//							HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+//							HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 						}
 		       }
 
 		  DccRx.DataReady = 0;
+//		  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 	  }
 
 

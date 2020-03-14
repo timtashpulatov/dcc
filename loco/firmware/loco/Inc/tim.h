@@ -2,7 +2,7 @@
 #define __TIM_H__
 
 
-#define TIM4_INIT_PERIOD		50000
+#define TIM4_INIT_PERIOD		1000	// 50000
 
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim14;

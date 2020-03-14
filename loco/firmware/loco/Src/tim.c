@@ -3,10 +3,9 @@
 #include "tim.h"
 
 volatile DccRx_t DccRx;
-//volatile uint32_t bitMax, bitMin, bitVal;
 
-uint8_t DccBitVal;
-uint16_t bitMicros;
+
+
 volatile uint16_t count0, count1;
 
 #define NUMDEBUGBITS 20
@@ -15,32 +14,16 @@ uint16_t bits [NUMDEBUGBITS];
 uint8_t bitIndex = 0;
 
 void HAL_TIM_IC_CaptureCallback (TIM_HandleTypeDef *htim) {
-
-
-//volatile uint8_t gap;
-
+uint8_t DccBitVal;
+uint16_t bitMicros;
 
 //HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 
-
-__HAL_DBGMCU_FREEZE_TIM3 ();
-__HAL_DBGMCU_FREEZE_TIM14 ();
-
-
-
-
+//__HAL_DBGMCU_FREEZE_TIM3 ();
+//__HAL_DBGMCU_FREEZE_TIM14 ();
 
 count0 = count1;
 count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
-
-
-
-
-
-
-// We only have one input capture timer, so no checks for proper htim here
-
-//	bitMicros = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
 
 
@@ -48,35 +31,8 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
 //	if (1) {
 	if (htim->Instance->SR & TIM_SR_CC1OF) {
-
-//		gap = 0;
 		htim->Instance->SR = ~(TIM_SR_CC1OF | TIM_SR_CC1IF);
 	} else {
-
-
-//
-//		if (0 == gap) {
-//			count0 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
-//			gap = 1;
-//		} else {
-//			count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
-//			if (count1 > count0) {
-//				bitMicros = count1 - count0;
-//			} else {
-//				bitMicros = count1 + 0xffffffffU - count0 + 1;
-//			}
-//			gap = 0;	// ??
-//		}
-
-
-//		count0 = count1;
-//		count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
-
-
-//		TIM14->EGR = 1;
-
-//		htim->Instance->EGR = 1;
-
 
 		if (count1 > count0) {
 			bitMicros = count1 - count0;
@@ -95,6 +51,9 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 			switch (DccRx.State) {
 
 			case WAIT_PREAMBLE:
+
+	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+
 				if (DccBitVal) {
 					DccRx.BitCount++;
 					if (DccRx.BitCount > 10) {
@@ -117,16 +76,14 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 					if (bitMicros < MIN_ZEROBIT) {
 						// Change polarity and restart detection
 
-						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
-
 						htim->Instance->CCER ^= TIM_CCER_CC1P_Msk;
 
 						DccRx.State = WAIT_PREAMBLE;
-						DccRx.BitCount = 0 ;
+						DccRx.BitCount = 0;
 
 					} else {
 
-						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 
 						DccRx.State = WAIT_DATA ;
 						DccRx.PacketBuf.Size = 0;
@@ -143,15 +100,25 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 				break;
 
 			case WAIT_DATA:
+
+//		HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+
 				DccRx.BitCount++;
 				DccRx.TempByte = (DccRx.TempByte << 1);
 				if (DccBitVal) {
 					DccRx.TempByte |= 1;
 					if (DccRx.BitCount == 8) {
+
+						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+
 					  if (DccRx.PacketBuf.Size == MAX_DCC_MESSAGE_LEN ) { // Packet is too long - abort
 						DccRx.State = WAIT_PREAMBLE ;
 						DccRx.BitCount = 0 ;
 					  } else {
+
+		  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+
 						DccRx.State = WAIT_END_BIT;
 						DccRx.PacketBuf.Data [DccRx.PacketBuf.Size ++] = DccRx.TempByte;
 					  }
@@ -167,6 +134,9 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 				  DccRx.PacketCopy = DccRx.PacketBuf;
 
 				  DccRx.DataReady = 1;
+
+//	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
 				}
 				else  // Get next Byte
@@ -185,20 +155,20 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 	}
 
 
-	// Debug bit lengths
-	bits [bitIndex] = bitMicros;
-	bitIndex ++;
-	if (bitIndex >= NUMDEBUGBITS)
-		bitIndex = 0;
+//	// Debug bit lengths
+//	bits [bitIndex] = bitMicros;
+//	bitIndex ++;
+//	if (bitIndex >= NUMDEBUGBITS)
+//		bitIndex = 0;
 
 
-	__HAL_DBGMCU_UNFREEZE_TIM14 ();
+//	__HAL_DBGMCU_UNFREEZE_TIM14 ();
 
-	__HAL_TIM_CLEAR_IT(htim, TIM_IT_CC1);
+//	__HAL_TIM_CLEAR_IT(htim, TIM_IT_CC1);
 
-	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+//HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
-	__HAL_DBGMCU_UNFREEZE_TIM3 ();
+//	__HAL_DBGMCU_UNFREEZE_TIM3 ();
 
 
 }
