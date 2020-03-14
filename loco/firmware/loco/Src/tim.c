@@ -9,6 +9,11 @@ uint8_t DccBitVal;
 uint16_t bitMicros;
 volatile uint16_t count0, count1;
 
+#define NUMDEBUGBITS 20
+
+uint16_t bits [NUMDEBUGBITS];
+uint8_t bitIndex = 0;
+
 void HAL_TIM_IC_CaptureCallback (TIM_HandleTypeDef *htim) {
 
 
@@ -27,6 +32,9 @@ __HAL_DBGMCU_FREEZE_TIM14 ();
 
 count0 = count1;
 count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
+
+
+
 
 
 
@@ -155,6 +163,13 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 	}
 
 
+	// Debug bit lengths
+	bits [bitIndex] = bitMicros;
+	bitIndex ++;
+	if (bitIndex >= NUMDEBUGBITS)
+		bitIndex = 0;
+
+
 	__HAL_DBGMCU_UNFREEZE_TIM14 ();
 
 	__HAL_TIM_CLEAR_IT(htim, TIM_IT_CC1);
@@ -162,6 +177,7 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 //	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
 	__HAL_DBGMCU_UNFREEZE_TIM3 ();
+
 
 }
 
