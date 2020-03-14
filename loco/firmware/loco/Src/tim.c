@@ -84,8 +84,12 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 			bitMicros = TIM4_INIT_PERIOD - count0 + count1;
 		}
 
+		// 1 = 116 us (2*58)
+		// 0 = 200 us (2*100)
+
 
 		if (bitMicros > MIN_ONEBITFULL) {
+
 			DccBitVal = (bitMicros < MAX_ONEBITFULL);
 
 			switch (DccRx.State) {
@@ -102,20 +106,38 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 				break;
 
 			case WAIT_START_BIT:
-
 				if (DccBitVal) {
 					DccRx.BitCount ++;
 				} else {
 					// we got the startbit
-					DccRx.State = WAIT_DATA ;
-					DccRx.PacketBuf.Size = 0;
-					DccRx.PacketBuf.PreambleBits = 0;
-					for(uint8_t i = 0; i< MAX_DCC_MESSAGE_LEN; i++ )
-						DccRx.PacketBuf.Data [i] = 0;
 
-					DccRx.PacketBuf.PreambleBits = DccRx.BitCount;
-					DccRx.BitCount = 0 ;
-					DccRx.TempByte = 0 ;
+					// Now, the startbit will be 200 us with correct polarity,
+					// and 58+100 with incorrect polarity
+
+					if (bitMicros < MIN_ZEROBIT) {
+						// Change polarity and restart detection
+
+						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+
+						htim->Instance->CCER ^= TIM_CCER_CC1P_Msk;
+
+						DccRx.State = WAIT_PREAMBLE;
+						DccRx.BitCount = 0 ;
+
+					} else {
+
+						HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+
+						DccRx.State = WAIT_DATA ;
+						DccRx.PacketBuf.Size = 0;
+						DccRx.PacketBuf.PreambleBits = 0;
+						for(uint8_t i = 0; i< MAX_DCC_MESSAGE_LEN; i++ )
+							DccRx.PacketBuf.Data [i] = 0;
+
+						DccRx.PacketBuf.PreambleBits = DccRx.BitCount;
+						DccRx.BitCount = 0 ;
+						DccRx.TempByte = 0 ;
+					}
 				}
 
 				break;
@@ -174,7 +196,7 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
 	__HAL_TIM_CLEAR_IT(htim, TIM_IT_CC1);
 
-//	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
 	__HAL_DBGMCU_UNFREEZE_TIM3 ();
 

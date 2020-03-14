@@ -146,7 +146,7 @@ int main(void)
 		       } else {
 						if (Msg.Data [0] != 0xff) {
 							HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
-						  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+							HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 						}
 		       }
 
