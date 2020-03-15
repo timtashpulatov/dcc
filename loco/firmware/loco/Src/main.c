@@ -113,6 +113,7 @@ int main(void)
 
   HAL_TIM_IC_Start_IT (&htim14, TIM_CHANNEL_1);
 
+  // Support stopping timers in debug
   __HAL_RCC_DBGMCU_CLK_ENABLE();
 
 
@@ -130,7 +131,7 @@ int main(void)
 
 
 	  if (DccRx.DataReady) {
-//		  	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+		  	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 //		  	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
 		   Msg = DccRx.PacketCopy;
@@ -152,7 +153,7 @@ int main(void)
 		       }
 
 		  DccRx.DataReady = 0;
-//		  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+		  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 	  }
 
 

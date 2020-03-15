@@ -52,8 +52,6 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
 			case WAIT_PREAMBLE:
 
-	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
-
 				if (DccBitVal) {
 					DccRx.BitCount++;
 					if (DccRx.BitCount > 10) {
@@ -65,8 +63,6 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 				break;
 
 			case WAIT_START_BIT:
-
-	HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
 				if (DccBitVal) {
 					DccRx.BitCount ++;
@@ -85,18 +81,17 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 						DccRx.BitCount = 0;
 
 					} else {
-						DccRx.State = WAIT_DATA ;
+						DccRx.State = WAIT_DATA;
 						DccRx.PacketBuf.Size = 0;
 						DccRx.PacketBuf.PreambleBits = 0;
-						for(uint8_t i = 0; i< MAX_DCC_MESSAGE_LEN; i++ )
+						for (uint8_t i = 0; i < MAX_DCC_MESSAGE_LEN; i++)
 							DccRx.PacketBuf.Data [i] = 0;
 
 						DccRx.PacketBuf.PreambleBits = DccRx.BitCount;
-						DccRx.BitCount = 0 ;
-						DccRx.TempByte = 0 ;
+						DccRx.BitCount = 0;
+						DccRx.TempByte = 0;
 					}
 				}
-
 				break;
 
 			case WAIT_DATA:
@@ -104,15 +99,15 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 				DccRx.TempByte = (DccRx.TempByte << 1);
 				if (DccBitVal) {
 					DccRx.TempByte |= 1;
-					if (DccRx.BitCount == 8) {
-					  if (DccRx.PacketBuf.Size == MAX_DCC_MESSAGE_LEN ) { // Packet is too long - abort
-						DccRx.State = WAIT_PREAMBLE ;
-						DccRx.BitCount = 0 ;
-					  } else {
-						DccRx.State = WAIT_END_BIT;
-						DccRx.PacketBuf.Data [DccRx.PacketBuf.Size ++] = DccRx.TempByte;
-					  }
-					}
+				}
+				if (DccRx.BitCount == 8) {
+				  if (DccRx.PacketBuf.Size == MAX_DCC_MESSAGE_LEN) { // Packet is too long - abort
+					DccRx.State = WAIT_PREAMBLE;
+					DccRx.BitCount = 0;
+				  } else {
+					DccRx.State = WAIT_END_BIT;
+					DccRx.PacketBuf.Data [DccRx.PacketBuf.Size ++] = DccRx.TempByte;
+				  }
 				}
 				break;
 
