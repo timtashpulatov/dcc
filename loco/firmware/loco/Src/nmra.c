@@ -12,42 +12,52 @@ uint8_t dir = 0;
 
 		case INSTR_ADVANCED_OPERATION:
 			// 001CCCCC 0 DDDDDDDD
-				/* CCCCC = 11111: 128 Speed Step Control - Instruction "11111" is used to send
-				one of 126 Digital Decoder speed steps. The subsequent single byte shall define
-				speed and direction with bit 7 being direction ("1" is forward and "0" is reverse)
-				and the remaining bits used to indicate speed.
-				The most significant speed bit is bit 6.
 
-				A data-byte value of U0000000 is used for stop,
-				and a data-byte value of U0000001 is used for emergency stop.
+			// The 5-bit sub-instruction CCCCC allows for 32 separate Advanced Operations Sub-Instructions
+			switch (Msg.Data [1] & 0b00011111) {
+				case ADV_SUBF_128_SPEED_STEP_CONTROL:
+					/* CCCCC = 11111: 128 Speed Step Control - Instruction "11111" is used to send
+					one of 126 Digital Decoder speed steps. The subsequent single byte shall define
+					speed and direction with bit 7 being direction ("1" is forward and "0" is reverse)
+					and the remaining bits used to indicate speed.
+					The most significant speed bit is bit 6.
 
-				This allows up to 126 speed steps.
-				*/
+					A data-byte value of U0000000 is used for stop,
+					and a data-byte value of U0000001 is used for emergency stop.
 
-			// Directional lighting
-			dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
+					This allows up to 126 speed steps.
+					*/
 
-			HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin,
-					dir ? GPIO_PIN_SET : GPIO_PIN_RESET);
+					// Directional lighting
+					dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
 
-			HAL_GPIO_WritePin (FL_GPIO_Port, RL_Pin,
-					dir ? GPIO_PIN_RESET : GPIO_PIN_SET);
+					HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin,
+							dir ? GPIO_PIN_SET : GPIO_PIN_RESET);
 
-			// Speed
-			speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
-			if (1 == speed) {
-				// Emergency stop
-				TIM3->CCR1 = 0;
-				TIM3->CCR2 = 0;
-			} else {
-				// TODO accelerate/deccelerate
-				if (dir) {
-					TIM3->CCR2 = 0;
-					TIM3->CCR1 = speed;
-				} else {
-					TIM3->CCR1 = 0;
-					TIM3->CCR2 = speed;
-				}
+					HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin,
+							dir ? GPIO_PIN_RESET : GPIO_PIN_SET);
+
+					// Speed
+					speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
+					if (1 == speed) {
+						// Emergency stop
+						TIM3->CCR1 = 0;
+						TIM3->CCR2 = 0;
+					} else {
+						// TODO accelerate/deccelerate
+						if (dir) {
+							TIM3->CCR2 = 0;
+							TIM3->CCR1 = speed;
+						} else {
+							TIM3->CCR1 = 0;
+							TIM3->CCR2 = speed;
+						}
+					}
+					break;
+				case ADV_SUBF_RESTRICTED_SPEED_STEP:
+					break;
+				default:
+					break;
 			}
 
 			break;
