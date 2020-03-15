@@ -4,6 +4,7 @@
 
 void Decode () {
 uint8_t speed = 0;
+uint8_t dir = 0;
 
 	switch (Msg.Data [1] & INSTR_TYPE_BIT_MASK) {
 		case INSTR_DECODER_AND_CONSIST_CONTROL:
@@ -24,19 +25,30 @@ uint8_t speed = 0;
 				*/
 
 			// Directional lighting
+			dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
+
 			HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin,
-					Msg.Data [2] & INSTR_DIRECTION_BIT_MASK ? GPIO_PIN_SET : GPIO_PIN_RESET);
+					dir ? GPIO_PIN_SET : GPIO_PIN_RESET);
 
 			HAL_GPIO_WritePin (FL_GPIO_Port, RL_Pin,
-					Msg.Data [2] & INSTR_DIRECTION_BIT_MASK ? GPIO_PIN_RESET : GPIO_PIN_SET);
+					dir ? GPIO_PIN_RESET : GPIO_PIN_SET);
 
 			// Speed
 			speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
 			if (1 == speed) {
 				// Emergency stop
-				speed = 0;
+				TIM3->CCR1 = 0;
+				TIM3->CCR2 = 0;
+			} else {
+				// TODO accelerate/deccelerate
+				if (dir) {
+					TIM3->CCR2 = 0;
+					TIM3->CCR1 = speed;
+				} else {
+					TIM3->CCR1 = 0;
+					TIM3->CCR2 = speed;
+				}
 			}
-			TIM3->CCR1 = speed;	// TODO accelerate/deccelerate
 
 			break;
 
