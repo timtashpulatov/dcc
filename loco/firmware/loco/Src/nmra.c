@@ -54,10 +54,7 @@ uint8_t dir = 0;
 
 		case INSTR_SPEED_DIR_REVERSE:
 			// 010DDDDD
-
 //			TIM3->CCR1 = Msg.Data [1] & INSTR_SPEED_BIT_MASK;
-
-
 			break;
 
 		case INSTR_SPEED_DIR_FORWARD:
@@ -68,6 +65,9 @@ uint8_t dir = 0;
 			// 100DDDDD - FL and F1-F4
 			// If Bit 1 of CV#29 has a value of one (1), then bit 4 controls function FL,
 			// otherwise bit 4 has no meaning.
+
+			SetFunctions (Msg.Data [2]);
+
 			break;
 
 		case INSTR_FUNCTION_GROUP_2:
@@ -86,4 +86,12 @@ uint8_t dir = 0;
 			break;
 	}
 
+}
+
+
+void SetFunctions (uint8_t funcs) {
+	HAL_GPIO_WritePin (F1_GPIO_Port, F1_Pin, (funcs & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	HAL_GPIO_WritePin (F2_GPIO_Port, F2_Pin, (funcs & 0x02) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin (F3_GPIO_Port, F3_Pin, (funcs & 0x04) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin (F4_GPIO_Port, F4_Pin, (funcs & 0x08) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }

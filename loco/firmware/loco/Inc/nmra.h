@@ -29,6 +29,7 @@
 extern DCC_MSG Msg;
 
 void Decode ();
+void SetFunctions (uint8_t funcs);
 
 
 
