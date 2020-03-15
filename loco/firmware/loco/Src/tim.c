@@ -155,9 +155,7 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
 }
 
-#define PWM_FREQUENCY	12000	// 12 KHz
-#define PWM_PRESCALER	(48000/PWM_FREQUENCY)
-//#define PWM_PERIOD		1000
+#define PWM_PRESCALER	48*4	// Results in 1KHz PWM frequency
 #define PWM_STEPS		256
 
 /**

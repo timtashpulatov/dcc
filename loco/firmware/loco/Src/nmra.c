@@ -3,6 +3,7 @@
 #include "nmra.h"
 
 void Decode () {
+uint8_t speed = 0;
 
 	switch (Msg.Data [1] & INSTR_TYPE_BIT_MASK) {
 		case INSTR_DECODER_AND_CONSIST_CONTROL:
@@ -10,11 +11,16 @@ void Decode () {
 
 		case INSTR_ADVANCED_OPERATION:
 			// 001CCCCC 0 DDDDDDDD
-				/* CCCCC = 11111: 128 Speed Step Control - Instruction "11111" is used to send one of 126 Digital Decoder speed
-				steps. The subsequent single byte shall define speed and direction with bit 7 being direction ("1" is forward and "0"
-				is reverse) and the remaining bits used to indicate speed. The most significant speed bit is bit 6. A data-byte value
-				of U0000000 is used for stop, and a data-byte value of U0000001 is used for emergency stop. This allows up to 126
-				speed steps.
+				/* CCCCC = 11111: 128 Speed Step Control - Instruction "11111" is used to send
+				one of 126 Digital Decoder speed steps. The subsequent single byte shall define
+				speed and direction with bit 7 being direction ("1" is forward and "0" is reverse)
+				and the remaining bits used to indicate speed.
+				The most significant speed bit is bit 6.
+
+				A data-byte value of U0000000 is used for stop,
+				and a data-byte value of U0000001 is used for emergency stop.
+
+				This allows up to 126 speed steps.
 				*/
 
 			// Directional lighting
@@ -25,8 +31,12 @@ void Decode () {
 					Msg.Data [2] & INSTR_DIRECTION_BIT_MASK ? GPIO_PIN_RESET : GPIO_PIN_SET);
 
 			// Speed
-			TIM3->CCR1 = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
-
+			speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
+			if (1 == speed) {
+				// Emergency stop
+				speed = 0;
+			}
+			TIM3->CCR1 = speed;	// TODO accelerate/deccelerate
 
 			break;
 
