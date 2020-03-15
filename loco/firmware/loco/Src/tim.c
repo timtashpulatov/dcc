@@ -155,7 +155,10 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
 }
 
-
+#define PWM_FREQUENCY	12000	// 12 KHz
+#define PWM_PRESCALER	(48000/PWM_FREQUENCY)
+//#define PWM_PERIOD		1000
+#define PWM_STEPS		256
 
 /**
   * @brief TIM3 Initialization Function
@@ -177,9 +180,9 @@ void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 48-1;										// 48MHz/48 = 1MHz (one tick equals 1us)
+  htim3.Init.Prescaler = PWM_PRESCALER-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 158-1;	// 500-1;
+  htim3.Init.Period = PWM_STEPS-1;	//	//158-1;	// 500-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -202,7 +205,7 @@ void MX_TIM3_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 58-1;	// 250-1;
+  sConfigOC.Pulse = (PWM_STEPS/2)-1;	//58-1;	// 250-1;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)

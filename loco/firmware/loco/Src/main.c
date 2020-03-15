@@ -131,7 +131,7 @@ int main(void)
 
 
 	  if (DccRx.DataReady) {
-		  	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+//		  	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 //		  	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
 		   Msg = DccRx.PacketCopy;
@@ -145,15 +145,18 @@ int main(void)
 //		         Checksum error
 
 		       } else {
-//						if ((Msg.Data [0] != 0xff) && (Msg.Size != 2)) {
-		    	   	   if (1) {
+						if ((Msg.Data [0] != 0xff)) {	// && (Msg.Size != 2)) {
+//						if (1) {
 //							HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+
+							Decode ();
+
 //							HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 						}
 		       }
 
 		  DccRx.DataReady = 0;
-		  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+//		  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 	  }
 
 

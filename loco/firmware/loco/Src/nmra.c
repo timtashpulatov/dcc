@@ -4,7 +4,7 @@
 
 void Decode () {
 
-	switch (Msg.Data [2] & INSTR_TYPE_BIT_MASK) {
+	switch (Msg.Data [1] & INSTR_TYPE_BIT_MASK) {
 		case INSTR_DECODER_AND_CONSIST_CONTROL:
 			break;
 
@@ -16,12 +16,24 @@ void Decode () {
 				of U0000000 is used for stop, and a data-byte value of U0000001 is used for emergency stop. This allows up to 126
 				speed steps.
 				*/
+
+			// Directional lighting
+			HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin,
+					Msg.Data [2] & INSTR_DIRECTION_BIT_MASK ? GPIO_PIN_SET : GPIO_PIN_RESET);
+
+			HAL_GPIO_WritePin (FL_GPIO_Port, RL_Pin,
+					Msg.Data [2] & INSTR_DIRECTION_BIT_MASK ? GPIO_PIN_RESET : GPIO_PIN_SET);
+
+			// Speed
+			TIM3->CCR1 = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
+
+
 			break;
 
 		case INSTR_SPEED_DIR_REVERSE:
 			// 010DDDDD
 
-			TIM3->CCR1 = Msg.Data [1] & INSTR_SPEED_BIT_MASK;
+//			TIM3->CCR1 = Msg.Data [1] & INSTR_SPEED_BIT_MASK;
 
 
 			break;
