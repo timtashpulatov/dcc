@@ -8,10 +8,9 @@ volatile DccRx_t DccRx;
 
 volatile uint16_t count0, count1;
 
-#define NUMDEBUGBITS 20
-
-uint16_t bits [NUMDEBUGBITS];
-uint8_t bitIndex = 0;
+//#define NUMDEBUGBITS 20
+//uint16_t bits [NUMDEBUGBITS];
+//uint8_t bitIndex = 0;
 
 void HAL_TIM_IC_CaptureCallback (TIM_HandleTypeDef *htim) {
 uint8_t DccBitVal;
@@ -25,11 +24,6 @@ uint16_t bitMicros;
 count0 = count1;
 count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
-
-
-//	if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1) {
-
-//	if (1) {
 	if (htim->Instance->SR & TIM_SR_CC1OF) {
 		htim->Instance->SR = ~(TIM_SR_CC1OF | TIM_SR_CC1IF);
 	} else {
@@ -42,7 +36,6 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
 		// 1 = 116 us (2*58)
 		// 0 = 200 us (2*100)
-
 
 		if (bitMicros > MIN_ONEBITFULL) {
 

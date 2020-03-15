@@ -23,6 +23,7 @@
 #include "tim.h"
 
 #include "loco.h"
+#include "nmra.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

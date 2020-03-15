@@ -56,6 +56,8 @@ uint8_t dir = 0;
 					break;
 				case ADV_SUBF_RESTRICTED_SPEED_STEP:
 					break;
+				case ADV_SUBF_ANALOG_FUNC_GROUP:
+					break;
 				default:
 					break;
 			}
