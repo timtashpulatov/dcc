@@ -1,12 +1,15 @@
 #ifndef __FLASH_H_
 #define __FLASH_H_
 
-typedef struct {
-    uint32_t deviceType;
-} ConfigBlock;
+#define FLASH_CV_ADDR	0x08003c00
 
 
-extern const ConfigBlock configBlock; // Provided by linker
+#define FLASH_FKEY1 0x45670123
+#define FLASH_FKEY2 0xCDEF89AB
+
+
+
+void FlashInitCVs (void);
 
 
 #endif

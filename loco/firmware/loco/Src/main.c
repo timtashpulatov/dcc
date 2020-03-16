@@ -111,6 +111,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
+  // Flash stuff
+  FlashInitCVs ();
+
+
+
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_2);
 
@@ -119,9 +124,6 @@ int main(void)
   // Support stopping timers in debug
   __HAL_RCC_DBGMCU_CLK_ENABLE();
 
-
-
-  configBlock;
 
 
   /* USER CODE END 2 */
