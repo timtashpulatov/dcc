@@ -24,6 +24,7 @@
 
 #include "loco.h"
 #include "nmra.h"
+#include "flash.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -117,6 +118,10 @@ int main(void)
 
   // Support stopping timers in debug
   __HAL_RCC_DBGMCU_CLK_ENABLE();
+
+
+
+  configBlock;
 
 
   /* USER CODE END 2 */
