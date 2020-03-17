@@ -113,10 +113,12 @@ int main(void)
 
 
   // Flash stuff
-  FlashInitCVs ();
+//  FlashInitCVs ();
 
 
   ReadCV (0);
+  UpdateCV (1, 99);
+  UpdateCV (29, 7);
 
 
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
