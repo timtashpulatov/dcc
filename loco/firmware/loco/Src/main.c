@@ -25,6 +25,7 @@
 #include "loco.h"
 #include "nmra.h"
 #include "flash.h"
+#include "cv.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -114,6 +115,8 @@ int main(void)
   // Flash stuff
   FlashInitCVs ();
 
+
+  ReadCV (0);
 
 
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);

@@ -58,12 +58,16 @@ _estack = 0x20001000;    /* end of RAM */
 _Min_Heap_Size = 0x200;      /* required amount of heap  */
 _Min_Stack_Size = 0x400; /* required amount of stack */
 
+_cv_start_address = 0x08003c00;
+
+
 /* Specify the memory areas */
 MEMORY
 {
 RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 4K
 /*FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 16K */
 FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 12K
+CV (r)		: ORIGIN = 0x08003c00, LENGTH = 1K
 }
 
 
@@ -186,6 +190,15 @@ SECTIONS
   }
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
+
+
+
+.cv _cv_start_address :
+{
+  KEEP(*(.cv)) ;
+} > CV
+
+
 }
 
 
