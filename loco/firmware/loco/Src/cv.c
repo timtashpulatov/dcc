@@ -5,10 +5,11 @@
 
 typedef struct {
 	uint16_t signature;
+	uint16_t checksum;
 	uint8_t *cvptr;
 } CVBlock_t;
 
-const CVBlock_t __attribute__((section (".cv"))) CVBlock;
+//const CVBlock_t __attribute__((section (".cv"))) CVBlock;
 
 // "Supported" CV means it can be updated (written to)
 // "Not supported" CV can be read from flash
@@ -29,13 +30,16 @@ const CVBlock_t __attribute__((section (".cv"))) CVBlock;
 // Read-Only CVs: 7 and 8
 
 // Default CV values in pairs (CV, Value)
-const uint8_t __attribute__((section (".rodata"))) defaultCVs = {
+const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
 		1, 3,
 		2, 0,		// Vstart
 		3, 0,		// Acceleration Rate
 		4, 0,		// Deceleration Rate
 		5, 0,		// Vhigh
 		6, 0, 		// Vmid
+		7, 0,		// Manufacturer Version
+		8, 23,		// Manufacturer ID
+		9, 0,		// Total PWM Period
 
 		29, CV29_DEFAULT_VALUE,	// Configuration
 
@@ -47,7 +51,7 @@ const uint8_t __attribute__((section (".rodata"))) defaultCVs = {
 uint8_t ReadCV (uint16_t cvnum) {
 uint8_t cv = 0;
 
-//	cv = supportedCV_1_32;
+	cv = defaultCVs [7*2 + 1];		// get ManufID
 
 
 	return cv;

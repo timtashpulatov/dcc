@@ -5,6 +5,6 @@
 
 #define CV29_DEFAULT_VALUE	0
 
-
+extern const uint8_t defaultCVs [];
 
 #endif
