@@ -88,8 +88,6 @@ uint32_t addr;
 
 	FlashWriteHalfWord (FLASH_CV_ADDR, SIGNATURE);
 
-//	FlashWriteHalfWord (FLASH_CV_ADDR + 2, 0x1234);
-
 	addr = FLASH_CV_ADDR + 4;	// skip signature and checksum
 	i = 0;
 	while (1) {
@@ -102,7 +100,4 @@ uint32_t addr;
 		}
 		i += 2;
 	}
-
-
-
 }
