@@ -94,7 +94,7 @@ uint32_t addr;
 		if (0 == defaultCVs [i])
 			break;
 		else {
-			FlashWriteHalfWord (addr + i,
+			FlashWriteHalfWord (addr + (defaultCVs [i]) * 2,
 					((uint16_t)(defaultCVs [i + 1]) << 8) + defaultCVs [i]
 					);
 		}
