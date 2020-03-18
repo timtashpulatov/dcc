@@ -1,8 +1,9 @@
 #ifndef __FLASH_H_
 #define __FLASH_H_
 
-#define FLASH_CV_ADDR	0x08003c00
+#define FLASH_CV_ADDR	(0x08003c00U)
 #define SIGNATURE		0x55aa
+#define FLASH_CV_OFFSET	(6U)
 
 
 #define FLASH_FKEY1 0x45670123

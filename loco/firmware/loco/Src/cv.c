@@ -1,6 +1,7 @@
 #include "main.h"
 
 #include "cv.h"
+#include "flash.h"
 
 
 typedef struct {
@@ -50,13 +51,17 @@ const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
 
 uint8_t ReadCV (uint16_t cvnum) {
 uint8_t cv = 0;
+uint8_t *addr = (FLASH_CV_ADDR + FLASH_CV_OFFSET + ((cvnum - 1) * 2));
 
-	cv = defaultCVs [7*2 + 1];		// get ManufID
-
+	if (*addr == cvnum) {
+		cv = *(addr + 1); //defaultCVs [7*2 + 1];		// get ManufID
+	}
 
 	return cv;
 }
 
+
 void UpdateCV (uint16_t cvnum, uint8_t val) {
+	// Supported CVs have their number written along with value at corresponding address
 
 }
