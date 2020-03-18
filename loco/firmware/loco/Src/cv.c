@@ -48,10 +48,13 @@ const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
 };
 
 
+#define CVTOADDR(x)	((uint8_t *)(FLASH_CV_ADDR + FLASH_CV_OFFSET + ((cvnum - 1) * 2)))
+
 
 uint8_t ReadCV (uint16_t cvnum) {
 uint8_t cv = 0;
-uint8_t *addr = (FLASH_CV_ADDR + FLASH_CV_OFFSET + ((cvnum - 1) * 2));
+uint8_t *addr = CVTOADDR(cvnum);
+//uint8_t *addr = (FLASH_CV_ADDR + FLASH_CV_OFFSET + ((cvnum - 1) * 2));
 
 	if (*addr == cvnum) {
 		cv = *(addr + 1); //defaultCVs [7*2 + 1];		// get ManufID
@@ -62,6 +65,16 @@ uint8_t *addr = (FLASH_CV_ADDR + FLASH_CV_OFFSET + ((cvnum - 1) * 2));
 
 
 void UpdateCV (uint16_t cvnum, uint8_t val) {
+uint8_t *addr;
+
+	addr = CVTOADDR(cvnum);
+
 	// Supported CVs have their number written along with value at corresponding address
+	if (*addr == cvnum) {
+		// Only update value if it is different from the one stored in flash
+		if (*(addr + 1) != val) {
+
+		}
+	}
 
 }
