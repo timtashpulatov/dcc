@@ -74,6 +74,14 @@ uint8_t *addr;
 		// Only update value if it is different from the one stored in flash
 		if (*(addr + 1) != val) {
 
+			// Copy CV block from flash to RAM
+			// Update RAM
+			// Calculate checksum, if necessary
+			// Write CV block from RAM to flash
+
+			uint8_t cvBlock [256];
+
+
 		}
 	}
 
