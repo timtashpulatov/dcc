@@ -5,6 +5,7 @@ Things to do
 - [x] Basic PWM motor control
 - [ ] CV storage
 - [ ] Acceleration/Decceleration Rate support (CV3 and CV4)
+- [ ] PWM period (CV9)
 - [ ] Lighting effects
 - [ ] BEMF motor control
 - [ ] etc
