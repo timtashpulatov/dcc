@@ -7,3 +7,4 @@
 *.sch-bak
 *.kicad_pcb-bak
 loco/firmware/loco/.settings/language.settings.xml
+loco/loco/fp-info-cache
