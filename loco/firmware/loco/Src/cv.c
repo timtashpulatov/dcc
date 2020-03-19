@@ -32,23 +32,25 @@ typedef struct {
 
 // Default CV values in pairs (CV, Value)
 const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
-		CV1_PRIMARY_ADDRESS, 		3,		// Primary Address
-		CV2_VSTART, 				0,		// Vstart
-		CV3_ACCELERATION_RATE, 		0,		// Acceleration Rate
-		CV4_DECELERATION_RATE, 		0,		// Deceleration Rate
-		CV5_VHIGH, 					0,		// Vhigh
-		CV6_VMID, 					0, 		// Vmid
-		CV7_MANUFACTURER_VERSION, 	0,		// Manufacturer Version
-		CV8_MANUFACTURER_ID, 		23,		// Manufacturer ID
-		CV9_PWM_PERIOD, 0,		// Total PWM Period
+		CV1_PRIMARY_ADDRESS, 		3,						// Primary Address
+		CV2_VSTART, 				0,						// Vstart
+		CV3_ACCELERATION_RATE, 		0,						// Acceleration Rate
+		CV4_DECELERATION_RATE, 		0,						// Deceleration Rate
+		CV5_VHIGH, 					0,						// Vhigh
+		CV6_VMID, 					0, 						// Vmid
+		CV7_MANUFACTURER_VERSION, 	0,						// Manufacturer Version
+		CV8_MANUFACTURER_ID, 		23,						// Manufacturer ID
+		CV9_PWM_PERIOD, 			0,						// Total PWM Period
 
-		CV29_CONFIGURATION,			CV29_DEFAULT_VALUE,	// Configuration
+		CV29_CONFIGURATION,			CV29_DEFAULT_VALUE,		// Configuration
+
+		CV65_KICK_START,			0,						// Kick
 
 		0, 0		// End
 };
 
 
-#define CVTOADDR(x)	((uint8_t *)(FLASH_CV_ADDR + FLASH_CV_OFFSET + ((cvnum - 1) * 2)))
+
 
 
 uint8_t ReadCV (uint16_t cvnum) {

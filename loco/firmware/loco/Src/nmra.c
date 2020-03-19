@@ -109,6 +109,24 @@ void SetFunctions (uint8_t funcs) {
 
 // Basic Acknowledgement - at least 60 mA for 6 ms +/-1 ms
 
+void ServiceModeBaseAck (void) {
+
+
+	HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin, GPIO_PIN_SET);
+
+	MotorSetPWM (255, 0);
+
+	HAL_Delay (10);
+
+	MotorStopPWM ();
+
+	// TODO additional delay to make blink more noticeable
+
+	HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin, GPIO_PIN_RESET);
+}
+
 /*
 	Hard-Reset-Cycle - A hard reset (see RP-9.2.1), followed by 10 idle or reset packets. This sequence is used when a
 	Command Station/Programmer desires to return the decoder to its initial predefined state.
