@@ -6,5 +6,6 @@
 void MotorRestartUpdateTimer (void);
 void MotorSetSpeed (uint8_t newSpeed, uint8_t dir);
 void MotorInit (void);
+uint8_t MotorSpeedToDuty (void);
 
 #endif

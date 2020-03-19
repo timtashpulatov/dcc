@@ -35,8 +35,10 @@ void MotorUpdateSpeed (void) {
 
 			if (CurrentSpeed < TargetSpeed) {
 				CurrentSpeed ++;
+				MotorSetPWM (MotorSpeedToDuty ());
 			} else if (CurrentSpeed > TargetSpeed) {
 				CurrentSpeed --;
+				MotorSetPWM (MotorSpeedToDuty ());
 			}
 		}
 	}
@@ -47,8 +49,8 @@ void MotorStopPWM (void) {
 	TIM3->CCR1 = TIM3->CCR2 = 0;
 }
 
-void MotorSetPWM (uint8_t pwm, uint8_t dir) {
-	if (dir) {
+void MotorSetPWM (uint8_t pwm) {
+	if (CurrentDir) {
 		TIM3->CCR2 = 0;
 		TIM3->CCR1 = pwm;
 	} else {
@@ -103,7 +105,8 @@ void MotorRestartUpdateTimer (void) {
 }
 
 
+uint8_t MotorSpeedToDuty (void) {
+	return (CurrentSpeed << 1);
+}
 
-
-// TODO Translate speed to PWM duty
 
