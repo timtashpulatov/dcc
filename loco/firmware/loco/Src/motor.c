@@ -10,13 +10,32 @@ static volatile uint8_t TargetSpeed = 0;
 
 static volatile uint8_t CurrentDir = 0;			// Forward
 
-// Must be called periodically
-void MotorUpdateSpeed (void) {
+static volatile uint8_t UpdatePeriod = 0;
+static volatile uint32_t motorUpdateTime;
 
-	if (CurrentSpeed < TargetSpeed) {
-		CurrentSpeed += ReadCV (CV3_ACCELERATION_RATE);
-	} else if (CurrentSpeed > TargetSpeed) {
-		CurrentSpeed -= ReadCV (CV4_DECELERATION_RATE);
+void MotorSetUpdatePeriod (void) {
+	if (CurrentDir) {
+		UpdatePeriod = 7 * ReadCV (CV4_DECELERATION_RATE);
+	} else {
+		UpdatePeriod = 7 * ReadCV (CV3_ACCELERATION_RATE);
+	}
+}
+
+
+// Must be called periodically
+void MotorUpdateSpeed (uint32_t now) {
+
+
+	if (now >= motorUpdateTime) {
+		motorUpdateTime = now + UpdatePeriod;
+
+		if (CurrentSpeed < TargetSpeed) {
+			//CurrentSpeed += ReadCV (CV3_ACCELERATION_RATE);
+			CurrentSpeed ++;
+		} else if (CurrentSpeed > TargetSpeed) {
+			//CurrentSpeed -= ReadCV (CV4_DECELERATION_RATE);
+			CurrentSpeed --;
+		}
 	}
 }
 
@@ -51,6 +70,10 @@ void MotorSetSpeed (uint8_t newSpeed, uint8_t newDir) {
 				// Reverse and set target speed
 				CurrentDir = newDir;
 				TargetSpeed = newSpeed;
+
+				// Direction changed
+				MotorSetUpdatePeriod ();
+
 			}
 		} else {
 			// Same direction, possibly different speed

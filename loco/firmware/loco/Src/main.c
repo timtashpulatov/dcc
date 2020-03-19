@@ -26,6 +26,7 @@
 #include "nmra.h"
 #include "flash.h"
 #include "cv.h"
+#include "motor.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -54,6 +55,11 @@ IWDG_HandleTypeDef hiwdg;
 
 
 /* USER CODE BEGIN PV */
+
+volatile uint32_t now;
+volatile uint32_t motorUpdateTime;
+volatile uint32_t functionsUpdateTime;
+
 
 //  extern DCC_MSG Msg;
 extern volatile DccRx_t DccRx;
@@ -129,13 +135,12 @@ int main(void)
   __HAL_RCC_DBGMCU_CLK_ENABLE();
 
 
+  // Setup soft timers
+  now = HAL_GetTick ();
+//  functionsUpdateTime = now + FUNCTIONSUPDATEINTERVAL;
 
-  /* USER CODE END 2 */
- 
- 
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+
   while (1)
   {
 
@@ -172,12 +177,17 @@ int main(void)
 //		  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 	  }
 
+	  // Periodic tasks
+	  now = HAL_GetTick ();
 
-    /* USER CODE END WHILE */
+	  MotorUpdateSpeed (now);
 
-    /* USER CODE BEGIN 3 */
+	  // Functions update (now)
+
+	  // etc
+
+
   }
-  /* USER CODE END 3 */
 }
 
 /**
