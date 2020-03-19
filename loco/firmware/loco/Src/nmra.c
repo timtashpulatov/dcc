@@ -2,6 +2,8 @@
 #include "loco.h"
 #include "nmra.h"
 
+static uint8_t ServiceMode = 0;
+
 void Decode () {
 uint8_t speed = 0;
 uint8_t dir = 0;
@@ -93,6 +95,10 @@ uint8_t dir = 0;
 			// 1111CCCC 0 DDDDDDDD - short form
 			// 1110CCVV 0 VVVVVVVV 0 DDDDDDDD - long form
 
+			if (ServiceMode) {
+
+			}
+
 			break;
 
 		default:
@@ -108,3 +114,19 @@ void SetFunctions (uint8_t funcs) {
 //	HAL_GPIO_WritePin (F3_GPIO_Port, F3_Pin, (funcs & 0x04) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 //	HAL_GPIO_WritePin (F4_GPIO_Port, F4_Pin, (funcs & 0x08) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
+
+
+// Service mode
+
+// Basic Acknowledgement - at least 60 mA for 6 ms +/-1 ms
+
+/*
+	Hard-Reset-Cycle - A hard reset (see RP-9.2.1), followed by 10 idle or reset packets. This sequence is used when a
+	Command Station/Programmer desires to return the decoder to its initial predefined state.
+
+	Page-Preset-Instruction - A packet sequence sent to guarantee the contents of the page register. The instruction
+	sequence is (long-preamble 0 01111101 0 00000001 0 01111100 1)
+
+	Decoder Factory Reset - long-preamble 0 01111111 0 00001000 0 01110111 1
+
+*/
