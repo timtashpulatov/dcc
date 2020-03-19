@@ -33,7 +33,8 @@ uint8_t dir = 0;
 
 			if ((Msg.Data [0] & 0b11111100) == 0b01110100) {
 				// Verify Byte
-				ReadCV (Msg.Data [1] - 1);
+				if (ReadCV (Msg.Data [1] + 1) == Msg.Data [2])
+					ServiceModeBaseAck ();
 			}
 
 			if ((Msg.Data [0] & 0b11111100) == 0b01111100) {
