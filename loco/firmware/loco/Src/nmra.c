@@ -126,7 +126,7 @@ void ServiceModeBaseAck (void) {
 
 	MotorSetPWM (255);
 
-	HAL_Delay (10);
+	HAL_Delay (6);
 
 	MotorStopPWM ();
 
