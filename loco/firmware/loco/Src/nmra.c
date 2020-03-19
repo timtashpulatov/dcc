@@ -2,6 +2,7 @@
 #include "loco.h"
 #include "nmra.h"
 #include "motor.h"
+#include "functions.h"
 
 static uint8_t ServiceMode = 0;
 
@@ -34,11 +35,9 @@ uint8_t dir = 0;
 					// Directional lighting
 					dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
 
-					HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin,
-							dir ? GPIO_PIN_SET : GPIO_PIN_RESET);
+					SetFrontLight (dir ? 1 : 0);
 
-					HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin,
-							dir ? GPIO_PIN_RESET : GPIO_PIN_SET);
+					SetRearLight (dir ? 0 : 1);
 
 					// Speed
 					speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
@@ -97,12 +96,6 @@ uint8_t dir = 0;
 }
 
 
-void SetFunctions (uint8_t funcs) {
-	HAL_GPIO_WritePin (F1_GPIO_Port, F1_Pin, (funcs & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	HAL_GPIO_WritePin (F2_GPIO_Port, F2_Pin, (funcs & 0x02) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-//	HAL_GPIO_WritePin (F3_GPIO_Port, F3_Pin, (funcs & 0x04) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-//	HAL_GPIO_WritePin (F4_GPIO_Port, F4_Pin, (funcs & 0x08) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
 
 
 // Service mode
@@ -112,8 +105,8 @@ void SetFunctions (uint8_t funcs) {
 void ServiceModeBaseAck (void) {
 
 
-	HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin, GPIO_PIN_SET);
+	SetFrontLight (1);
+	SetRearLight (1);
 
 	MotorSetPWM (255, 0);
 
@@ -123,8 +116,8 @@ void ServiceModeBaseAck (void) {
 
 	// TODO additional delay to make blink more noticeable
 
-	HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin, GPIO_PIN_RESET);
+	SetFrontLight (0);
+	SetRearLight (0);
 }
 
 /*
