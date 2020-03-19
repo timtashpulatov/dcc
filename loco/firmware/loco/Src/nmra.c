@@ -1,6 +1,7 @@
 #include "main.h"
 #include "loco.h"
 #include "nmra.h"
+#include "motor.h"
 
 static uint8_t ServiceMode = 0;
 
@@ -41,21 +42,9 @@ uint8_t dir = 0;
 
 					// Speed
 					speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
-					if (1 == speed) {
-						// Emergency stop
-						TIM3->CCR1 = 0;
-						TIM3->CCR2 = 0;
-					} else {
-						// TODO accelerate/deccelerate
-						if (dir) {
-							TIM3->CCR2 = 0;
-							TIM3->CCR1 = speed;
-						} else {
-							TIM3->CCR1 = 0;
-							TIM3->CCR2 = speed;
-						}
-					}
+					MotorSetSpeed (speed, dir);
 					break;
+
 				case ADV_SUBF_RESTRICTED_SPEED_STEP:
 					break;
 				case ADV_SUBF_ANALOG_FUNC_GROUP:
