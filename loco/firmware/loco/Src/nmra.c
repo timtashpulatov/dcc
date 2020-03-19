@@ -47,10 +47,6 @@ uint8_t dir = 0;
 						// Directional lighting
 						dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
 
-						SetFrontLight (dir ? 1 : 0);
-
-						SetRearLight (dir ? 0 : 1);
-
 						// Speed
 						speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
 						MotorSetSpeed (speed, dir);

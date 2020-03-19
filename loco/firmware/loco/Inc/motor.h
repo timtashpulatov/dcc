@@ -9,5 +9,6 @@ void MotorInit (void);
 uint8_t MotorSpeedToDuty (void);
 void MotorSetPWM (uint8_t pwm);
 void MotorStopPWM (void);
+void MotorSetAccelDecelRate (void);
 
 #endif

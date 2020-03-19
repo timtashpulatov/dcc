@@ -2,6 +2,7 @@
 
 #include "cv.h"
 #include "motor.h"
+#include "functions.h"
 
 
 
@@ -78,6 +79,10 @@ void MotorSetSpeed (uint8_t newSpeed, uint8_t newDir) {
 
 				// Direction changed
 				MotorSetAccelDecelRate ();
+
+				// Update Front/Rear Lights
+				SetFrontLight (CurrentDir ? 1 : 0);
+				SetRearLight (CurrentDir ? 0 : 1);
 
 			}
 		} else {
