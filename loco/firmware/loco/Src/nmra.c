@@ -12,16 +12,53 @@ typedef enum {
 
 static ServiceMode_t ServiceMode;
 
-
+// 78 00 e8 - read CV1 in Direct mode
 
 void Decode () {
 uint8_t speed = 0;
 uint8_t dir = 0;
 
-	if ((2 == Msg.Size) && ((0 == Msg.Data [0]) && (0 == Msg.Data [1]))) {
+	if ((3 == Msg.Size) && ((0 == Msg.Data [0]) && (0 == Msg.Data [1]))) {
 		// Reset packet
 		ServiceMode = POSSIBLE;
-	} else {
+	}
+
+	else
+
+	switch (ServiceMode) {
+
+	case POSSIBLE:
+		if ((4 == Msg.Size) && (0b01110000 == (Msg.Data [0] & 0b11110000))) {
+			ServiceMode = ACTIVE;
+
+			if ((Msg.Data [0] & 0b11111100) == 0b01110100) {
+				// Verify Byte
+				ReadCV (Msg.Data [1] - 1);
+			}
+
+			if ((Msg.Data [0] & 0b11111100) == 0b01111100) {
+				// Write Byte
+				ReadCV (Msg.Data [1] + 1);
+			}
+
+			if ((Msg.Data [0] & 0b11111100) == 0b01111000) {
+				// Bit Manipulation
+				// 0 011110AA 0 AAAAAAAA 0 111KDBBB 0 EEEEEEEE 1
+				uint8_t bitPos = Msg.Data [2] & 7;
+				uint8_t workingBit = (Msg.Data [2] & 8) ? 1 : 0;
+				uint8_t cv = ReadCV (Msg.Data [1] + 1);
+				if (((cv >> bitPos) & 1) == workingBit)
+					ServiceModeBaseAck ();
+			}
+
+		}
+		break;
+
+	case ACTIVE:
+		break;
+
+	case INACTIVE:
+	default:
 		switch (Msg.Data [1] & INSTR_TYPE_BIT_MASK) {
 			case INSTR_DECODER_AND_CONSIST_CONTROL:
 				break;
@@ -91,21 +128,12 @@ uint8_t dir = 0;
 				// 1111CCCC 0 DDDDDDDD - short form
 				// 1110CCVV 0 VVVVVVVV 0 DDDDDDDD - long form
 
-				switch (ServiceMode) {
-					case INACTIVE:
-						break;
-					case POSSIBLE:
-						ServiceMode = ACTIVE;
-						break;
-					case ACTIVE:
-						break;
-				}
-
 				break;
 
 			default:
 				break;
 		}
+		break;
 	}
 
 }
