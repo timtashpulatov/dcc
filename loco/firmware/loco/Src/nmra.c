@@ -108,7 +108,7 @@ void ServiceModeBaseAck (void) {
 	SetFrontLight (1);
 	SetRearLight (1);
 
-	MotorSetPWM (255, 0);
+	MotorSetPWM (255);
 
 	HAL_Delay (10);
 
