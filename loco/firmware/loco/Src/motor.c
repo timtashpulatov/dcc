@@ -94,9 +94,9 @@ void MotorSetSpeed (uint8_t newSpeed, uint8_t newDir) {
 
 void MotorSetAccelDecelRate (void) {
 	if (CurrentDir) {
-		Rate = 7 * ReadCV (CV4_DECELERATION_RATE);
+		Rate = ReadCV (CV4_DECELERATION_RATE);
 	} else {
-		Rate = 7 * ReadCV (CV3_ACCELERATION_RATE);
+		Rate = ReadCV (CV3_ACCELERATION_RATE);
 	}
 }
 

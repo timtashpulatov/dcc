@@ -34,8 +34,8 @@ typedef struct {
 const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
 		CV1_PRIMARY_ADDRESS, 		3,						// Primary Address
 		CV2_VSTART, 				0,						// Vstart
-		CV3_ACCELERATION_RATE, 		0,						// Acceleration Rate
-		CV4_DECELERATION_RATE, 		0,						// Deceleration Rate
+		CV3_ACCELERATION_RATE, 		5,						// Acceleration Rate
+		CV4_DECELERATION_RATE, 		5,						// Deceleration Rate
 		CV5_VHIGH, 					0,						// Vhigh
 		CV6_VMID, 					0, 						// Vmid
 		CV7_MANUFACTURER_VERSION, 	0,						// Manufacturer Version

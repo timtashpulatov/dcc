@@ -112,7 +112,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC_Init();
-//  MX_IWDG_Init();
+  MX_IWDG_Init();
   MX_TIM3_Init();
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
@@ -144,6 +144,8 @@ int main(void)
 
   while (1)
   {
+
+	  HAL_IWDG_Refresh (&hiwdg);
 
 //	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_SET);
 //	  HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
