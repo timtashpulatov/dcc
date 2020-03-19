@@ -139,6 +139,7 @@ int main(void)
   now = HAL_GetTick ();
 //  functionsUpdateTime = now + FUNCTIONSUPDATEINTERVAL;
 
+  MotorInit ();
 
 
   while (1)
@@ -180,7 +181,7 @@ int main(void)
 	  // Periodic tasks
 	  now = HAL_GetTick ();
 
-	  MotorUpdateSpeed (now);
+	  MotorUpdateSpeed ();
 
 	  // Functions update (now)
 

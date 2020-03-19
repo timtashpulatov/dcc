@@ -10,31 +10,34 @@ static volatile uint8_t TargetSpeed = 0;
 
 static volatile uint8_t CurrentDir = 0;			// Forward
 
-static volatile uint8_t UpdatePeriod = 0;
+static volatile uint8_t Rate = 0;
 static volatile uint32_t motorUpdateTime;
 
-void MotorSetUpdatePeriod (void) {
-	if (CurrentDir) {
-		UpdatePeriod = 7 * ReadCV (CV4_DECELERATION_RATE);
-	} else {
-		UpdatePeriod = 7 * ReadCV (CV3_ACCELERATION_RATE);
-	}
+
+void MotorInit (void) {
+	MotorStopPWM ();
+	MotorSetAccelDecelRate ();
+	MotorRestartUpdateTimer ();
 }
 
 
 // Must be called periodically
-void MotorUpdateSpeed (uint32_t now) {
+void MotorUpdateSpeed (void) {
+	if (HAL_GetTick () >= motorUpdateTime) {
 
+		MotorRestartUpdateTimer ();
 
-	if (now >= motorUpdateTime) {
-		motorUpdateTime = now + UpdatePeriod;
+		if (Rate) {
+			Rate --;
+		} else {
 
-		if (CurrentSpeed < TargetSpeed) {
-			//CurrentSpeed += ReadCV (CV3_ACCELERATION_RATE);
-			CurrentSpeed ++;
-		} else if (CurrentSpeed > TargetSpeed) {
-			//CurrentSpeed -= ReadCV (CV4_DECELERATION_RATE);
-			CurrentSpeed --;
+			MotorSetAccelDecelRate ();
+
+			if (CurrentSpeed < TargetSpeed) {
+				CurrentSpeed ++;
+			} else if (CurrentSpeed > TargetSpeed) {
+				CurrentSpeed --;
+			}
 		}
 	}
 }
@@ -72,17 +75,34 @@ void MotorSetSpeed (uint8_t newSpeed, uint8_t newDir) {
 				TargetSpeed = newSpeed;
 
 				// Direction changed
-				MotorSetUpdatePeriod ();
+				MotorSetAccelDecelRate ();
 
 			}
 		} else {
 			// Same direction, possibly different speed
 			if (TargetSpeed != newSpeed) {
 				TargetSpeed = newSpeed;
+
+				MotorSetAccelDecelRate ();
+
 			}
 		}
 	}
 }
+
+void MotorSetAccelDecelRate (void) {
+	if (CurrentDir) {
+		Rate = 7 * ReadCV (CV4_DECELERATION_RATE);
+	} else {
+		Rate = 7 * ReadCV (CV3_ACCELERATION_RATE);
+	}
+}
+
+void MotorRestartUpdateTimer (void) {
+	motorUpdateTime = HAL_GetTick () + MOTORUPDATEPERIOD;
+}
+
+
 
 
 // TODO Translate speed to PWM duty

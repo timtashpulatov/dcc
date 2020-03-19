@@ -1,8 +1,10 @@
 #ifndef __MOTOR_H__
 #define __MOTOR_H__
 
-void MotorUpdateSpeed (uint32_t now);
-void MotorSetSpeed (uint8_t newSpeed, uint8_t dir);
+#define MOTORUPDATEPERIOD	7	// ms
 
+void MotorRestartUpdateTimer (void);
+void MotorSetSpeed (uint8_t newSpeed, uint8_t dir);
+void MotorInit (void);
 
 #endif
