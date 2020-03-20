@@ -14,11 +14,25 @@ static volatile uint8_t CurrentDir = 0;			// Forward
 static volatile uint8_t Rate = 0;
 static volatile uint32_t motorUpdateTime;
 
+static volatile uint16_t VStart;
+static volatile uint8_t SpeedStep;
+
 
 void MotorInit (void) {
+uint16_t VHigh;
+
 	MotorStopPWM ();
 	MotorSetAccelDecelRate ();
 	MotorRestartUpdateTimer ();
+
+	VHigh = ReadCV (CV5_VHIGH);
+	if (0 == VHigh)
+		VHigh = 255;
+	VHigh = VHigh * 4;
+
+	VStart = ReadCV (CV2_VSTART) * 4;
+
+	SpeedStep = (VHigh - VStart) / 127;
 }
 
 
@@ -111,7 +125,12 @@ void MotorRestartUpdateTimer (void) {
 
 
 uint16_t MotorSpeedToDuty (void) {
-	return (CurrentSpeed << 3);
+
+	// Step = (CV5 (Vhigh) - CV2 (Vstart)) / 128
+	// Duty = CV2 (Vstart) + Speed * Step
+
+//	return (CurrentSpeed << 3);
+	return (VStart + CurrentSpeed * SpeedStep);
 }
 
 

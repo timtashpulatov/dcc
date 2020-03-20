@@ -33,7 +33,7 @@ typedef struct {
 // Default CV values in pairs (CV, Value)
 const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
 		CV1_PRIMARY_ADDRESS, 		3,						// Primary Address
-		CV2_VSTART, 				0,						// Vstart
+		CV2_VSTART, 				40,						// Vstart
 		CV3_ACCELERATION_RATE, 		5,						// Acceleration Rate
 		CV4_DECELERATION_RATE, 		5,						// Deceleration Rate
 		CV5_VHIGH, 					0,						// Vhigh
