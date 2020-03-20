@@ -6,8 +6,8 @@
 void MotorRestartUpdateTimer (void);
 void MotorSetSpeed (uint8_t newSpeed, uint8_t dir);
 void MotorInit (void);
-uint8_t MotorSpeedToDuty (void);
-void MotorSetPWM (uint8_t pwm);
+uint16_t MotorSpeedToDuty (void);
+void MotorSetPWM (uint16_t pwm);
 void MotorStopPWM (void);
 void MotorSetAccelDecelRate (void);
 

@@ -148,8 +148,8 @@ count1 = HAL_TIM_ReadCapturedValue (htim, TIM_CHANNEL_1);
 
 }
 
-#define PWM_PRESCALER	4*4		// 11KHz		//48*4	// Results in 1KHz PWM frequency
-#define PWM_STEPS		256
+#define PWM_PRESCALER	4 // 4*4		// 12KHz		//48*4	// Results in 1KHz PWM frequency
+#define PWM_STEPS		1024 // 256
 
 /**
   * @brief TIM3 Initialization Function
