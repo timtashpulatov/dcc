@@ -51,6 +51,11 @@ const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
 
 
 
+uint8_t IsCVSupported (uint16_t cvnum) {
+uint8_t *addr = CVTOADDR(cvnum);
+
+	return (*addr == cvnum);
+}
 
 
 uint8_t ReadCV (uint16_t cvnum) {
@@ -64,6 +69,7 @@ uint8_t *addr = CVTOADDR(cvnum);
 
 	return cv;
 }
+
 
 
 void UpdateCV (uint16_t cvnum, uint8_t val) {

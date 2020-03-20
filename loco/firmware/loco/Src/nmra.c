@@ -29,27 +29,35 @@ uint8_t dir = 0;
 
 	case POSSIBLE:
 		if ((4 == Msg.Size) && (0b01110000 == (Msg.Data [0] & 0b11110000))) {
+			uint8_t cv = ReadCV (Msg.Data [1] + 1);
+
 			ServiceMode = ACTIVE;
 
-			if ((Msg.Data [0] & 0b11111100) == 0b01110100) {
-				// Verify Byte
-				if (ReadCV (Msg.Data [1] + 1) == Msg.Data [2])
-					ServiceModeBaseAck ();
-			}
+			if (IsCVSupported (cv)) {
 
-			if ((Msg.Data [0] & 0b11111100) == 0b01111100) {
-				// Write Byte
-				ReadCV (Msg.Data [1] + 1);
-			}
+				if ((Msg.Data [0] & 0b11111100) == 0b01110100) {
+					// Verify Byte
+					if (ReadCV (Msg.Data [1] + 1) == Msg.Data [2])
+						ServiceModeBaseAck ();
+				}
 
-			if ((Msg.Data [0] & 0b11111100) == 0b01111000) {
-				// Bit Manipulation
-				// 0 011110AA 0 AAAAAAAA 0 111KDBBB 0 EEEEEEEE 1
-				uint8_t bitPos = Msg.Data [2] & 7;
-				uint8_t workingBit = (Msg.Data [2] & 8) ? 1 : 0;
-				uint8_t cv = ReadCV (Msg.Data [1] + 1);
-				if (((cv >> bitPos) & 1) == workingBit)
-					ServiceModeBaseAck ();
+				if ((Msg.Data [0] & 0b11111100) == 0b01111100) {
+					// Write Byte
+					ReadCV (Msg.Data [1] + 1);
+				}
+
+				if ((Msg.Data [0] & 0b11111100) == 0b01111000) {
+					// Bit Manipulation
+					// 0 011110AA 0 AAAAAAAA 0 111KDBBB 0 EEEEEEEE 1
+
+
+					uint8_t bitPos = Msg.Data [2] & 7;
+					uint8_t workingBit = (Msg.Data [2] & 8) ? 1 : 0;
+
+					if (((cv >> bitPos) & 1) == workingBit)
+						ServiceModeBaseAck ();
+				}
+
 			}
 
 		}
