@@ -16,7 +16,7 @@ static volatile uint32_t motorUpdateTime;
 
 static volatile uint16_t VStart;
 static volatile uint8_t SpeedStep;
-static volatile uint8_t Kick = 0;
+static volatile uint16_t Kick = 0;
 
 
 void MotorInit (void) {
@@ -37,7 +37,7 @@ uint16_t VHigh;
 }
 
 static void SetKick (void) {
-	Kick = (CurrentSpeed) ? 0 : ReadCV (CV65_KICK_START);
+	Kick = (CurrentSpeed) ? 0 : ReadCV (CV65_KICK_START) * 8;		// TODO parametrize this 8
 }
 
 // Must be called periodically
@@ -72,10 +72,10 @@ void MotorStopPWM (void) {
 void MotorSetPWM (uint16_t pwm) {
 	if (CurrentDir) {
 		TIM3->CCR2 = 0;
-		TIM3->CCR1 = pwm + Kick * 8;	// TODO parametrize this 8
+		TIM3->CCR1 = pwm + Kick;
 	} else {
 		TIM3->CCR1 = 0;
-		TIM3->CCR2 = pwm + Kick * 8;
+		TIM3->CCR2 = pwm + Kick;
 	}
 }
 
