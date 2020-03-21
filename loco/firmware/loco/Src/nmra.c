@@ -153,6 +153,7 @@ uint8_t val;
 							UpdateCV (cv, val);
 							break;
 						case 0b00001000:	// Bit manipulation
+							// TODO
 							break;
 						default: break;
 						}
