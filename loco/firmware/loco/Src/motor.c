@@ -46,19 +46,22 @@ void MotorUpdateSpeed (void) {
 
 		MotorRestartUpdateTimer ();
 
-		if (Rate) {
-			Rate --;
-		} else {
+		if (CurrentSpeed != TargetSpeed) {
 
-			MotorSetAccelDecelRate ();
+			if (Rate) {
+				Rate --;
+			} else {
 
-			if (CurrentSpeed < TargetSpeed) {
-				SetKick ();
-				CurrentSpeed ++;
-				MotorSetPWM (MotorSpeedToDuty ());
-			} else if (CurrentSpeed > TargetSpeed) {
-				CurrentSpeed --;
-				MotorSetPWM (MotorSpeedToDuty ());
+				MotorSetAccelDecelRate ();
+
+				if (CurrentSpeed < TargetSpeed) {
+					SetKick ();
+					CurrentSpeed ++;
+					MotorSetPWM (MotorSpeedToDuty ());
+				} else if (CurrentSpeed > TargetSpeed) {
+					CurrentSpeed --;
+					MotorSetPWM (MotorSpeedToDuty ());
+				}
 			}
 		}
 	}

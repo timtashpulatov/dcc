@@ -23,7 +23,7 @@
 
 #define CV29_CONFIGURATION			29
 
-#define CV65_KICK_START				50
+#define CV65_KICK_START				65
 
 
 #define CV29_DEFAULT_VALUE	2
