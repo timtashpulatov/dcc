@@ -49,7 +49,8 @@ uint8_t val;
 
 				if ((Msg.Data [0] & 0b11111100) == 0b01111100) {
 					// Write Byte
-//					ReadCV (Msg.Data [1] + 1);
+					UpdateCV (cv, Msg.Data [2]);
+					ServiceModeBaseAck ();
 				}
 
 				if ((Msg.Data [0] & 0b11111100) == 0b01111000) {

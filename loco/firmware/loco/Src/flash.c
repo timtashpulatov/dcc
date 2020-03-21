@@ -9,8 +9,8 @@
 void FlashCheckCVs (void) {
 uint16_t *addr = FLASH_CV_ADDR;	// last 1K
 
-//	if (*addr != SIGNATURE) {
-	if (1) {
+	if (*addr != SIGNATURE) {
+//	if (1) {
 		// No signature found
 		// Erase page and fill with default values
 

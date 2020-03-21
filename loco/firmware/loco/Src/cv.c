@@ -76,6 +76,8 @@ uint8_t *addr = CVTOADDR(cvnum);
 
 void UpdateCV (uint16_t cvnum, uint8_t val) {
 uint8_t *addr;
+uint8_t cvBlock [256];
+uint8_t i;
 
 	addr = CVTOADDR(cvnum);
 
@@ -89,7 +91,28 @@ uint8_t *addr;
 			// Calculate checksum, if necessary
 			// Write CV block from RAM to flash
 
-			uint8_t cvBlock [256];
+			addr = FLASH_CV_ADDR;
+
+			for (i = 0; i < 255; i ++) {
+				cvBlock [i] = *addr ++;
+			}
+
+
+			cvBlock [4 + (cvnum * 2) + 1] = val;	// Write new CV value after CV num
+
+
+			FlashUnlock ();
+
+			FlashErasePage (FLASH_CV_ADDR);
+
+			// copy cvBlock to Flash
+			for (i = 0; i < 255; i += 2) {
+				FlashWriteHalfWord (FLASH_CV_ADDR + i,
+									((uint16_t)(cvBlock [i + 1]) << 8) + cvBlock [i]
+									);
+			}
+
+			FlashLock ();
 
 
 		}
