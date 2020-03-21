@@ -157,7 +157,6 @@ uint8_t val;
 						}
 					}
 				}
-
 				break;
 
 			default:
