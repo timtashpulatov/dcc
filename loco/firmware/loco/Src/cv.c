@@ -51,7 +51,8 @@ const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
 		CV35_FUNCTION_1,			4,
 		CV36_FUNCTION_2,			8,
 		CV37_FUNCTION_3,			16,
-		CV38_FUNCTION_4,			32,
+
+		CV38_FUNCTION_4,			4,
 
 		CV65_KICK_START,			60,						// Kick
 
