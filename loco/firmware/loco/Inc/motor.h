@@ -1,7 +1,8 @@
 #ifndef __MOTOR_H__
 #define __MOTOR_H__
 
-#define MOTORUPDATEPERIOD	7	// ms
+#define MOTORUPDATEPERIOD		8	//7	// ms
+#define KICK_SPEED_THRESHOLD	1	// Enable kick start for speed steps under 5
 
 void MotorRestartUpdateTimer (void);
 void MotorSetSpeed (uint8_t newSpeed, uint8_t dir);

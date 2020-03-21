@@ -16,6 +16,7 @@ static volatile uint32_t motorUpdateTime;
 
 static volatile uint16_t VStart;
 static volatile uint8_t SpeedStep;
+static volatile uint8_t Kick = 0;
 
 
 void MotorInit (void) {
@@ -35,6 +36,9 @@ uint16_t VHigh;
 	SpeedStep = (VHigh - VStart) / 127;
 }
 
+static void SetKick (void) {
+	Kick = (CurrentSpeed) ? 0 : ReadCV (CV65_KICK_START);
+}
 
 // Must be called periodically
 void MotorUpdateSpeed (void) {
@@ -49,6 +53,7 @@ void MotorUpdateSpeed (void) {
 			MotorSetAccelDecelRate ();
 
 			if (CurrentSpeed < TargetSpeed) {
+				SetKick ();
 				CurrentSpeed ++;
 				MotorSetPWM (MotorSpeedToDuty ());
 			} else if (CurrentSpeed > TargetSpeed) {
@@ -67,10 +72,10 @@ void MotorStopPWM (void) {
 void MotorSetPWM (uint16_t pwm) {
 	if (CurrentDir) {
 		TIM3->CCR2 = 0;
-		TIM3->CCR1 = pwm;
+		TIM3->CCR1 = pwm + Kick * 8;	// TODO parametrize this 8
 	} else {
 		TIM3->CCR1 = 0;
-		TIM3->CCR2 = pwm;
+		TIM3->CCR2 = pwm + Kick * 8;
 	}
 }
 
@@ -82,6 +87,7 @@ void MotorSetSpeed (uint8_t newSpeed, uint8_t newDir) {
 		CurrentSpeed = TargetSpeed = 0;	// newSpeed;
 		MotorStopPWM ();
 	} else {
+
 		// When changing direction, first bring speed to zero
 		if (CurrentDir != newDir) {
 			TargetSpeed = 0;
