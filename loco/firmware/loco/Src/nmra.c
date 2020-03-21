@@ -17,6 +17,8 @@ static ServiceMode_t ServiceMode;
 void Decode () {
 uint8_t speed = 0;
 uint8_t dir = 0;
+uint8_t cv;
+uint8_t val;
 
 	if ((3 == Msg.Size) && ((0 == Msg.Data [0]) && (0 == Msg.Data [1]))) {
 		// Reset packet
@@ -27,17 +29,21 @@ uint8_t dir = 0;
 
 	switch (ServiceMode) {
 
+	case ACTIVE:
 	case POSSIBLE:
 		if ((4 == Msg.Size) && (0b01110000 == (Msg.Data [0] & 0b11110000))) {
-			uint8_t cv = ReadCV (Msg.Data [1] + 1);
 
 			ServiceMode = ACTIVE;
 
+			cv = Msg.Data [1] + 1;
+
 			if (IsCVSupported (cv)) {
+
+				val = ReadCV (cv);
 
 				if ((Msg.Data [0] & 0b11111100) == 0b01110100) {
 					// Verify Byte
-					if (ReadCV (cv) == Msg.Data [2])
+					if (val == Msg.Data [2])
 						ServiceModeBaseAck ();
 				}
 
@@ -53,16 +59,13 @@ uint8_t dir = 0;
 					uint8_t bitPos = Msg.Data [2] & 7;
 					uint8_t workingBit = (Msg.Data [2] & 8) ? 1 : 0;
 
-					if (((cv >> bitPos) & 1) == workingBit)
+					if (((val >> bitPos) & 1) == workingBit)
 						ServiceModeBaseAck ();
 				}
 
 			}
 
 		}
-		break;
-
-	case ACTIVE:
 		break;
 
 	case INACTIVE:
@@ -134,7 +137,28 @@ uint8_t dir = 0;
 
 			case INSTR_CV_ACCESS:
 				// 1111CCCC 0 DDDDDDDD - short form
-				// 1110CCVV 0 VVVVVVVV 0 DDDDDDDD - long form
+
+//				ServiceModeBaseAck ();		// FOR TESTING ONLY!!!
+
+				if (5 == Msg.Size) {
+					// 1110CCVV 0 VVVVVVVV 0 DDDDDDDD - long form
+					cv = Msg.Data [2] + 1;		// TODO support 10-bit CVs (CV512+)
+					if (IsCVSupported (cv)) {
+						val = Msg.Data [3];
+						switch (Msg.Data [1] & 0b00001100) {
+						case 0b00000100:	// Verify byte
+							break;
+						case 0b00001100:	// Write byte
+							UpdateCV (cv, val);
+							break;
+						case 0b00001000:	// Bit manipulation
+							break;
+						default: break;
+						}
+
+
+					}
+				}
 
 				break;
 
@@ -160,7 +184,7 @@ void ServiceModeBaseAck (void) {
 	SetFrontLight (1);
 	SetRearLight (1);
 
-	MotorSetPWM (255);
+	MotorSetPWM (255*8);
 
 	HAL_Delay (6);
 
