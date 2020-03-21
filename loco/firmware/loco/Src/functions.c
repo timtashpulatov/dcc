@@ -15,8 +15,9 @@ void SetFunctions1 (uint8_t funcs) {
 	// otherwise bit 4 has no meaning.
 
 
-	HAL_GPIO_WritePin (F1_GPIO_Port, F1_Pin, (funcs & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	HAL_GPIO_WritePin (F2_GPIO_Port, F2_Pin, (funcs & 0x02) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin (F1_GPIO_Port, F1_Pin, (funcs & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin (F2_GPIO_Port, F2_Pin, (funcs & 0x02) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+
 //	HAL_GPIO_WritePin (F3_GPIO_Port, F3_Pin, (funcs & 0x04) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 //	HAL_GPIO_WritePin (F4_GPIO_Port, F4_Pin, (funcs & 0x08) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 
@@ -35,19 +36,28 @@ void InitFunctions (void) {
 	funcUpdateTime = 0;
 }
 
+volatile uint8_t pops;
 
 // Must be called periodically
 void UpdateFunctions (void) {
-	if (HAL_GetTick () >= funcUpdateTime) {
-		funcUpdateTime = HAL_GetTick () + FUNCUPDATEPERIOD;
+
+	//		HAL_GPIO_WritePin (F1_GPIO_Port, F1_Pin, GPIO_PIN_SET);
+
+
+	if (1) {
+//	if (HAL_GetTick () >= funcUpdateTime) {
+//		funcUpdateTime = HAL_GetTick () + FUNCUPDATEPERIOD;
 
 		// Process functions
 
 		// TEST
 
+		pops ++;
+
+
 		if (GetCurrentDir () == 0) {
 			SetFrontLight (1);
-			SetRearLight (0);
+			SetRearLight (pops < 16);
 		} else {
 			SetFrontLight (0);
 			SetRearLight (1);
@@ -57,6 +67,9 @@ void UpdateFunctions (void) {
 
 
 	}
+
+//	HAL_GPIO_WritePin (F1_GPIO_Port, F1_Pin, GPIO_PIN_RESET);
+
 }
 
 
