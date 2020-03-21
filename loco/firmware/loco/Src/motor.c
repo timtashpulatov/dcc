@@ -13,6 +13,7 @@ static volatile uint8_t CurrentDir = 0;			// Forward
 
 static volatile uint8_t Rate = 0;
 static volatile uint32_t motorUpdateTime;
+static volatile uint32_t kickTime;
 
 static volatile uint16_t VStart;
 static volatile uint8_t SpeedStep;
@@ -37,11 +38,22 @@ uint16_t VHigh;
 }
 
 static void SetKick (void) {
-	Kick = (CurrentSpeed) ? 0 : ReadCV (CV65_KICK_START) * 8;		// TODO parametrize this 8
+	if (0 == kickTime) {
+		kickTime = HAL_GetTick () + KICK_TIME;
+		Kick = (CurrentSpeed) ? 0 : ReadCV (CV65_KICK_START) * 8;		// TODO parametrize this 8
+	}
 }
 
 // Must be called periodically
 void MotorUpdateSpeed (void) {
+
+	// Kick control
+	if (HAL_GetTick () >= kickTime) {
+		kickTime = 0;
+		Kick = 0;
+	}
+
+
 	if (HAL_GetTick () >= motorUpdateTime) {
 
 		MotorRestartUpdateTimer ();
