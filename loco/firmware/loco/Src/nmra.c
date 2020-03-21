@@ -137,9 +137,7 @@ uint8_t val;
 				break;
 
 			case INSTR_CV_ACCESS:
-				// 1111CCCC 0 DDDDDDDD - short form
-
-//				ServiceModeBaseAck ();		// FOR TESTING ONLY!!!
+				// 1111CCCC 0 DDDDDDDD - short form TODO
 
 				if (5 == Msg.Size) {
 					// 1110CCVV 0 VVVVVVVV 0 DDDDDDDD - long form
@@ -153,12 +151,10 @@ uint8_t val;
 							UpdateCV (cv, val);
 							break;
 						case 0b00001000:	// Bit manipulation
-							// TODO
+							// TODO 111CDBBB C=1 Write bit
 							break;
 						default: break;
 						}
-
-
 					}
 				}
 
