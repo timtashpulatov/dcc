@@ -46,6 +46,13 @@ const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
 
 		CV29_CONFIGURATION,			CV29_DEFAULT_VALUE,		// Configuration
 
+		CV33_FORWARD_HEADLIGHT,		1,
+		CV34_REVERSE_HEADLIGHT,		2,
+		CV35_FUNCTION_1,			4,
+		CV36_FUNCTION_2,			8,
+		CV37_FUNCTION_3,			16,
+		CV38_FUNCTION_4,			32,
+
 		CV65_KICK_START,			60,						// Kick
 
 		0, 0		// End

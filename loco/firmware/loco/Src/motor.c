@@ -116,8 +116,9 @@ void MotorSetSpeed (uint8_t newSpeed, uint8_t newDir) {
 				MotorSetAccelDecelRate ();
 
 				// Update Front/Rear Lights
-				SetFrontLight (CurrentDir ? 1 : 0);
-				SetRearLight (CurrentDir ? 0 : 1);
+				// TODO move to Functions processing
+//				SetFrontLight (CurrentDir ? 1 : 0);
+//				SetRearLight (CurrentDir ? 0 : 1);
 
 			}
 		} else {
