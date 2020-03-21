@@ -25,12 +25,12 @@ uint16_t VHigh;
 	MotorSetAccelDecelRate ();
 	MotorRestartUpdateTimer ();
 
-	VHigh = ReadCV (CV5_VHIGH);
+	VHigh = ReadCV (CV5_VHIGH);	// TODO use IsSupported ()
 	if (0 == VHigh)
 		VHigh = 255;
 	VHigh = VHigh * 4;
 
-	VStart = ReadCV (CV2_VSTART) * 4;
+	VStart = ReadCV (CV2_VSTART) * 8;
 
 	SpeedStep = (VHigh - VStart) / 127;
 }
@@ -125,12 +125,19 @@ void MotorRestartUpdateTimer (void) {
 
 
 uint16_t MotorSpeedToDuty (void) {
-
+uint16_t duty;
 	// Step = (CV5 (Vhigh) - CV2 (Vstart)) / 128
 	// Duty = CV2 (Vstart) + Speed * Step
 
 //	return (CurrentSpeed << 3);
-	return (VStart + CurrentSpeed * SpeedStep);
+
+	if (CurrentSpeed) {
+		duty = (CurrentSpeed * SpeedStep) + VStart;
+	} else {
+		duty = 0;
+	}
+
+	return duty;
 }
 
 
