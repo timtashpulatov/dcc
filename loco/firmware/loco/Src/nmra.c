@@ -122,15 +122,16 @@ uint8_t val;
 
 			case INSTR_FUNCTION_GROUP_1:
 				// 100DDDDD - FL and F1-F4
-				// If Bit 1 of CV#29 has a value of one (1), then bit 4 controls function FL,
-				// otherwise bit 4 has no meaning.
 
-				SetFunctions (Msg.Data [2]);
+				SetFunctions1 (Msg.Data [2]);
 
 				break;
 
 			case INSTR_FUNCTION_GROUP_2:
 				// 101SDDDD - F5-F12
+
+				SetFunctions2 (Msg.Data [2]);
+
 				break;
 
 			case INSTR_FEATURE_EXPANSION:

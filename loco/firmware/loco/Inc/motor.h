@@ -12,5 +12,6 @@ uint16_t MotorSpeedToDuty (void);
 void MotorSetPWM (uint16_t pwm);
 void MotorStopPWM (void);
 void MotorSetAccelDecelRate (void);
+uint8_t GetCurrentDir (void);
 
 #endif

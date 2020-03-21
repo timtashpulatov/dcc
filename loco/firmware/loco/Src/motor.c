@@ -162,4 +162,6 @@ uint16_t duty;
 	return duty;
 }
 
-
+uint8_t GetCurrentDir (void) {
+	return CurrentDir;
+}

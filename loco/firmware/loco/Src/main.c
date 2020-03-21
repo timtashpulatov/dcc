@@ -27,6 +27,7 @@
 #include "flash.h"
 #include "cv.h"
 #include "motor.h"
+#include "functions.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -185,7 +186,7 @@ int main(void)
 
 	  MotorUpdateSpeed ();
 
-	  // Functions update (now)
+	  UpdateFunctions ();
 
 	  // etc
 
