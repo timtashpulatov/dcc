@@ -30,6 +30,8 @@
 #define CV37_FUNCTION_3				37
 #define CV38_FUNCTION_4				38
 
+#define CV64_KICK_TIME				64
+
 #define CV65_KICK_START				65
 
 

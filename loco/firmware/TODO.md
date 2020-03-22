@@ -9,4 +9,5 @@ Things to do
 - [ ] PWM period (CV9)
 - [ ] Lighting effects
 - [ ] BEMF motor control
+- [ ] Speed curve
 - [ ] etc

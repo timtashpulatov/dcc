@@ -39,7 +39,7 @@ uint16_t VHigh;
 
 static void SetKick (void) {
 	if (0 == kickTime) {
-		kickTime = HAL_GetTick () + KICK_TIME;
+		kickTime = HAL_GetTick () + ReadCV (CV64_KICK_TIME);
 		Kick = (CurrentSpeed) ? 0 : ReadCV (CV65_KICK_START) * 8;		// TODO parametrize this 8
 	}
 }
