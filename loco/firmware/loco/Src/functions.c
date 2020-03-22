@@ -8,20 +8,16 @@ static volatile uint8_t Functions2;
 static volatile uint32_t funcUpdateTime;
 
 
-typedef struct {
-	GPIO_TypeDef* port;
-	uint16_t pin;
-	uint8_t pwm;
-} Output_t;
+
 
 
 #define NUM_OUTPUTS	4
 
 static Output_t Outputs [NUM_OUTPUTS] = {	// TODO #define
-		{FL_GPIO_Port, FL_Pin, 0},	// F0(f)
-		{RL_GPIO_Port, RL_Pin, 0},	// F0(r)
+		{FL_GPIO_Port, FL_Pin, 0},		// F0(f)
+		{RL_GPIO_Port, RL_Pin, 0},		// F0(r)
 		{F1_GPIO_Port, F1_Pin, 127},	// F1
-		{F2_GPIO_Port, F2_Pin, 255}	// F2
+		{F2_GPIO_Port, F2_Pin, 255}		// F2
 };
 
 
@@ -82,15 +78,11 @@ uint8_t i;
 
 		if (GetCurrentDir () == 0) {
 			SetFrontLight (1);
-			// SetRearLight (pops < 16);		// Dim
 			SetRearLight (0);
 		} else {
 			SetFrontLight (0);
 			SetRearLight (1);
 		}
-
-		// TEST
-
 
 	}
 
