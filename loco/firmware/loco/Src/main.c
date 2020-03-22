@@ -138,6 +138,8 @@ int main(void)
 //  functionsUpdateTime = now + FUNCTIONSUPDATEINTERVAL;
 
   MotorInit ();
+  FunctionsInit ();
+  ServiceModeInit ();
 
 
   while (1)

@@ -32,7 +32,7 @@ void SetFunctions2 (uint8_t funcs) {
 	Functions2 = funcs;
 }
 
-void InitFunctions (void) {
+void FunctionsInit (void) {
 	funcUpdateTime = 0;
 }
 

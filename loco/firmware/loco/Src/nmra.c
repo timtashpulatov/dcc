@@ -3,6 +3,7 @@
 #include "nmra.h"
 #include "motor.h"
 #include "functions.h"
+#include "cv.h"
 
 typedef enum {
 	INACTIVE = 0,
@@ -22,18 +23,26 @@ uint8_t val;
 
 	if ((3 == Msg.Size) && ((0 == Msg.Data [0]) && (0 == Msg.Data [1]))) {
 		// Reset packet
-		ServiceMode = POSSIBLE;
+		MotorInit ();
+		FunctionsInit ();
+
+		if (INACTIVE == ServiceMode) {
+			ServiceMode = POSSIBLE;
+		} else if (POSSIBLE == ServiceMode) {
+			ServiceMode = ACTIVE;
+		}
 	}
 
 	else
 
 	switch (ServiceMode) {
 
-	case ACTIVE:
 	case POSSIBLE:
-		if ((4 == Msg.Size) && (0b01110000 == (Msg.Data [0] & 0b11110000))) {
+		// Wait for another Service Mode instruction or Reset packet
+		break;
 
-			ServiceMode = ACTIVE;
+	case ACTIVE:
+		if ((4 == Msg.Size) && (0b01110000 == (Msg.Data [0] & 0b11110000))) {
 
 			cv = Msg.Data [1] + 1;
 
@@ -205,6 +214,10 @@ void ServiceModeBaseAck (void) {
 
 	SetFrontLight (0);
 	SetRearLight (0);
+}
+
+void ServiceModeInit (void) {
+	ServiceMode = INACTIVE;
 }
 
 /*

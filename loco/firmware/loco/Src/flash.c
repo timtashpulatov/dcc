@@ -28,6 +28,7 @@ uint16_t *addr = FLASH_CV_ADDR;	// last 1K
 void FlashUnlock (void) {
 	while ((FLASH->SR & FLASH_SR_BSY) != 0) {
 		/* For robust implementation, add here time-out management */
+		HAL_IWDG_Refresh (&hiwdg);
 	};
 
 	if ((FLASH->CR & FLASH_CR_LOCK) != 0 ) {
@@ -50,6 +51,7 @@ void FlashErasePage (uint32_t page_addr) {
 	FLASH->CR |= FLASH_CR_STRT;
 	while ((FLASH->SR & FLASH_SR_BSY) != 0) {
 		/* For robust implementation, add here time-out management */
+		HAL_IWDG_Refresh (&hiwdg);
 	};
 
 	if ((FLASH->SR & FLASH_SR_EOP) != 0) {
@@ -67,7 +69,9 @@ void FlashWriteHalfWord (uint32_t addr, uint16_t val) {
 
 	*(uint16_t *)(addr) = val;
 
-	while ((FLASH->SR & FLASH_SR_BSY) != 0);
+	while ((FLASH->SR & FLASH_SR_BSY) != 0) {
+		HAL_IWDG_Refresh (&hiwdg);
+	}
 
 	if ((FLASH->SR & FLASH_SR_EOP) != 0) {
 		FLASH->SR |= FLASH_SR_EOP;
@@ -84,6 +88,7 @@ uint32_t addr;
 
 	while ((FLASH->SR & FLASH_SR_BSY) != 0) {
 		/* For robust implementation, add here time-out management */
+		HAL_IWDG_Refresh (&hiwdg);
 	};
 
 	FlashWriteHalfWord (FLASH_CV_ADDR, SIGNATURE);

@@ -12,6 +12,12 @@
 
 void FlashCheckCVs (void);
 void FlashInitCVs (void);
+void FlashErasePage (uint32_t page_addr);
+void FlashLock (void);
+void FlashUnlock (void);
+void FlashWriteHalfWord (uint32_t addr, uint16_t val);
+
+extern IWDG_HandleTypeDef hiwdg;
 
 
 #endif

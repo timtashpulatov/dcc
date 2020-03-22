@@ -2,6 +2,7 @@
 
 #include "cv.h"
 #include "flash.h"
+#include "tim.h"
 
 
 typedef struct {
@@ -87,12 +88,16 @@ uint8_t *addr;
 uint8_t cvBlock [256];
 uint8_t i;
 
+
 	addr = CVTOADDR(cvnum);
 
 	// Supported CVs have their number written along with value at corresponding address
 	if (*addr == cvnum) {
 		// Only update value if it is different from the one stored in flash
 		if (*(addr + 1) != val) {
+
+//			__HAL_TIM_DISABLE_IT(&htim14, TIM_IT_CC1);
+
 
 			// Copy CV block from flash to RAM
 			// Update RAM
@@ -114,7 +119,10 @@ uint8_t i;
 			FlashErasePage (FLASH_CV_ADDR);
 
 			// copy cvBlock to Flash
-			for (i = 0; i < 255; i += 2) {
+			for (i = 0; i < 254; i += 2) {
+
+				HAL_IWDG_Refresh (&hiwdg);
+
 				FlashWriteHalfWord (FLASH_CV_ADDR + i,
 									((uint16_t)(cvBlock [i + 1]) << 8) + cvBlock [i]
 									);
@@ -122,8 +130,11 @@ uint8_t i;
 
 			FlashLock ();
 
+//			__HAL_TIM_DISABLE_IT(&htim14, TIM_IT_CC1);
 
 		}
 	}
+
+
 
 }

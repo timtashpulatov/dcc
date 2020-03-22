@@ -10,6 +10,7 @@ void SetFrontLight (uint8_t on);
 void SetRearLight (uint8_t on);
 
 void UpdateFunctions (void);
+void FunctionsInit (void);
 
 
 #endif
