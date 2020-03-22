@@ -145,7 +145,7 @@ uint8_t val;
 			case INSTR_FUNCTION_GROUP_1:
 				// 100DDDDD - FL and F1-F4
 
-				SetFunctions1 (Msg.Data [2]);
+				SetFunctions1 (Msg.Data [1]);
 
 				break;
 
