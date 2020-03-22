@@ -7,7 +7,7 @@
 
 
 void FlashCheckCVs (void) {
-uint16_t *addr = FLASH_CV_ADDR;	// last 1K
+uint16_t *addr = (uint16_t *)FLASH_CV_ADDR;	// last 1K
 
 	if (*addr != SIGNATURE) {
 //	if (1) {

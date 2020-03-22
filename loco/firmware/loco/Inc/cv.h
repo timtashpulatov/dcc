@@ -40,5 +40,6 @@ extern const uint8_t defaultCVs [];
 
 uint8_t ReadCV (uint16_t cvnum);
 uint8_t IsCVSupported (uint16_t cvnum);
+void UpdateCV (uint16_t cvnum, uint8_t val);
 
 #endif
