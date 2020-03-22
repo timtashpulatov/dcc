@@ -60,8 +60,21 @@ uint8_t val;
 					uint8_t bitPos = Msg.Data [2] & 7;
 					uint8_t workingBit = (Msg.Data [2] & 8) ? 1 : 0;
 
-					if (((val >> bitPos) & 1) == workingBit)
+					if ((Msg.Data [2]) & 0b00010000) {
+						// Write bit
+						if (workingBit) {
+							val |= (1 << bitPos);
+						} else {
+							val &= ~(1 << bitPos);
+						}
+						UpdateCV (cv, val);
 						ServiceModeBaseAck ();
+
+					} else {
+						// Verify bit
+						if (((val >> bitPos) & 1) == workingBit)
+							ServiceModeBaseAck ();
+					}
 				}
 
 			}

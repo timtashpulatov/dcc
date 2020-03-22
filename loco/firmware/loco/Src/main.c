@@ -124,9 +124,6 @@ int main(void)
   FlashCheckCVs ();
 
 
-  ReadCV (29);
-
-
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_2);
 
