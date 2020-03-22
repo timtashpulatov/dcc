@@ -14,5 +14,6 @@ void MotorStopPWM (void);
 void MotorSetAccelDecelRate (void);
 uint8_t GetCurrentDir (void);
 void MotorUpdateSpeed (void);
+void UpdateMotorControlParameters (void);
 
 #endif

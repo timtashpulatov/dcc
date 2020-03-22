@@ -172,6 +172,7 @@ uint8_t val;
 							break;
 						case 0b00001100:	// Write byte
 							UpdateCV (cv, val);
+							UpdateMotorControlParameters ();
 							break;
 						case 0b00001000:	// Bit manipulation
 							// TODO 111CDBBB C=1 Write bit

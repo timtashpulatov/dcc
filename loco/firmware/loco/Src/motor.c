@@ -21,20 +21,13 @@ static volatile uint16_t Kick = 0;
 
 
 void MotorInit (void) {
-uint16_t VHigh;
 
 	MotorStopPWM ();
 	MotorSetAccelDecelRate ();
 	MotorRestartUpdateTimer ();
 
-	VHigh = ReadCV (CV5_VHIGH);	// TODO use IsSupported ()
-	if (0 == VHigh)
-		VHigh = 255;
-	VHigh = VHigh * 4;
+	UpdateMotorControlParameters ();
 
-	VStart = ReadCV (CV2_VSTART) * 8;
-
-	SpeedStep = (VHigh - VStart) / 127;
 }
 
 static void SetKick (void) {
@@ -173,4 +166,17 @@ uint16_t duty;
 
 uint8_t GetCurrentDir (void) {
 	return CurrentDir;
+}
+
+void UpdateMotorControlParameters (void) {
+uint16_t VHigh;
+
+	VHigh = ReadCV (CV5_VHIGH);	// TODO use IsSupported ()
+	if (0 == VHigh)
+		VHigh = 255;
+	VHigh = VHigh * 4;
+
+	VStart = ReadCV (CV2_VSTART) * 8;
+
+	SpeedStep = (VHigh - VStart) / 127;
 }

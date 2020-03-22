@@ -7,6 +7,24 @@ static volatile uint8_t Functions2;
 
 static volatile uint32_t funcUpdateTime;
 
+
+typedef struct {
+	GPIO_TypeDef* port;
+	uint16_t pin;
+	uint8_t pwm;
+} Output_t;
+
+
+#define NUM_OUTPUTS	4
+
+static Output_t Outputs [NUM_OUTPUTS] = {	// TODO #define
+		{FL_GPIO_Port, FL_Pin, 0},	// F0(f)
+		{RL_GPIO_Port, RL_Pin, 0},	// F0(r)
+		{F1_GPIO_Port, F1_Pin, 127},	// F1
+		{F2_GPIO_Port, F2_Pin, 255}	// F2
+};
+
+
 void SetFunctions1 (uint8_t funcs) {
 
 	Functions1 = funcs;
@@ -15,8 +33,8 @@ void SetFunctions1 (uint8_t funcs) {
 	// otherwise bit 4 has no meaning.
 
 
-	HAL_GPIO_WritePin (F1_GPIO_Port, F1_Pin, (funcs & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	HAL_GPIO_WritePin (F2_GPIO_Port, F2_Pin, (funcs & 0x02) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin (F1_GPIO_Port, F1_Pin, (funcs & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin (F2_GPIO_Port, F2_Pin, (funcs & 0x02) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 
 //	HAL_GPIO_WritePin (F3_GPIO_Port, F3_Pin, (funcs & 0x04) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 //	HAL_GPIO_WritePin (F4_GPIO_Port, F4_Pin, (funcs & 0x08) ? GPIO_PIN_SET : GPIO_PIN_RESET);
@@ -40,8 +58,15 @@ volatile uint8_t pops;
 
 // Must be called periodically
 void UpdateFunctions (void) {
+uint8_t i;
 
 	//		HAL_GPIO_WritePin (F1_GPIO_Port, F1_Pin, GPIO_PIN_SET);
+
+	// Update outputs' PWM
+	for (i = 0; i < NUM_OUTPUTS; i++) {
+		HAL_GPIO_WritePin (Outputs [i].port, Outputs [i].pin, pops < Outputs [i].pwm);
+	}
+
 
 
 	if (1) {
@@ -57,7 +82,8 @@ void UpdateFunctions (void) {
 
 		if (GetCurrentDir () == 0) {
 			SetFrontLight (1);
-			SetRearLight (pops < 16);
+			// SetRearLight (pops < 16);		// Dim
+			SetRearLight (0);
 		} else {
 			SetFrontLight (0);
 			SetRearLight (1);
@@ -75,11 +101,13 @@ void UpdateFunctions (void) {
 
 
 void SetFrontLight (uint8_t on) {
-	HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	Outputs [0].pwm = on ? 255 : 31;
 }
 
 void SetRearLight (uint8_t on) {
-	HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	Outputs [1].pwm = on ? 255 : 63;
 }
 
 /* MERG Lighting Effects
