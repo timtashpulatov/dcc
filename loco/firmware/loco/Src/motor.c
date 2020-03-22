@@ -39,8 +39,13 @@ uint16_t VHigh;
 
 static void SetKick (void) {
 	if (0 == kickTime) {
-		kickTime = HAL_GetTick () + ReadCV (CV64_KICK_TIME);
-		Kick = (CurrentSpeed) ? 0 : ReadCV (CV65_KICK_START) * 8;		// TODO parametrize this 8
+
+		kickTime = ReadCV (CV64_KICK_TIME);
+
+		if (kickTime) {
+			Kick = (CurrentSpeed) ? 0 : ReadCV (CV65_KICK_START) * 8;		// TODO parametrize this 8
+			kickTime += HAL_GetTick ();
+		}
 	}
 }
 
@@ -50,7 +55,11 @@ void MotorUpdateSpeed (void) {
 	// Kick control
 	if (HAL_GetTick () >= kickTime) {
 		kickTime = 0;
-		Kick = 0;
+
+		if (Kick) {
+			Kick = 0;
+			MotorSetPWM (MotorSpeedToDuty ());
+		}
 	}
 
 
