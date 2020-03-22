@@ -94,12 +94,12 @@ uint8_t i;
 
 void SetFrontLight (uint8_t on) {
 //	HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	Outputs [0].pwm = on ? 255 : 31;
+	Outputs [0].pwm = on ? 255 : 15;
 }
 
 void SetRearLight (uint8_t on) {
 //	HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	Outputs [1].pwm = on ? 255 : 63;
+	Outputs [1].pwm = on ? 255 : 15;
 }
 
 /* MERG Lighting Effects
