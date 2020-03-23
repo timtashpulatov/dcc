@@ -42,6 +42,11 @@ uint8_t val;
 		break;
 
 	case ACTIVE:
+
+		if ((4 == Msg.Size) && (01111111 == Msg.Data [0]) && (00001000 == Msg.Data [1]) && (01110111 == Msg.Data [2])) {
+			// Reset to factory defaults
+		}
+
 		if ((4 == Msg.Size) && (0b01110000 == (Msg.Data [0] & 0b11110000))) {
 
 			cv = Msg.Data [1] + 1;
@@ -93,98 +98,101 @@ uint8_t val;
 
 	case INACTIVE:
 	default:
-		switch (Msg.Data [1] & INSTR_TYPE_BIT_MASK) {
-			case INSTR_DECODER_AND_CONSIST_CONTROL:
-				break;
 
-			case INSTR_ADVANCED_OPERATION:
-				// 001CCCCC 0 DDDDDDDD
+		if (Msg.Data [0] == ReadCV (CV1_PRIMARY_ADDRESS)) {
+			switch (Msg.Data [1] & INSTR_TYPE_BIT_MASK) {
+				case INSTR_DECODER_AND_CONSIST_CONTROL:
+					break;
 
-				// The 5-bit sub-instruction CCCCC allows for 32 separate Advanced Operations Sub-Instructions
-				switch (Msg.Data [1] & 0b00011111) {
-					case ADV_SUBF_128_SPEED_STEP_CONTROL:
-						/* CCCCC = 11111: 128 Speed Step Control - Instruction "11111" is used to send
-						one of 126 Digital Decoder speed steps. The subsequent single byte shall define
-						speed and direction with bit 7 being direction ("1" is forward and "0" is reverse)
-						and the remaining bits used to indicate speed.
-						The most significant speed bit is bit 6.
+				case INSTR_ADVANCED_OPERATION:
+					// 001CCCCC 0 DDDDDDDD
 
-						A data-byte value of U0000000 is used for stop,
-						and a data-byte value of U0000001 is used for emergency stop.
+					// The 5-bit sub-instruction CCCCC allows for 32 separate Advanced Operations Sub-Instructions
+					switch (Msg.Data [1] & 0b00011111) {
+						case ADV_SUBF_128_SPEED_STEP_CONTROL:
+							/* CCCCC = 11111: 128 Speed Step Control - Instruction "11111" is used to send
+							one of 126 Digital Decoder speed steps. The subsequent single byte shall define
+							speed and direction with bit 7 being direction ("1" is forward and "0" is reverse)
+							and the remaining bits used to indicate speed.
+							The most significant speed bit is bit 6.
 
-						This allows up to 126 speed steps.
-						*/
+							A data-byte value of U0000000 is used for stop,
+							and a data-byte value of U0000001 is used for emergency stop.
 
-						// Directional lighting
-						dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
+							This allows up to 126 speed steps.
+							*/
 
-						// Speed
-						speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
-						MotorSetSpeed (speed, dir);
-						break;
+							// Directional lighting
+							dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
 
-					case ADV_SUBF_RESTRICTED_SPEED_STEP:
-						break;
-					case ADV_SUBF_ANALOG_FUNC_GROUP:
-						break;
-					default:
-						break;
-				}
-
-				break;
-
-			case INSTR_SPEED_DIR_REVERSE:
-				// 010DDDDD
-	//			TIM3->CCR1 = Msg.Data [1] & INSTR_SPEED_BIT_MASK;
-				break;
-
-			case INSTR_SPEED_DIR_FORWARD:
-				// 011DDDDD
-				break;
-
-			case INSTR_FUNCTION_GROUP_1:
-				// 100DDDDD - FL and F1-F4
-
-				SetFunctions1 (Msg.Data [1]);
-
-				break;
-
-			case INSTR_FUNCTION_GROUP_2:
-				// 101SDDDD - F5-F12
-
-				SetFunctions2 (Msg.Data [2]);
-
-				break;
-
-			case INSTR_FEATURE_EXPANSION:
-				break;
-
-			case INSTR_CV_ACCESS:
-				// 1111CCCC 0 DDDDDDDD - short form TODO
-
-				if (5 == Msg.Size) {
-					// 1110CCVV 0 VVVVVVVV 0 DDDDDDDD - long form
-					cv = Msg.Data [2] + 1;		// TODO support 10-bit CVs (CV512+)
-					if (IsCVSupported (cv)) {
-						val = Msg.Data [3];
-						switch (Msg.Data [1] & 0b00001100) {
-						case 0b00000100:	// Verify byte
+							// Speed
+							speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
+							MotorSetSpeed (speed, dir);
 							break;
-						case 0b00001100:	// Write byte
-							UpdateCV (cv, val);
-							UpdateMotorControlParameters ();
+
+						case ADV_SUBF_RESTRICTED_SPEED_STEP:
 							break;
-						case 0b00001000:	// Bit manipulation
-							// TODO 111CDBBB C=1 Write bit
+						case ADV_SUBF_ANALOG_FUNC_GROUP:
 							break;
-						default: break;
+						default:
+							break;
+					}
+
+					break;
+
+				case INSTR_SPEED_DIR_REVERSE:
+					// 010DDDDD
+		//			TIM3->CCR1 = Msg.Data [1] & INSTR_SPEED_BIT_MASK;
+					break;
+
+				case INSTR_SPEED_DIR_FORWARD:
+					// 011DDDDD
+					break;
+
+				case INSTR_FUNCTION_GROUP_1:
+					// 100DDDDD - FL and F1-F4
+
+					SetFunctions1 (Msg.Data [1]);
+
+					break;
+
+				case INSTR_FUNCTION_GROUP_2:
+					// 101SDDDD - F5-F12
+
+					SetFunctions2 (Msg.Data [2]);
+
+					break;
+
+				case INSTR_FEATURE_EXPANSION:
+					break;
+
+				case INSTR_CV_ACCESS:
+					// 1111CCCC 0 DDDDDDDD - short form TODO
+
+					if (5 == Msg.Size) {
+						// 1110CCVV 0 VVVVVVVV 0 DDDDDDDD - long form
+						cv = Msg.Data [2] + 1;		// TODO support 10-bit CVs (CV512+)
+						if (IsCVSupported (cv)) {
+							val = Msg.Data [3];
+							switch (Msg.Data [1] & 0b00001100) {
+							case 0b00000100:	// Verify byte
+								break;
+							case 0b00001100:	// Write byte
+								UpdateCV (cv, val);
+								UpdateMotorControlParameters ();
+								break;
+							case 0b00001000:	// Bit manipulation
+								// TODO 111CDBBB C=1 Write bit
+								break;
+							default: break;
+							}
 						}
 					}
-				}
-				break;
+					break;
 
-			default:
-				break;
+				default:
+					break;
+			}
 		}
 		break;
 	}
