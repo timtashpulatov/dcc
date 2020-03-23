@@ -99,7 +99,8 @@ uint8_t val;
 	case INACTIVE:
 	default:
 
-		if (Msg.Data [0] == ReadCV (CV1_PRIMARY_ADDRESS)) {
+		if (Msg.Data [0] == ReadCV (CV1_PRIMARY_ADDRESS) ||
+				(0 == Msg.Data [0])) {
 			switch (Msg.Data [1] & INSTR_TYPE_BIT_MASK) {
 				case INSTR_DECODER_AND_CONSIST_CONTROL:
 					break;
