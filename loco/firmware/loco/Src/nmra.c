@@ -126,6 +126,11 @@ uint8_t val;
 							// Directional lighting
 							dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
 
+							// CV29 bit 0
+							if (ReadCV (CV29_CONFIGURATION) & 1) {
+								dir ^= INSTR_DIRECTION_BIT_MASK;
+							}
+
 							// Speed
 							speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
 							MotorSetSpeed (speed, dir);
