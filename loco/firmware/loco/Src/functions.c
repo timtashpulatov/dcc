@@ -75,13 +75,17 @@ uint8_t i;
 
 		pops ++;
 
-
-		if (GetCurrentDir () == 0) {
-			SetFrontLight (1);
-			SetRearLight (0);
+		if (Functions1 & 0x10) {
+			if (GetCurrentDir () == 0) {
+				SetFrontLight (1);
+				SetRearLight (0);
+			} else {
+				SetFrontLight (0);
+				SetRearLight (1);
+			}
 		} else {
 			SetFrontLight (0);
-			SetRearLight (1);
+			SetRearLight (0);
 		}
 
 	}
@@ -94,12 +98,12 @@ uint8_t i;
 
 void SetFrontLight (uint8_t on) {
 //	HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	Outputs [0].pwm = on ? 255 : 15;
+	Outputs [0].pwm = on ? 255 : 7;
 }
 
 void SetRearLight (uint8_t on) {
 //	HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	Outputs [1].pwm = on ? 255 : 15;
+	Outputs [1].pwm = on ? 255 : 7;
 }
 
 /* MERG Lighting Effects
