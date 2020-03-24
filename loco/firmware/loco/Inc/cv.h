@@ -30,6 +30,14 @@
 #define CV37_FUNCTION_3				37
 #define CV38_FUNCTION_4				38
 
+// MERG Lighting Effects
+#define CV49_FL						49
+#define CV50_RL						50
+#define CV51_F1						51
+#define CV52_F2						52
+#define CV53_F3						53
+#define CV54_F4						54
+
 #define CV64_KICK_TIME				64
 
 #define CV65_KICK_START				65

@@ -8,10 +8,14 @@ static volatile uint8_t Functions2;
 static volatile uint32_t funcUpdateTime;
 
 
-
-
-
 #define NUM_OUTPUTS	4
+
+#define OUT_INDEX_F0_F	0
+#define OUT_INDEX_F0_R	1
+#define OUT_INDEX_F1	2
+//#define OUT_INDEX_F2	3
+//#define OUT_INDEX_F3	4
+//#define OUT_INDEX_F4	5
 
 static Output_t Outputs [NUM_OUTPUTS] = {	// TODO #define
 		{FL_GPIO_Port, FL_Pin, 0},		// F0(f)
@@ -75,6 +79,8 @@ uint8_t i;
 
 		pops ++;
 
+		// F0
+
 		if (Functions1 & 0x10) {
 			if (GetCurrentDir () == 0) {
 				SetFrontLight (1);
@@ -87,6 +93,10 @@ uint8_t i;
 			SetFrontLight (0);
 			SetRearLight (0);
 		}
+
+		// F1
+		Outputs [2].pwm = (Functions1 & 0x01) ? 255 : 0;
+		Outputs [3].pwm = (Functions1 & 0x02) ? 255 : 0;
 
 	}
 
