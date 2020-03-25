@@ -27,6 +27,7 @@
 #include "flash.h"
 #include "cv.h"
 #include "motor.h"
+#include "functions.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -123,9 +124,6 @@ int main(void)
   FlashCheckCVs ();
 
 
-  ReadCV (29);
-
-
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start (&htim3, TIM_CHANNEL_2);
 
@@ -140,6 +138,8 @@ int main(void)
 //  functionsUpdateTime = now + FUNCTIONSUPDATEINTERVAL;
 
   MotorInit ();
+  FunctionsInit ();
+  ServiceModeInit ();
 
 
   while (1)
@@ -185,7 +185,7 @@ int main(void)
 
 	  MotorUpdateSpeed ();
 
-	  // Functions update (now)
+	  UpdateFunctions ();
 
 	  // etc
 

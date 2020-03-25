@@ -23,6 +23,23 @@
 
 #define CV29_CONFIGURATION			29
 
+#define CV33_FORWARD_HEADLIGHT		33
+#define CV34_REVERSE_HEADLIGHT		34
+#define CV35_FUNCTION_1				35
+#define CV36_FUNCTION_2				36
+#define CV37_FUNCTION_3				37
+#define CV38_FUNCTION_4				38
+
+// MERG Lighting Effects
+#define CV49_FL						49
+#define CV50_RL						50
+#define CV51_F1						51
+#define CV52_F2						52
+#define CV53_F3						53
+#define CV54_F4						54
+
+#define CV64_KICK_TIME				64
+
 #define CV65_KICK_START				65
 
 
@@ -32,5 +49,7 @@ extern const uint8_t defaultCVs [];
 
 
 uint8_t ReadCV (uint16_t cvnum);
+uint8_t IsCVSupported (uint16_t cvnum);
+void UpdateCV (uint16_t cvnum, uint8_t val);
 
 #endif

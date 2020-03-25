@@ -3,6 +3,7 @@
 #include "nmra.h"
 #include "motor.h"
 #include "functions.h"
+#include "cv.h"
 
 typedef enum {
 	INACTIVE = 0,
@@ -17,10 +18,19 @@ static ServiceMode_t ServiceMode;
 void Decode () {
 uint8_t speed = 0;
 uint8_t dir = 0;
+uint8_t cv;
+uint8_t val;
 
 	if ((3 == Msg.Size) && ((0 == Msg.Data [0]) && (0 == Msg.Data [1]))) {
 		// Reset packet
-		ServiceMode = POSSIBLE;
+		MotorInit ();
+		FunctionsInit ();
+
+		if (INACTIVE == ServiceMode) {
+			ServiceMode = POSSIBLE;
+		} else if (POSSIBLE == ServiceMode) {
+			ServiceMode = ACTIVE;
+		}
 	}
 
 	else
@@ -28,111 +38,167 @@ uint8_t dir = 0;
 	switch (ServiceMode) {
 
 	case POSSIBLE:
+		// Wait for another Service Mode instruction or Reset packet
+		break;
+
+	case ACTIVE:
+
+		if ((4 == Msg.Size) && (01111111 == Msg.Data [0]) && (00001000 == Msg.Data [1]) && (01110111 == Msg.Data [2])) {
+			// Reset to factory defaults
+		}
+
 		if ((4 == Msg.Size) && (0b01110000 == (Msg.Data [0] & 0b11110000))) {
-			ServiceMode = ACTIVE;
 
-			if ((Msg.Data [0] & 0b11111100) == 0b01110100) {
-				// Verify Byte
-				if (ReadCV (Msg.Data [1] + 1) == Msg.Data [2])
+			cv = Msg.Data [1] + 1;
+
+			if (IsCVSupported (cv)) {
+
+				val = ReadCV (cv);
+
+				if ((Msg.Data [0] & 0b11111100) == 0b01110100) {
+					// Verify Byte
+					if (val == Msg.Data [2])
+						ServiceModeBaseAck ();
+				}
+
+				if ((Msg.Data [0] & 0b11111100) == 0b01111100) {
+					// Write Byte
+					UpdateCV (cv, Msg.Data [2]);
 					ServiceModeBaseAck ();
-			}
+				}
 
-			if ((Msg.Data [0] & 0b11111100) == 0b01111100) {
-				// Write Byte
-				ReadCV (Msg.Data [1] + 1);
-			}
+				if ((Msg.Data [0] & 0b11111100) == 0b01111000) {
+					// Bit Manipulation
+					// 0 011110AA 0 AAAAAAAA 0 111KDBBB 0 EEEEEEEE 1
 
-			if ((Msg.Data [0] & 0b11111100) == 0b01111000) {
-				// Bit Manipulation
-				// 0 011110AA 0 AAAAAAAA 0 111KDBBB 0 EEEEEEEE 1
-				uint8_t bitPos = Msg.Data [2] & 7;
-				uint8_t workingBit = (Msg.Data [2] & 8) ? 1 : 0;
-				uint8_t cv = ReadCV (Msg.Data [1] + 1);
-				if (((cv >> bitPos) & 1) == workingBit)
-					ServiceModeBaseAck ();
+					uint8_t bitPos = Msg.Data [2] & 7;
+					uint8_t workingBit = (Msg.Data [2] & 8) ? 1 : 0;
+
+					if ((Msg.Data [2]) & 0b00010000) {
+						// Write bit
+						if (workingBit) {
+							val |= (1 << bitPos);
+						} else {
+							val &= ~(1 << bitPos);
+						}
+						UpdateCV (cv, val);
+						ServiceModeBaseAck ();
+
+					} else {
+						// Verify bit
+						if (((val >> bitPos) & 1) == workingBit)
+							ServiceModeBaseAck ();
+					}
+				}
+
 			}
 
 		}
 		break;
 
-	case ACTIVE:
-		break;
-
 	case INACTIVE:
 	default:
-		switch (Msg.Data [1] & INSTR_TYPE_BIT_MASK) {
-			case INSTR_DECODER_AND_CONSIST_CONTROL:
-				break;
 
-			case INSTR_ADVANCED_OPERATION:
-				// 001CCCCC 0 DDDDDDDD
+		if (Msg.Data [0] == ReadCV (CV1_PRIMARY_ADDRESS) ||
+				(0 == Msg.Data [0])) {
+			switch (Msg.Data [1] & INSTR_TYPE_BIT_MASK) {
+				case INSTR_DECODER_AND_CONSIST_CONTROL:
+					break;
 
-				// The 5-bit sub-instruction CCCCC allows for 32 separate Advanced Operations Sub-Instructions
-				switch (Msg.Data [1] & 0b00011111) {
-					case ADV_SUBF_128_SPEED_STEP_CONTROL:
-						/* CCCCC = 11111: 128 Speed Step Control - Instruction "11111" is used to send
-						one of 126 Digital Decoder speed steps. The subsequent single byte shall define
-						speed and direction with bit 7 being direction ("1" is forward and "0" is reverse)
-						and the remaining bits used to indicate speed.
-						The most significant speed bit is bit 6.
+				case INSTR_ADVANCED_OPERATION:
+					// 001CCCCC 0 DDDDDDDD
 
-						A data-byte value of U0000000 is used for stop,
-						and a data-byte value of U0000001 is used for emergency stop.
+					// The 5-bit sub-instruction CCCCC allows for 32 separate Advanced Operations Sub-Instructions
+					switch (Msg.Data [1] & 0b00011111) {
+						case ADV_SUBF_128_SPEED_STEP_CONTROL:
+							/* CCCCC = 11111: 128 Speed Step Control - Instruction "11111" is used to send
+							one of 126 Digital Decoder speed steps. The subsequent single byte shall define
+							speed and direction with bit 7 being direction ("1" is forward and "0" is reverse)
+							and the remaining bits used to indicate speed.
+							The most significant speed bit is bit 6.
 
-						This allows up to 126 speed steps.
-						*/
+							A data-byte value of U0000000 is used for stop,
+							and a data-byte value of U0000001 is used for emergency stop.
 
-						// Directional lighting
-						dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
+							This allows up to 126 speed steps.
+							*/
 
-						// Speed
-						speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
-						MotorSetSpeed (speed, dir);
-						break;
+							// Directional lighting
+							dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
 
-					case ADV_SUBF_RESTRICTED_SPEED_STEP:
-						break;
-					case ADV_SUBF_ANALOG_FUNC_GROUP:
-						break;
-					default:
-						break;
-				}
+							// CV29 bit 0
+							if (ReadCV (CV29_CONFIGURATION) & 1) {
+								dir ^= INSTR_DIRECTION_BIT_MASK;
+							}
 
-				break;
+							// Speed
+							speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
+							MotorSetSpeed (speed, dir);
+							break;
 
-			case INSTR_SPEED_DIR_REVERSE:
-				// 010DDDDD
-	//			TIM3->CCR1 = Msg.Data [1] & INSTR_SPEED_BIT_MASK;
-				break;
+						case ADV_SUBF_RESTRICTED_SPEED_STEP:
+							break;
+						case ADV_SUBF_ANALOG_FUNC_GROUP:
+							break;
+						default:
+							break;
+					}
 
-			case INSTR_SPEED_DIR_FORWARD:
-				// 011DDDDD
-				break;
+					break;
 
-			case INSTR_FUNCTION_GROUP_1:
-				// 100DDDDD - FL and F1-F4
-				// If Bit 1 of CV#29 has a value of one (1), then bit 4 controls function FL,
-				// otherwise bit 4 has no meaning.
+				case INSTR_SPEED_DIR_REVERSE:
+					// 010DDDDD
+		//			TIM3->CCR1 = Msg.Data [1] & INSTR_SPEED_BIT_MASK;
+					break;
 
-				SetFunctions (Msg.Data [2]);
+				case INSTR_SPEED_DIR_FORWARD:
+					// 011DDDDD
+					break;
 
-				break;
+				case INSTR_FUNCTION_GROUP_1:
+					// 100DDDDD - FL and F1-F4
 
-			case INSTR_FUNCTION_GROUP_2:
-				// 101SDDDD - F5-F12
-				break;
+					SetFunctions1 (Msg.Data [1]);
 
-			case INSTR_FEATURE_EXPANSION:
-				break;
+					break;
 
-			case INSTR_CV_ACCESS:
-				// 1111CCCC 0 DDDDDDDD - short form
-				// 1110CCVV 0 VVVVVVVV 0 DDDDDDDD - long form
+				case INSTR_FUNCTION_GROUP_2:
+					// 101SDDDD - F5-F12
 
-				break;
+					SetFunctions2 (Msg.Data [2]);
 
-			default:
-				break;
+					break;
+
+				case INSTR_FEATURE_EXPANSION:
+					break;
+
+				case INSTR_CV_ACCESS:
+					// 1111CCCC 0 DDDDDDDD - short form TODO
+
+					if (5 == Msg.Size) {
+						// 1110CCVV 0 VVVVVVVV 0 DDDDDDDD - long form
+						cv = Msg.Data [2] + 1;		// TODO support 10-bit CVs (CV512+)
+						if (IsCVSupported (cv)) {
+							val = Msg.Data [3];
+							switch (Msg.Data [1] & 0b00001100) {
+							case 0b00000100:	// Verify byte
+								break;
+							case 0b00001100:	// Write byte
+								UpdateCV (cv, val);
+								UpdateMotorControlParameters ();
+								break;
+							case 0b00001000:	// Bit manipulation
+								// TODO 111CDBBB C=1 Write bit
+								break;
+							default: break;
+							}
+						}
+					}
+					break;
+
+				default:
+					break;
+			}
 		}
 		break;
 	}
@@ -153,7 +219,7 @@ void ServiceModeBaseAck (void) {
 	SetFrontLight (1);
 	SetRearLight (1);
 
-	MotorSetPWM (255);
+	MotorSetPWM (255*8);
 
 	HAL_Delay (6);
 
@@ -163,6 +229,10 @@ void ServiceModeBaseAck (void) {
 
 	SetFrontLight (0);
 	SetRearLight (0);
+}
+
+void ServiceModeInit (void) {
+	ServiceMode = INACTIVE;
 }
 
 /*

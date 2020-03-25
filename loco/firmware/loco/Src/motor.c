@@ -13,33 +13,69 @@ static volatile uint8_t CurrentDir = 0;			// Forward
 
 static volatile uint8_t Rate = 0;
 static volatile uint32_t motorUpdateTime;
+static volatile uint32_t kickTime;
+
+static volatile uint16_t VStart;
+static volatile uint8_t SpeedStep;
+static volatile uint16_t Kick = 0;
 
 
 void MotorInit (void) {
+
 	MotorStopPWM ();
 	MotorSetAccelDecelRate ();
 	MotorRestartUpdateTimer ();
+
+	UpdateMotorControlParameters ();
+
 }
 
+static void SetKick (void) {
+	if (0 == kickTime) {
+
+		kickTime = ReadCV (CV64_KICK_TIME);
+
+		if (kickTime) {
+			Kick = (CurrentSpeed) ? 0 : ReadCV (CV65_KICK_START) * 8;		// TODO parametrize this 8
+			kickTime += HAL_GetTick ();
+		}
+	}
+}
 
 // Must be called periodically
 void MotorUpdateSpeed (void) {
+
+	// Kick control
+	if (HAL_GetTick () >= kickTime) {
+		kickTime = 0;
+
+		if (Kick) {
+			Kick = 0;
+			MotorSetPWM (MotorSpeedToDuty ());
+		}
+	}
+
+
 	if (HAL_GetTick () >= motorUpdateTime) {
 
 		MotorRestartUpdateTimer ();
 
-		if (Rate) {
-			Rate --;
-		} else {
+		if (CurrentSpeed != TargetSpeed) {
 
-			MotorSetAccelDecelRate ();
+			if (Rate) {
+				Rate --;
+			} else {
 
-			if (CurrentSpeed < TargetSpeed) {
-				CurrentSpeed ++;
-				MotorSetPWM (MotorSpeedToDuty ());
-			} else if (CurrentSpeed > TargetSpeed) {
-				CurrentSpeed --;
-				MotorSetPWM (MotorSpeedToDuty ());
+				MotorSetAccelDecelRate ();
+
+				if (CurrentSpeed < TargetSpeed) {
+					SetKick ();
+					CurrentSpeed ++;
+					MotorSetPWM (MotorSpeedToDuty ());
+				} else if (CurrentSpeed > TargetSpeed) {
+					CurrentSpeed --;
+					MotorSetPWM (MotorSpeedToDuty ());
+				}
 			}
 		}
 	}
@@ -50,13 +86,13 @@ void MotorStopPWM (void) {
 	TIM3->CCR1 = TIM3->CCR2 = 0;
 }
 
-void MotorSetPWM (uint8_t pwm) {
+void MotorSetPWM (uint16_t pwm) {
 	if (CurrentDir) {
 		TIM3->CCR2 = 0;
-		TIM3->CCR1 = pwm;
+		TIM3->CCR1 = pwm + Kick;
 	} else {
 		TIM3->CCR1 = 0;
-		TIM3->CCR2 = pwm;
+		TIM3->CCR2 = pwm + Kick;
 	}
 }
 
@@ -68,6 +104,7 @@ void MotorSetSpeed (uint8_t newSpeed, uint8_t newDir) {
 		CurrentSpeed = TargetSpeed = 0;	// newSpeed;
 		MotorStopPWM ();
 	} else {
+
 		// When changing direction, first bring speed to zero
 		if (CurrentDir != newDir) {
 			TargetSpeed = 0;
@@ -81,8 +118,9 @@ void MotorSetSpeed (uint8_t newSpeed, uint8_t newDir) {
 				MotorSetAccelDecelRate ();
 
 				// Update Front/Rear Lights
-				SetFrontLight (CurrentDir ? 1 : 0);
-				SetRearLight (CurrentDir ? 0 : 1);
+				// TODO move to Functions processing
+//				SetFrontLight (CurrentDir ? 1 : 0);
+//				SetRearLight (CurrentDir ? 0 : 1);
 
 			}
 		} else {
@@ -110,8 +148,35 @@ void MotorRestartUpdateTimer (void) {
 }
 
 
-uint8_t MotorSpeedToDuty (void) {
-	return (CurrentSpeed << 1);
+uint16_t MotorSpeedToDuty (void) {
+uint16_t duty;
+	// Step = (CV5 (Vhigh) - CV2 (Vstart)) / 128
+	// Duty = CV2 (Vstart) + Speed * Step
+
+//	return (CurrentSpeed << 3);
+
+	if (CurrentSpeed) {
+		duty = (CurrentSpeed * SpeedStep) + VStart;
+	} else {
+		duty = 0;
+	}
+
+	return duty;
 }
 
+uint8_t GetCurrentDir (void) {
+	return CurrentDir;
+}
 
+void UpdateMotorControlParameters (void) {
+uint16_t VHigh;
+
+	VHigh = ReadCV (CV5_VHIGH);	// TODO use IsSupported ()
+	if (0 == VHigh)
+		VHigh = 255;
+	VHigh = VHigh * 4;
+
+	VStart = ReadCV (CV2_VSTART) * 8;
+
+	SpeedStep = (VHigh - VStart) / 127;
+}
