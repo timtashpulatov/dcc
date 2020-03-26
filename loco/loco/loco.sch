@@ -732,4 +732,6 @@ $EndComp
 Wire Wire Line
 	2175 2725 2175 2600
 Connection ~ 2175 2600
+Text Notes 3150 2450 0    50   ~ 0
+LM3480IM3-3.3
 $EndSCHEMATC
