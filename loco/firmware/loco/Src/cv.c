@@ -112,7 +112,7 @@ uint8_t i;
 			// Calculate checksum, if necessary
 			// Write CV block from RAM to flash
 
-			addr = FLASH_CV_ADDR;
+			addr = (uint8_t *)FLASH_CV_ADDR;
 
 			for (i = 0; i < 255; i ++) {
 				cvBlock [i] = *addr ++;
