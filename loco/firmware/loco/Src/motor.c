@@ -154,6 +154,9 @@ int8_t trim;
 
 	if (CurrentSpeed) {
 		trim = ReadCV ((0 == CurrentDir) ? CV66_FORWARD_TRIM : CV95_REVERSE_TRIM);
+
+		// TODO no idea how to apply trim :(
+
 		duty = (CurrentSpeed * SpeedStep) + VStart;
 	} else {
 		duty = 0;
