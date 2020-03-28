@@ -15,11 +15,18 @@ static ServiceMode_t ServiceMode;
 
 // 78 00 e8 - read CV1 in Direct mode
 
+volatile uint8_t basicAddr;
+volatile uint16_t extendedAddr;
+
 void Decode () {
 uint8_t speed = 0;
 uint8_t dir = 0;
 uint8_t cv;
 uint8_t val;
+uint8_t ourAddress;
+uint8_t match;
+uint8_t offset;
+
 
 	if ((3 == Msg.Size) && ((0 == Msg.Data [0]) && (0 == Msg.Data [1]))) {
 		// Reset packet
@@ -99,9 +106,34 @@ uint8_t val;
 	case INACTIVE:
 	default:
 
-		if (Msg.Data [0] == ReadCV (CV1_PRIMARY_ADDRESS) ||
-				(0 == Msg.Data [0])) {
-			switch (Msg.Data [1] & INSTR_TYPE_BIT_MASK) {
+		if (((Msg.Data [0] & 0b11000000) == 0b11000000) &&
+			((Msg.Data [0] & 0b00111111) != 0b00111111)) {
+			// Extended address
+			basicAddr = 0;
+			extendedAddr = ((Msg.Data [0] & 0b00111111) << 8) | Msg.Data [1];
+			offset = 1;
+		} else {
+			// Basic address
+			basicAddr = Msg.Data [0];
+			extendedAddr = 0;
+			offset = 0;
+		}
+
+		// Short or long addressing selected in CV29.5
+		if (ReadCV (CV29_CONFIGURATION) & 0b00100000) {
+			// Two byte (extended) addressing
+			match = (ReadDoubleCV (CV17_EXT_ADDRESS_MSB) == extendedAddr);
+		} else {
+			// One byte addressing
+			match = (ReadCV (CV1_PRIMARY_ADDRESS) == basicAddr);
+		}
+
+
+		if (match) {
+
+//		if (Msg.Data [0] == ReadCV (CV1_PRIMARY_ADDRESS) ||		// 7-bit address
+//				(0 == Msg.Data [0])) {							// Broadcast address 0
+			switch (Msg.Data [offset + 1] & INSTR_TYPE_BIT_MASK) {
 				case INSTR_DECODER_AND_CONSIST_CONTROL:
 					break;
 
@@ -109,7 +141,7 @@ uint8_t val;
 					// 001CCCCC 0 DDDDDDDD
 
 					// The 5-bit sub-instruction CCCCC allows for 32 separate Advanced Operations Sub-Instructions
-					switch (Msg.Data [1] & 0b00011111) {
+					switch (Msg.Data [offset + 1] & 0b00011111) {
 						case ADV_SUBF_128_SPEED_STEP_CONTROL:
 							/* CCCCC = 11111: 128 Speed Step Control - Instruction "11111" is used to send
 							one of 126 Digital Decoder speed steps. The subsequent single byte shall define
@@ -124,7 +156,7 @@ uint8_t val;
 							*/
 
 							// Directional lighting
-							dir = Msg.Data [2] & INSTR_DIRECTION_BIT_MASK;
+							dir = Msg.Data [offset + 2] & INSTR_DIRECTION_BIT_MASK;
 
 							// CV29 bit 0
 							if (ReadCV (CV29_CONFIGURATION) & 1) {
@@ -132,7 +164,7 @@ uint8_t val;
 							}
 
 							// Speed
-							speed = Msg.Data [2] & INSTR_SPEED_BIT_MASK;
+							speed = Msg.Data [offset + 2] & INSTR_SPEED_BIT_MASK;
 							MotorSetSpeed (speed, dir);
 							break;
 
@@ -158,14 +190,14 @@ uint8_t val;
 				case INSTR_FUNCTION_GROUP_1:
 					// 100DDDDD - FL and F1-F4
 
-					SetFunctions1 (Msg.Data [1]);
+					SetFunctions1 (Msg.Data [offset + 1]);
 
 					break;
 
 				case INSTR_FUNCTION_GROUP_2:
 					// 101SDDDD - F5-F12
 
-					SetFunctions2 (Msg.Data [2]);
+					SetFunctions2 (Msg.Data [offset + 2]);
 
 					break;
 
@@ -177,10 +209,10 @@ uint8_t val;
 
 					if (5 == Msg.Size) {
 						// 1110CCVV 0 VVVVVVVV 0 DDDDDDDD - long form
-						cv = Msg.Data [2] + 1;		// TODO support 10-bit CVs (CV512+)
+						cv = Msg.Data [offset + 2] + 1;		// TODO support 10-bit CVs (CV512+)
 						if (IsCVSupported (cv)) {
-							val = Msg.Data [3];
-							switch (Msg.Data [1] & 0b00001100) {
+							val = Msg.Data [offset + 3];
+							switch (Msg.Data [offset + 1] & 0b00001100) {
 							case 0b00000100:	// Verify byte
 								break;
 							case 0b00001100:	// Write byte
