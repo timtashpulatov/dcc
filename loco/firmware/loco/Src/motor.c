@@ -150,12 +150,10 @@ void MotorRestartUpdateTimer (void) {
 
 uint16_t MotorSpeedToDuty (void) {
 uint16_t duty;
-	// Step = (CV5 (Vhigh) - CV2 (Vstart)) / 128
-	// Duty = CV2 (Vstart) + Speed * Step
-
-//	return (CurrentSpeed << 3);
+int8_t trim;
 
 	if (CurrentSpeed) {
+		trim = ReadCV ((0 == CurrentDir) ? CV66_FORWARD_TRIM : CV95_REVERSE_TRIM);
 		duty = (CurrentSpeed * SpeedStep) + VStart;
 	} else {
 		duty = 0;
@@ -176,7 +174,7 @@ uint16_t VHigh;
 		VHigh = 255;
 	VHigh = VHigh * 4;
 
-	VStart = ReadCV (CV2_VSTART) * 8;
+	VStart = ReadCV (CV2_VSTART) * 4; //8;
 
 	SpeedStep = (VHigh - VStart) / 127;
 }
