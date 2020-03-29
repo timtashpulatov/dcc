@@ -44,6 +44,7 @@ static void SetKick (void) {
 
 // Must be called periodically
 void MotorUpdateSpeed (void) {
+uint32_t ccmr;
 
 	// Kick control
 	if (HAL_GetTick () >= kickTime) {
@@ -68,6 +69,20 @@ void MotorUpdateSpeed (void) {
 		// - poll for EOC
 		// - read conversion result, do averaging
 		// - start PWM
+
+////		MotorStopPWM ();	// Try Force Output Mode
+//		ccmr = TIM3->CCMR1;
+//		TIM3->CCMR1 &= ~(TIM_CCMR1_OC1M | TIM_CCMR1_OC2M);
+////		TIM3->CCMR1 |= ((5 << TIM_CCMR1_OC1M_Pos) | 5 << TIM_CCMR1_OC2M_Pos);	// Force High
+//		TIM3->CCMR1 |= ((4 << TIM_CCMR1_OC1M_Pos) | 4 << TIM_CCMR1_OC2M_Pos);	// Force Low
+//
+//
+//		HAL_Delay (2);
+//
+//		TIM3->CCMR1 = ccmr;
+//
+////		MotorSetPWM (MotorSpeedToDuty ());
+
 
 
 		// Process speed
