@@ -60,6 +60,18 @@ void MotorUpdateSpeed (void) {
 
 		MotorRestartUpdateTimer ();
 
+		// Measure Back EMF
+		// only when Kick is off
+		// - stop PWM
+		// - wait (~10us, TBD)
+		// - start ADC conversion
+		// - poll for EOC
+		// - read conversion result, do averaging
+		// - start PWM
+
+
+		// Process speed
+
 		if (CurrentSpeed != TargetSpeed) {
 
 			if (Rate) {
