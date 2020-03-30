@@ -3,6 +3,7 @@
 #include "cv.h"
 #include "motor.h"
 #include "functions.h"
+#include "adc.h"
 
 
 
@@ -198,6 +199,12 @@ uint16_t VHigh;
 	SpeedStep = (VHigh - VStart) / 127;
 }
 
+
+
+#define NUMADCCONVERSIONS	16
+static uint16_t adc_data [NUMADCCONVERSIONS];
+
+
 void MeasureBEMF (void) {
 uint32_t ccmr;
 
@@ -225,7 +232,10 @@ uint32_t ccmr;
 
 
 
-		HAL_Delay (2);
+		HAL_Delay (1);
+
+		HAL_ADC_Start_DMA (&hadc, adc_data, NUMADCCONVERSIONS);
+
 
 		TIM3->CCMR1 = ccmr;
 
