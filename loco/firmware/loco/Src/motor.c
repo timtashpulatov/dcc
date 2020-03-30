@@ -14,6 +14,7 @@ static volatile uint8_t CurrentDir = 0;			// Forward
 static volatile uint8_t Rate = 0;
 static volatile uint32_t motorUpdateTime;
 static volatile uint32_t kickTime;
+static volatile uint32_t bemfMeasureTime;
 
 static volatile uint16_t VStart;
 static volatile uint8_t SpeedStep;
@@ -26,8 +27,15 @@ void MotorInit (void) {
 	MotorSetAccelDecelRate ();
 	MotorRestartUpdateTimer ();
 
+	MotorRestartBEMFMeasureTimer ();
+
+
 	UpdateMotorControlParameters ();
 
+}
+
+void MotorRestartBEMFMeasureTimer (void) {
+	bemfMeasureTime = HAL_GetTick () + BEMFMEASUREPERIOD;
 }
 
 static void SetKick (void) {
@@ -44,7 +52,6 @@ static void SetKick (void) {
 
 // Must be called periodically
 void MotorUpdateSpeed (void) {
-uint32_t ccmr;
 
 	// Kick control
 	if (HAL_GetTick () >= kickTime) {
@@ -60,42 +67,6 @@ uint32_t ccmr;
 	if (HAL_GetTick () >= motorUpdateTime) {
 
 		MotorRestartUpdateTimer ();
-
-		// Measure Back EMF
-		// only when Kick is off
-		// - stop PWM
-		// - wait (~10us, TBD)
-		// - start ADC conversion
-		// - poll for EOC
-		// - read conversion result, do averaging
-		// - start PWM
-
-		DebugPin (1);
-
-#define BEMF
-
-#ifdef BEMF
-
-
-//		MotorStopPWM ();	// Try Force Output Mode
-		ccmr = TIM3->CCMR1;
-		TIM3->CCMR1 &= ~(TIM_CCMR1_OC1M | TIM_CCMR1_OC2M);
-
-//		TIM3->CCMR1 |= ((5 << TIM_CCMR1_OC1M_Pos) | (5 << TIM_CCMR1_OC2M_Pos));	// Force High
-		TIM3->CCMR1 |= ((4 << TIM_CCMR1_OC1M_Pos) | (4 << TIM_CCMR1_OC2M_Pos));	// Force Low
-
-
-		HAL_Delay (2);
-
-		TIM3->CCMR1 = ccmr;
-
-//		MotorSetPWM (MotorSpeedToDuty ());
-
-#endif
-
-		DebugPin (0);
-
-
 
 		// Process speed
 
@@ -117,11 +88,13 @@ uint32_t ccmr;
 				}
 			}
 		}
-
-
-
-
 	}
+
+#ifdef BEMF
+		MeasureBEMF ();
+#endif
+
+
 }
 
 
@@ -223,4 +196,42 @@ uint16_t VHigh;
 	VStart = ReadCV (CV2_VSTART) * 4; //8;
 
 	SpeedStep = (VHigh - VStart) / 127;
+}
+
+void MeasureBEMF (void) {
+uint32_t ccmr;
+
+	// Measure Back EMF
+	// only when Kick is off
+	// - stop PWM
+	// - wait (~10us, TBD)
+	// - start ADC conversion
+	// - poll for EOC
+	// - read conversion result, do averaging
+	// - start PWM
+
+	if (HAL_GetTick () >= bemfMeasureTime) {
+		MotorRestartBEMFMeasureTimer ();
+
+
+		DebugPin (1);
+
+	////		MotorStopPWM ();	// Try Force Output Mode
+		ccmr = TIM3->CCMR1;
+		TIM3->CCMR1 &= ~(TIM_CCMR1_OC1M | TIM_CCMR1_OC2M);
+
+		TIM3->CCMR1 |= ((4 << TIM_CCMR1_OC1M_Pos) | (4 << TIM_CCMR1_OC2M_Pos));	// 100: Force inactive level - OC1REF is forced low
+	//		TIM3->CCMR1 |= ((5 << TIM_CCMR1_OC1M_Pos) | (5 << TIM_CCMR1_OC2M_Pos));	// Force High
+
+
+
+		HAL_Delay (2);
+
+		TIM3->CCMR1 = ccmr;
+
+	////		MotorSetPWM (MotorSpeedToDuty ());
+
+
+		DebugPin (0);
+	}
 }

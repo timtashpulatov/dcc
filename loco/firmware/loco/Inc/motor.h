@@ -5,6 +5,10 @@
 #define KICK_SPEED_THRESHOLD	1	// Enable kick start for speed steps under 5
 #define KICK_TIME				10	// Kick time in milliseconds
 
+#define BEMF
+#define BEMFMEASUREPERIOD		100	// ms
+
+
 void MotorRestartUpdateTimer (void);
 void MotorSetSpeed (uint8_t newSpeed, uint8_t dir);
 void MotorInit (void);
@@ -15,5 +19,6 @@ void MotorSetAccelDecelRate (void);
 uint8_t GetCurrentDir (void);
 void MotorUpdateSpeed (void);
 void UpdateMotorControlParameters (void);
+void MeasureBEMF (void);
 
 #endif
