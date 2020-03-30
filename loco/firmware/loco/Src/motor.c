@@ -204,9 +204,10 @@ uint16_t VHigh;
 #define NUMADCCONVERSIONS	16
 static uint16_t adc_data [NUMADCCONVERSIONS];
 
+static volatile uint32_t ccmr;
+
 
 void MeasureBEMF (void) {
-uint32_t ccmr;
 
 	// Measure Back EMF
 	// only when Kick is off
@@ -221,7 +222,7 @@ uint32_t ccmr;
 		MotorRestartBEMFMeasureTimer ();
 
 
-		HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, GPIO_PIN_SET);
+//		HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, GPIO_PIN_SET);
 
 	////		MotorStopPWM ();	// Try Force Output Mode
 		ccmr = TIM3->CCMR1;
@@ -230,18 +231,32 @@ uint32_t ccmr;
 		TIM3->CCMR1 |= ((4 << TIM_CCMR1_OC1M_Pos) | (4 << TIM_CCMR1_OC2M_Pos));	// 100: Force inactive level - OC1REF is forced low
 	//		TIM3->CCMR1 |= ((5 << TIM_CCMR1_OC1M_Pos) | (5 << TIM_CCMR1_OC2M_Pos));	// Force High
 
-
-
 		HAL_Delay (1);
+
+		HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, GPIO_PIN_SET);
 
 		HAL_ADC_Start_DMA (&hadc, adc_data, NUMADCCONVERSIONS);
 
 
-		TIM3->CCMR1 = ccmr;
+// moved to ADC callback		TIM3->CCMR1 = ccmr;
 
 	////		MotorSetPWM (MotorSpeedToDuty ());
 
-
-		HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, GPIO_PIN_RESET);
+//		HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, GPIO_PIN_RESET);
 	}
 }
+
+void HAL_ADC_ConvCpltCallback (ADC_HandleTypeDef* hadc) {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hadc);
+
+  HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, GPIO_PIN_RESET);
+
+  TIM3->CCMR1 = ccmr;
+
+
+
+}
+
+
+
