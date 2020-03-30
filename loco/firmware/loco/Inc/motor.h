@@ -19,6 +19,7 @@ void MotorSetAccelDecelRate (void);
 uint8_t GetCurrentDir (void);
 void MotorUpdateSpeed (void);
 void UpdateMotorControlParameters (void);
+void MotorRestartBEMFMeasureTimer (void);
 void MeasureBEMF (void);
 
 #endif
