@@ -1,4 +1,3 @@
-
 #ifndef __dma_H
 #define __dma_H
 
@@ -6,10 +5,9 @@
  extern "C" {
 #endif
 
-
 #include "main.h"
 
-void MX_DMA_Init(void);
+void MX_DMA_Init (void);
 
 #ifdef __cplusplus
 }
