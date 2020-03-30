@@ -41,6 +41,9 @@
 #define CV64_KICK_TIME				64
 
 #define CV65_KICK_START				65
+#define CV66_FORWARD_TRIM			66
+
+#define CV95_REVERSE_TRIM			95
 
 
 #define CV29_DEFAULT_VALUE	2
@@ -51,5 +54,6 @@ extern const uint8_t defaultCVs [];
 uint8_t ReadCV (uint16_t cvnum);
 uint8_t IsCVSupported (uint16_t cvnum);
 void UpdateCV (uint16_t cvnum, uint8_t val);
+uint16_t ReadDoubleCV (uint16_t cvnum);
 
 #endif

@@ -45,6 +45,9 @@ const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
 
 //		CV11_PACKET_TIMEOUT,		0,						// Packet Timeout
 
+		CV17_EXT_ADDRESS_MSB,		192,					// ?
+		CV18_EXT_ADDRESS_LSB,		3,
+
 		CV29_CONFIGURATION,			CV29_DEFAULT_VALUE,		// Configuration
 
 		CV33_FORWARD_HEADLIGHT,		1,
@@ -64,6 +67,8 @@ const uint8_t __attribute__((section (".rodata"))) defaultCVs [] = {
 
 		CV64_KICK_TIME,				0,						// Kick time
 		CV65_KICK_START,			0,						// Kick
+		CV66_FORWARD_TRIM,			0,						// Forward trim
+		CV95_REVERSE_TRIM,			0,						// Reverse trim
 
 		0, 0		// End
 };
@@ -89,6 +94,14 @@ uint8_t *addr = CVTOADDR(cvnum);
 	return cv;
 }
 
+uint16_t ReadDoubleCV (uint16_t cvnum) {
+uint16_t cv;
+
+	cv = ReadCV (cvnum) << 8;
+	cv += ReadCV (cvnum + 1);
+
+	return cv;
+}
 
 
 void UpdateCV (uint16_t cvnum, uint8_t val) {

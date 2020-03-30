@@ -44,6 +44,7 @@ static void SetKick (void) {
 
 // Must be called periodically
 void MotorUpdateSpeed (void) {
+uint32_t ccmr;
 
 	// Kick control
 	if (HAL_GetTick () >= kickTime) {
@@ -59,6 +60,32 @@ void MotorUpdateSpeed (void) {
 	if (HAL_GetTick () >= motorUpdateTime) {
 
 		MotorRestartUpdateTimer ();
+
+		// Measure Back EMF
+		// only when Kick is off
+		// - stop PWM
+		// - wait (~10us, TBD)
+		// - start ADC conversion
+		// - poll for EOC
+		// - read conversion result, do averaging
+		// - start PWM
+
+////		MotorStopPWM ();	// Try Force Output Mode
+//		ccmr = TIM3->CCMR1;
+//		TIM3->CCMR1 &= ~(TIM_CCMR1_OC1M | TIM_CCMR1_OC2M);
+////		TIM3->CCMR1 |= ((5 << TIM_CCMR1_OC1M_Pos) | 5 << TIM_CCMR1_OC2M_Pos);	// Force High
+//		TIM3->CCMR1 |= ((4 << TIM_CCMR1_OC1M_Pos) | 4 << TIM_CCMR1_OC2M_Pos);	// Force Low
+//
+//
+//		HAL_Delay (2);
+//
+//		TIM3->CCMR1 = ccmr;
+//
+////		MotorSetPWM (MotorSpeedToDuty ());
+
+
+
+		// Process speed
 
 		if (CurrentSpeed != TargetSpeed) {
 
@@ -150,12 +177,13 @@ void MotorRestartUpdateTimer (void) {
 
 uint16_t MotorSpeedToDuty (void) {
 uint16_t duty;
-	// Step = (CV5 (Vhigh) - CV2 (Vstart)) / 128
-	// Duty = CV2 (Vstart) + Speed * Step
-
-//	return (CurrentSpeed << 3);
+int8_t trim;
 
 	if (CurrentSpeed) {
+		trim = ReadCV ((0 == CurrentDir) ? CV66_FORWARD_TRIM : CV95_REVERSE_TRIM);
+
+		// TODO no idea how to apply trim :(
+
 		duty = (CurrentSpeed * SpeedStep) + VStart;
 	} else {
 		duty = 0;
@@ -176,7 +204,7 @@ uint16_t VHigh;
 		VHigh = 255;
 	VHigh = VHigh * 4;
 
-	VStart = ReadCV (CV2_VSTART) * 8;
+	VStart = ReadCV (CV2_VSTART) * 4; //8;
 
 	SpeedStep = (VHigh - VStart) / 127;
 }

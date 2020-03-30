@@ -27,7 +27,9 @@ static Output_t Outputs [NUM_OUTPUTS] = {	// TODO #define
 
 void SetFunctions1 (uint8_t funcs) {
 
-	Functions1 = funcs;
+	// Cache
+	if (Functions1 != funcs)
+		Functions1 = funcs;
 
 	// If Bit 1 of CV#29 has a value of one (1), then bit 4 controls function FL,
 	// otherwise bit 4 has no meaning.
@@ -47,7 +49,8 @@ void SetFunctions1 (uint8_t funcs) {
 }
 
 void SetFunctions2 (uint8_t funcs) {
-	Functions2 = funcs;
+	if (Functions2 != funcs)
+		Functions2 = funcs;
 }
 
 void FunctionsInit (void) {
