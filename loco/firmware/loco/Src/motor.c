@@ -70,18 +70,30 @@ uint32_t ccmr;
 		// - read conversion result, do averaging
 		// - start PWM
 
-////		MotorStopPWM ();	// Try Force Output Mode
-//		ccmr = TIM3->CCMR1;
-//		TIM3->CCMR1 &= ~(TIM_CCMR1_OC1M | TIM_CCMR1_OC2M);
-////		TIM3->CCMR1 |= ((5 << TIM_CCMR1_OC1M_Pos) | 5 << TIM_CCMR1_OC2M_Pos);	// Force High
-//		TIM3->CCMR1 |= ((4 << TIM_CCMR1_OC1M_Pos) | 4 << TIM_CCMR1_OC2M_Pos);	// Force Low
-//
-//
-//		HAL_Delay (2);
-//
-//		TIM3->CCMR1 = ccmr;
-//
-////		MotorSetPWM (MotorSpeedToDuty ());
+		DebugPin (1);
+
+#define BEMF
+
+#ifdef BEMF
+
+
+//		MotorStopPWM ();	// Try Force Output Mode
+		ccmr = TIM3->CCMR1;
+		TIM3->CCMR1 &= ~(TIM_CCMR1_OC1M | TIM_CCMR1_OC2M);
+
+//		TIM3->CCMR1 |= ((5 << TIM_CCMR1_OC1M_Pos) | (5 << TIM_CCMR1_OC2M_Pos));	// Force High
+		TIM3->CCMR1 |= ((4 << TIM_CCMR1_OC1M_Pos) | (4 << TIM_CCMR1_OC2M_Pos));	// Force Low
+
+
+		HAL_Delay (2);
+
+		TIM3->CCMR1 = ccmr;
+
+//		MotorSetPWM (MotorSpeedToDuty ());
+
+#endif
+
+		DebugPin (0);
 
 
 
@@ -105,6 +117,10 @@ uint32_t ccmr;
 				}
 			}
 		}
+
+
+
+
 	}
 }
 

@@ -141,3 +141,8 @@ void SetRearLight (uint8_t on) {
 
 
  */
+
+void DebugPin (uint8_t on) {
+	HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
+
