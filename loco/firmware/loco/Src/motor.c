@@ -221,7 +221,7 @@ uint32_t ccmr;
 		MotorRestartBEMFMeasureTimer ();
 
 
-		DebugPin (1);
+		HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, GPIO_PIN_SET);
 
 	////		MotorStopPWM ();	// Try Force Output Mode
 		ccmr = TIM3->CCMR1;
@@ -242,6 +242,6 @@ uint32_t ccmr;
 	////		MotorSetPWM (MotorSpeedToDuty ());
 
 
-		DebugPin (0);
+		HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, GPIO_PIN_RESET);
 	}
 }

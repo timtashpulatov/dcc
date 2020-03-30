@@ -109,12 +109,12 @@ uint8_t i;
 
 
 
-void SetFrontLight (uint8_t on) {
+void inline SetFrontLight (uint8_t on) {
 //	HAL_GPIO_WritePin (FL_GPIO_Port, FL_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
 	Outputs [0].pwm = on ? 255 : 7;
 }
 
-void SetRearLight (uint8_t on) {
+void inline SetRearLight (uint8_t on) {
 //	HAL_GPIO_WritePin (RL_GPIO_Port, RL_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
 	Outputs [1].pwm = on ? 255 : 7;
 }
@@ -142,7 +142,7 @@ void SetRearLight (uint8_t on) {
 
  */
 
-void DebugPin (uint8_t on) {
-	HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
+//void DebugPin (uint8_t on) {
+//	HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+//}
 

@@ -69,7 +69,7 @@ int main(void) {
   HAL_TIM_IC_Start_IT (&htim14, TIM_CHANNEL_1);
 
   // Support stopping timers in debug
-  __HAL_RCC_DBGMCU_CLK_ENABLE();
+//  __HAL_RCC_DBGMCU_CLK_ENABLE();
 
 
   // Setup soft timers
@@ -82,7 +82,7 @@ int main(void) {
 
   // Start ADC
 
-  HAL_ADC_Start (&hadc);
+//  HAL_ADC_Start (&hadc);
 
 
   while (1)
@@ -230,7 +230,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(FL_GPIO_Port, FL_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : F1_Pin F2_Pin RL_Pin */
-  GPIO_InitStruct.Pin = F1_Pin|F2_Pin|RL_Pin;
+  GPIO_InitStruct.Pin = F1_Pin|F2_Pin|RL_Pin | Debug_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -244,11 +244,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(FL_GPIO_Port, &GPIO_InitStruct);
 
   // Debug pin
-  GPIO_InitStruct.Pin = Debug_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-  HAL_GPIO_Init(Debug_GPIO_Port, &GPIO_InitStruct);
+//  GPIO_InitStruct.Pin = Debug_Pin;
+//  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+//  GPIO_InitStruct.Pull = GPIO_NOPULL;
+//  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+//  HAL_GPIO_Init(Debug_GPIO_Port, &GPIO_InitStruct);
 
 }
 

@@ -23,7 +23,7 @@ uint8_t speed = 0;
 uint8_t dir = 0;
 uint8_t cv;
 uint8_t val;
-uint8_t ourAddress;
+//uint8_t ourAddress;
 uint8_t match;
 uint8_t offset;
 
