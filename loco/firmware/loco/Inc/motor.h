@@ -6,7 +6,7 @@
 #define KICK_TIME				10	// Kick time in milliseconds
 
 #define BEMF
-#define BEMFMEASUREPERIOD		100	// ms
+#define BEMFMEASUREPERIOD		20	// ms
 
 
 void MotorRestartUpdateTimer (void);

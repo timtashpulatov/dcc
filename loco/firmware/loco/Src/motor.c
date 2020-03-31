@@ -204,6 +204,7 @@ uint16_t VHigh;
 #define NUMADCCONVERSIONS	16
 static uint16_t adc_data [NUMADCCONVERSIONS];
 static uint16_t accumulate;
+static uint16_t accumulate_avg;
 
 static volatile uint32_t ccmr;
 
@@ -218,6 +219,9 @@ void MeasureBEMF (void) {
 		}
 
 		if (0 == accumulate) accumulate = 1;
+
+		accumulate_avg = (accumulate_avg + accumulate) >> 1;
+
 	}
 
 
