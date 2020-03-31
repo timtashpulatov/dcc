@@ -52,7 +52,7 @@ int main(void) {
 #endif
   MX_TIM3_Init ();
   MX_TIM14_Init ();
-
+  TIM16_Init ();
 
 
   /* USER CODE BEGIN 2 */

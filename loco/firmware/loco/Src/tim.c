@@ -261,3 +261,21 @@ void MX_TIM14_Init(void)
 
 }
 
+/*
+ * Use TIM16 in one pulse mode to start ADC conversions 1ms after bridge goes coasting
+ */
+void TIM16_Init (void) {
+	__HAL_RCC_TIM16_CLK_ENABLE();
+
+	// TIM_Base_SetConfig-like things
+
+	// TIM16->CR1;
+	// TIM16->ARR
+	// TIM16->PSC
+	// TIM16->RCR
+	// TIM16->EGR
+
+
+    HAL_NVIC_SetPriority (TIM16_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ (TIM16_IRQn);
+}
