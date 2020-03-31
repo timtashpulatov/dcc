@@ -214,6 +214,7 @@ void MeasureBEMF (void) {
 	// Check if new ADC data is available
 	if (0 == accumulate) {
 		uint8_t i;
+
 		for (i = 0; i < NUMADCCONVERSIONS; i ++) {
 			accumulate += adc_data [i];
 		}
@@ -221,6 +222,7 @@ void MeasureBEMF (void) {
 		if (0 == accumulate) accumulate = 1;
 
 		accumulate_avg = (accumulate_avg + accumulate) >> 1;
+
 
 	}
 
