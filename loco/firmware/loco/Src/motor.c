@@ -35,7 +35,7 @@ void MotorInit (void) {
 
 }
 
-void MotorRestartBEMFMeasureTimer (void) {
+inline void MotorRestartBEMFMeasureTimer (void) {
 	bemfMeasureTime = HAL_GetTick () + BEMFMEASUREPERIOD;
 }
 
@@ -160,7 +160,7 @@ void MotorSetAccelDecelRate (void) {
 	}
 }
 
-void MotorRestartUpdateTimer (void) {
+inline void MotorRestartUpdateTimer (void) {
 	motorUpdateTime = HAL_GetTick () + MOTORUPDATEPERIOD;
 }
 
@@ -203,11 +203,23 @@ uint16_t VHigh;
 
 #define NUMADCCONVERSIONS	16
 static uint16_t adc_data [NUMADCCONVERSIONS];
+static uint16_t accumulate;
 
 static volatile uint32_t ccmr;
 
 
 void MeasureBEMF (void) {
+
+	// Check if new ADC data is available
+	if (0 == accumulate) {
+		uint8_t i;
+		for (i = 0; i < NUMADCCONVERSIONS; i ++) {
+			accumulate += adc_data [i];
+		}
+
+		if (0 == accumulate) accumulate = 1;
+	}
+
 
 	// Measure Back EMF
 	// only when Kick is off
@@ -235,7 +247,7 @@ void MeasureBEMF (void) {
 
 		HAL_GPIO_WritePin (Debug_GPIO_Port, Debug_Pin, GPIO_PIN_SET);
 
-		HAL_ADC_Start_DMA (&hadc, adc_data, NUMADCCONVERSIONS);
+		HAL_ADC_Start_DMA (&hadc, (uint32_t *)adc_data, NUMADCCONVERSIONS);
 
 
 // moved to ADC callback		TIM3->CCMR1 = ccmr;
@@ -254,7 +266,7 @@ void HAL_ADC_ConvCpltCallback (ADC_HandleTypeDef* hadc) {
 
   TIM3->CCMR1 = ccmr;
 
-
+  accumulate = 0;	// use avg_data as flag
 
 }
 
