@@ -1,3 +1,0 @@
-(sym_lib_table
-  (lib (name loco)(type Legacy)(uri ${KIPRJMOD}/loco.lib)(options "")(descr ""))
-)
